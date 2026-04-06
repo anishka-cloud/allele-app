@@ -2,20 +2,20 @@ import { ImageResponse } from "@vercel/og";
 
 export const runtime = "edge";
 
-// Season color palettes for OG images
+// Full 10-color palettes matching seasonData.js bestColors
 const seasonPalettes = {
-  "Clear Spring": ["#FF6B4A", "#FFB347", "#FFD700", "#85C88A", "#40B5AD", "#FF8FAB"],
-  "True Spring": ["#E8A838", "#F5C242", "#8DBE6D", "#FF7F50", "#FFAA5C", "#4DB8A4"],
-  "Light Spring": ["#FFB5BA", "#FFDAB9", "#E8D5B7", "#A8D5BA", "#87CEEB", "#DDA0DD"],
-  "Light Summer": ["#C9B1FF", "#B0C4DE", "#DDA0DD", "#87CEEB", "#D8BFD8", "#F0E68C"],
-  "True Summer": ["#8B93AF", "#A0A0C0", "#C4A4C9", "#7B9BAA", "#B0A0B8", "#8899AA"],
-  "Soft Summer": ["#B8B0A0", "#C4B8A8", "#A0A898", "#C0A8B0", "#B0A8B8", "#98A0A0"],
-  "Soft Autumn": ["#C4A265", "#B89A72", "#8B8B6B", "#A08060", "#C5A880", "#7B8B6B"],
-  "True Autumn": ["#C85A17", "#CC7722", "#8B6914", "#A0522D", "#B8860B", "#6B8E23"],
-  "Deep Autumn": ["#8B4513", "#A0522D", "#556B2F", "#8B0000", "#CD853F", "#6B4423"],
-  "Deep Winter": ["#1C1C3A", "#8B0000", "#006400", "#191970", "#4B0082", "#800020"],
-  "True Winter": ["#0000CD", "#DC143C", "#006400", "#4B0082", "#FF1493", "#00CED1"],
-  "Clear Winter": ["#FF0080", "#00BFFF", "#FF4500", "#9400D3", "#00FF7F", "#FF1493"],
+  "Clear Spring": ["#FF6B6B", "#FF8C42", "#FFD166", "#06D6A0", "#118AB2", "#FF4365", "#F8961E", "#43AA8B", "#F94144", "#577590"],
+  "True Spring": ["#FFD700", "#FF9F43", "#F8B500", "#4CAF50", "#FF6348", "#FECA57", "#FF7878", "#1ABC9C", "#E17055", "#A3CB38"],
+  "Light Spring": ["#FFE4B5", "#FFB6C1", "#FFDAB9", "#98FB98", "#DDA0DD", "#FFC0CB", "#B0E0E6", "#F0E68C", "#AFEEEE", "#FFE4E1"],
+  "Soft Summer": ["#C9929D", "#8E8E9A", "#7B9BA6", "#A4B494", "#B0A4C4", "#9EB1BD", "#C4A4B0", "#A0A0B0", "#8FAE80", "#D4B0C0"],
+  "True Summer": ["#6495ED", "#DA70D6", "#DB7093", "#5F9EA0", "#BA55D3", "#778899", "#87CEEB", "#C71585", "#DDA0DD", "#B0C4DE"],
+  "Light Summer": ["#B0C4DE", "#E6E6FA", "#FFC0CB", "#ADD8E6", "#DDA0DD", "#E0BBE4", "#98D8C8", "#B5EAD7", "#F7CAC9", "#87CEEB"],
+  "Soft Autumn": ["#C4A882", "#A09060", "#8B7355", "#B5A68C", "#9B8B6B", "#C0A080", "#A89070", "#8A9A6B", "#B08F70", "#6B7B5B"],
+  "True Autumn": ["#CC6633", "#CD853F", "#8B6914", "#A0522D", "#006400", "#B8860B", "#D2691E", "#556B2F", "#DAA520", "#8B4513"],
+  "Dark Autumn": ["#8B4513", "#556B2F", "#8B0000", "#B8860B", "#800020", "#483D8B", "#CD853F", "#2E8B57", "#A0522D", "#4A3728"],
+  "Dark Winter": ["#191970", "#8B008B", "#800020", "#006400", "#4B0082", "#B22222", "#2F4F4F", "#8B0000", "#483D8B", "#800080"],
+  "True Winter": ["#FF0000", "#0000CD", "#008B8B", "#9400D3", "#DC143C", "#4169E1", "#000000", "#FFFFFF", "#00CED1", "#C71585"],
+  "Bright Winter": ["#FF1493", "#00BFFF", "#00FF7F", "#FF4500", "#9400D3", "#1E90FF", "#FF69B4", "#00CED1", "#FF6347", "#4169E1"],
 };
 
 export async function GET(request) {
@@ -33,81 +33,69 @@ export async function GET(request) {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          background: "linear-gradient(145deg, #FFFBF7 0%, #F5EDE4 40%, #EDE5D8 100%)",
+          background: "#FBF8F4",
           fontFamily: "Georgia, serif",
         }}
       >
-        {/* Brand */}
+        {/* Header */}
         <div
           style={{
             display: "flex",
             fontSize: 14,
             letterSpacing: "0.35em",
             textTransform: "uppercase",
-            color: "#C4A265",
-            marginBottom: 12,
-            fontWeight: 600,
+            color: "#B8A080",
+            marginBottom: 20,
+            fontWeight: 400,
           }}
         >
-          SHADE DNA BY ALLELE
+          YOUR COLOR SEASON
         </div>
 
-        {/* Season Name */}
+        {/* You're a */}
         <div
           style={{
             display: "flex",
-            fontSize: 72,
+            fontSize: 48,
+            fontWeight: 400,
+            color: "#1a1a1a",
+            lineHeight: 1.1,
+            marginBottom: 4,
+          }}
+        >
+          You're a
+        </div>
+
+        {/* Season Name - italic, larger */}
+        <div
+          style={{
+            display: "flex",
+            fontSize: 80,
             fontWeight: 700,
             fontStyle: "italic",
             color: "#1a1a1a",
-            lineHeight: 1.05,
-            marginBottom: 24,
+            lineHeight: 1.1,
+            marginBottom: 36,
             textAlign: "center",
           }}
         >
           {season}
         </div>
 
-        {/* Divider */}
-        <div
-          style={{
-            width: 50,
-            height: 3,
-            background: colors[0] || "#C4A265",
-            borderRadius: 2,
-            marginBottom: 28,
-            display: "flex",
-          }}
-        />
-
-        {/* Color swatches */}
-        <div style={{ display: "flex", gap: 12, marginBottom: 32 }}>
+        {/* Color swatches - all 10 in a row */}
+        <div style={{ display: "flex", gap: 14 }}>
           {colors.map((color, i) => (
             <div
               key={i}
               style={{
-                width: 52,
-                height: 52,
+                width: 48,
+                height: 48,
                 borderRadius: "50%",
                 background: color,
-                boxShadow: `0 4px 12px ${color}40`,
                 display: "flex",
               }}
             />
           ))}
-        </div>
-
-        {/* CTA */}
-        <div
-          style={{
-            display: "flex",
-            fontSize: 18,
-            color: "#8B8B7A",
-            fontWeight: 300,
-            letterSpacing: "0.04em",
-          }}
-        >
-          Find your color season → allele.app
         </div>
       </div>
     ),
