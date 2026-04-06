@@ -262,17 +262,17 @@ export default function ResultsContent() {
   if (!seasonData) return null;
 
   const shareText = `I just discovered my Shade DNA \u2014 I'm a ${seasonName}! \u2728 Find your perfect makeup colors \u2192`;
-  const shareUrl = typeof window !== "undefined" ? window.location.origin : "";
+  const resultsUrl = typeof window !== "undefined" ? window.location.href : "";
 
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(`${shareUrl}/quiz`);
+    navigator.clipboard.writeText(resultsUrl);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   const handleShare = (platform) => {
     const encodedText = encodeURIComponent(shareText);
-    const encodedUrl = encodeURIComponent(`${shareUrl}/quiz`);
+    const encodedUrl = encodeURIComponent(resultsUrl);
     const urls = {
       twitter: `https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`,
       pinterest: `https://pinterest.com/pin/create/button/?url=${encodedUrl}&description=${encodedText}`,
@@ -285,7 +285,7 @@ export default function ResultsContent() {
 
   const handleNativeShare = () => {
     if (typeof navigator !== "undefined" && navigator.share) {
-      navigator.share({ title: `I'm a ${seasonName} \u2728`, text: shareText, url: `${shareUrl}/quiz` }).catch(() => {});
+      navigator.share({ title: `I'm a ${seasonName} \u2728`, text: shareText, url: resultsUrl }).catch(() => {});
     } else {
       setShareOpen(!shareOpen);
     }
