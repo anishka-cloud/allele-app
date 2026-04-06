@@ -17,35 +17,17 @@ const seasonPalettes = {
   "Bright Winter": ["#FF1493", "#00BFFF", "#00FF7F", "#FF4500", "#9400D3", "#1E90FF", "#FF69B4", "#00CED1", "#FF6347", "#4169E1"],
 };
 
-async function loadFont(url, name, weight, style = "normal") {
-  const res = await fetch(url);
-  const data = await res.arrayBuffer();
-  return { name, data, weight, style };
-}
+// Pre-fetch and cache font
+const playfairBoldItalic = fetch(
+  "https://fonts.gstatic.com/s/playfairdisplay/v37/nuFRD-vYSZviVYUb_rj3ij__anPXDTnCjmHKM4nYO7KN_qiTbtbK-F2qA.woff"
+).then((res) => res.arrayBuffer());
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const season = searchParams.get("season") || "True Spring";
   const colors = seasonPalettes[season] || seasonPalettes["True Spring"];
 
-  const [playfairBold, playfairBoldItalic, interRegular] = await Promise.all([
-    loadFont(
-      "https://fonts.gstatic.com/s/playfairdisplay/v37/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKd3vXDXbtXK-F2qC0s.woff",
-      "Playfair Display",
-      700
-    ),
-    loadFont(
-      "https://fonts.gstatic.com/s/playfairdisplay/v37/nuFRD-vYSZviVYUb_rj3ij__anPXDTnCjmHKM4nYO7KN_qiTbtbK-F2qA.woff",
-      "Playfair Display",
-      700,
-      "italic"
-    ),
-    loadFont(
-      "https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff",
-      "Inter",
-      400
-    ),
-  ]);
+  const fontData = await playfairBoldItalic;
 
   return new ImageResponse(
     (
@@ -58,13 +40,13 @@ export async function GET(request) {
           alignItems: "center",
           justifyContent: "center",
           background: "#FBF8F4",
+          fontFamily: "Georgia, serif",
         }}
       >
         {/* Header */}
         <div
           style={{
             display: "flex",
-            fontFamily: "Inter",
             fontSize: 13,
             letterSpacing: "0.35em",
             textTransform: "uppercase",
@@ -83,6 +65,7 @@ export async function GET(request) {
             fontFamily: "Playfair Display",
             fontSize: 52,
             fontWeight: 700,
+            fontStyle: "italic",
             color: "#2A2420",
             lineHeight: 1.0,
             marginBottom: 0,
@@ -100,7 +83,7 @@ export async function GET(request) {
             fontWeight: 700,
             fontStyle: "italic",
             color: "#8B7340",
-            lineHeight: 1.1,
+            lineHeight: 1.15,
             marginBottom: 40,
             textAlign: "center",
           }}
@@ -128,7 +111,14 @@ export async function GET(request) {
     {
       width: 1200,
       height: 630,
-      fonts: [playfairBold, playfairBoldItalic, interRegular],
+      fonts: [
+        {
+          name: "Playfair Display",
+          data: fontData,
+          weight: 700,
+          style: "italic",
+        },
+      ],
     }
   );
 }
