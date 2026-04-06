@@ -583,10 +583,10 @@ export default function ResultsContent() {
           {!emailSubmitted ? (
             <>
               <h3 className="mb-3" style={{ fontFamily: "var(--font-playfair, 'Playfair Display')", fontSize: "clamp(1.2rem, 3vw, 1.5rem)", fontWeight: 600, color: "var(--text-primary)" }}>
-                Get your full Shade DNA guide<br /><span style={{ fontStyle: "italic" }}>with 50+ product matches</span>
+                Stay in the loop<br /><span style={{ fontStyle: "italic" }}>with Allele</span>
               </h3>
               <p className="mb-6" style={{ fontFamily: "var(--font-inter)", fontSize: "0.9rem", color: "var(--text-muted)", fontWeight: 300 }}>
-                Your complete {seasonName} guide with personalized product links, seasonal tips, and a printable palette &mdash; free.
+                New quizzes, seasonal shade updates, and exclusive product drops &mdash; straight to your inbox.
               </p>
               <form onSubmit={async (e) => {
                 e.preventDefault();
@@ -616,7 +616,7 @@ export default function ResultsContent() {
                 <button id="email-submit" type="submit" className="px-7 py-3.5 rounded-full transition-all duration-200 hover:opacity-90"
                   disabled={emailSubmitting}
                   style={{ fontFamily: "var(--font-inter)", fontSize: "0.85rem", fontWeight: 500, letterSpacing: "0.03em", background: "var(--text-primary)", color: "white", border: "none", cursor: "pointer", whiteSpace: "nowrap" }}>
-                  {emailSubmitting ? "Sending..." : "Send My Guide"}
+                  {emailSubmitting ? "Sending..." : "Sign Me Up"}
                 </button>
               </form>
               {emailError && <p style={{ fontFamily: "var(--font-inter)", fontSize: "0.8rem", color: "#C25A38", marginTop: 8, textAlign: "center" }}>{emailError}</p>}
@@ -626,7 +626,7 @@ export default function ResultsContent() {
               <div className="text-3xl mb-3">{"\u2728"}</div>
               <h3 className="mb-2" style={{ fontFamily: "var(--font-playfair, 'Playfair Display')", fontSize: "1.3rem", fontWeight: 600, color: "var(--text-primary)" }}>You&apos;re in!</h3>
               <p style={{ fontFamily: "var(--font-inter)", fontSize: "0.9rem", color: "var(--text-muted)", fontWeight: 300 }}>
-                Check your inbox for your complete {seasonName} shade guide.
+                We&apos;ll keep you posted on new quizzes and shade updates.
               </p>
             </div>
           )}
