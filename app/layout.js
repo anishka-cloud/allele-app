@@ -33,7 +33,7 @@ export const metadata = {
     siteName: "Allele",
     images: [
       {
-        url: "/api/og?season=True%20Spring",
+        url: "/og/shade-dna-hero.png",
         width: 1200,
         height: 630,
         alt: "Shade DNA by Allele — Find Your Perfect Makeup Colors",
@@ -44,7 +44,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "Find Your Perfect Makeup Colors in 2 Minutes",
     description: "Based on color science, not guesswork. Free 2-min quiz.",
-    images: ["/api/og?season=True%20Spring"],
+    images: ["/og/shade-dna-hero.png"],
   },
   alternates: {
     canonical: "https://www.allele.app",
