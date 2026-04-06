@@ -17,17 +17,10 @@ const seasonPalettes = {
   "Bright Winter": ["#FF1493", "#00BFFF", "#00FF7F", "#FF4500", "#9400D3", "#1E90FF", "#FF69B4", "#00CED1", "#FF6347", "#4169E1"],
 };
 
-// Pre-fetch and cache font
-const playfairBoldItalic = fetch(
-  "https://fonts.gstatic.com/s/playfairdisplay/v37/nuFRD-vYSZviVYUb_rj3ij__anPXDTnCjmHKM4nYO7KN_qiTbtbK-F2qA.woff"
-).then((res) => res.arrayBuffer());
-
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const season = searchParams.get("season") || "True Spring";
   const colors = seasonPalettes[season] || seasonPalettes["True Spring"];
-
-  const fontData = await playfairBoldItalic;
 
   return new ImageResponse(
     (
@@ -40,18 +33,18 @@ export async function GET(request) {
           alignItems: "center",
           justifyContent: "center",
           background: "#FBF8F4",
-          fontFamily: "Georgia, serif",
+          fontFamily: "Georgia, 'Times New Roman', serif",
         }}
       >
         {/* Header */}
         <div
           style={{
             display: "flex",
-            fontSize: 13,
+            fontSize: 14,
             letterSpacing: "0.35em",
             textTransform: "uppercase",
             color: "#B8A080",
-            marginBottom: 24,
+            marginBottom: 28,
             fontWeight: 400,
           }}
         >
@@ -62,29 +55,26 @@ export async function GET(request) {
         <div
           style={{
             display: "flex",
-            fontFamily: "Playfair Display",
-            fontSize: 52,
+            fontSize: 48,
             fontWeight: 700,
-            fontStyle: "italic",
             color: "#2A2420",
             lineHeight: 1.0,
-            marginBottom: 0,
+            marginBottom: 2,
           }}
         >
-          You're a
+          You&apos;re a
         </div>
 
-        {/* Season Name */}
+        {/* Season Name - italic, gold */}
         <div
           style={{
             display: "flex",
-            fontFamily: "Playfair Display",
-            fontSize: 88,
+            fontSize: 82,
             fontWeight: 700,
             fontStyle: "italic",
             color: "#8B7340",
             lineHeight: 1.15,
-            marginBottom: 40,
+            marginBottom: 44,
             textAlign: "center",
           }}
         >
@@ -92,13 +82,13 @@ export async function GET(request) {
         </div>
 
         {/* Color swatches */}
-        <div style={{ display: "flex", gap: 12 }}>
+        <div style={{ display: "flex", gap: 14 }}>
           {colors.map((color, i) => (
             <div
               key={i}
               style={{
-                width: 44,
-                height: 44,
+                width: 42,
+                height: 42,
                 borderRadius: "50%",
                 background: color,
                 display: "flex",
@@ -111,14 +101,6 @@ export async function GET(request) {
     {
       width: 1200,
       height: 630,
-      fonts: [
-        {
-          name: "Playfair Display",
-          data: fontData,
-          weight: 700,
-          style: "italic",
-        },
-      ],
     }
   );
 }
