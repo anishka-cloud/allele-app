@@ -2,7 +2,6 @@ import { ImageResponse } from "@vercel/og";
 
 export const runtime = "edge";
 
-// Full 10-color palettes matching seasonData.js bestColors
 const seasonPalettes = {
   "Clear Spring": ["#FF6B6B", "#FF8C42", "#FFD166", "#06D6A0", "#118AB2", "#FF4365", "#F8961E", "#43AA8B", "#F94144", "#577590"],
   "True Spring": ["#FFD700", "#FF9F43", "#F8B500", "#4CAF50", "#FF6348", "#FECA57", "#FF7878", "#1ABC9C", "#E17055", "#A3CB38"],
@@ -18,10 +17,35 @@ const seasonPalettes = {
   "Bright Winter": ["#FF1493", "#00BFFF", "#00FF7F", "#FF4500", "#9400D3", "#1E90FF", "#FF69B4", "#00CED1", "#FF6347", "#4169E1"],
 };
 
+async function loadFont(url, name, weight, style = "normal") {
+  const res = await fetch(url);
+  const data = await res.arrayBuffer();
+  return { name, data, weight, style };
+}
+
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const season = searchParams.get("season") || "True Spring";
   const colors = seasonPalettes[season] || seasonPalettes["True Spring"];
+
+  const [playfairBold, playfairBoldItalic, interRegular] = await Promise.all([
+    loadFont(
+      "https://fonts.gstatic.com/s/playfairdisplay/v37/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKd3vXDXbtXK-F2qC0s.woff",
+      "Playfair Display",
+      700
+    ),
+    loadFont(
+      "https://fonts.gstatic.com/s/playfairdisplay/v37/nuFRD-vYSZviVYUb_rj3ij__anPXDTnCjmHKM4nYO7KN_qiTbtbK-F2qA.woff",
+      "Playfair Display",
+      700,
+      "italic"
+    ),
+    loadFont(
+      "https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff",
+      "Inter",
+      400
+    ),
+  ]);
 
   return new ImageResponse(
     (
@@ -34,18 +58,18 @@ export async function GET(request) {
           alignItems: "center",
           justifyContent: "center",
           background: "#FBF8F4",
-          fontFamily: "Georgia, serif",
         }}
       >
         {/* Header */}
         <div
           style={{
             display: "flex",
-            fontSize: 14,
+            fontFamily: "Inter",
+            fontSize: 13,
             letterSpacing: "0.35em",
             textTransform: "uppercase",
             color: "#B8A080",
-            marginBottom: 20,
+            marginBottom: 24,
             fontWeight: 400,
           }}
         >
@@ -56,40 +80,42 @@ export async function GET(request) {
         <div
           style={{
             display: "flex",
-            fontSize: 48,
-            fontWeight: 400,
-            color: "#1a1a1a",
-            lineHeight: 1.1,
-            marginBottom: 4,
+            fontFamily: "Playfair Display",
+            fontSize: 52,
+            fontWeight: 700,
+            color: "#2A2420",
+            lineHeight: 1.0,
+            marginBottom: 0,
           }}
         >
           You're a
         </div>
 
-        {/* Season Name - italic, larger */}
+        {/* Season Name */}
         <div
           style={{
             display: "flex",
-            fontSize: 80,
+            fontFamily: "Playfair Display",
+            fontSize: 88,
             fontWeight: 700,
             fontStyle: "italic",
-            color: "#1a1a1a",
+            color: "#8B7340",
             lineHeight: 1.1,
-            marginBottom: 36,
+            marginBottom: 40,
             textAlign: "center",
           }}
         >
           {season}
         </div>
 
-        {/* Color swatches - all 10 in a row */}
-        <div style={{ display: "flex", gap: 14 }}>
+        {/* Color swatches */}
+        <div style={{ display: "flex", gap: 12 }}>
           {colors.map((color, i) => (
             <div
               key={i}
               style={{
-                width: 48,
-                height: 48,
+                width: 44,
+                height: 44,
                 borderRadius: "50%",
                 background: color,
                 display: "flex",
@@ -102,6 +128,7 @@ export async function GET(request) {
     {
       width: 1200,
       height: 630,
+      fonts: [playfairBold, playfairBoldItalic, interRegular],
     }
   );
 }
