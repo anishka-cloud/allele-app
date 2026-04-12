@@ -1,51 +1,84 @@
 #!/usr/bin/env node
 /**
- * Seed Vercel KV with product data by calling the refresh-products API.
+ * Seed Vercel KV by calling refresh-products one season/archetype at a time.
+ * This avoids the 60-second Vercel Hobby plan timeout.
  *
  * Usage:
- *   # Against local dev server (start `npm run dev` first):
- *   node scripts/seed-products.js
- *
- *   # Against production:
- *   SEED_URL=https://allele.app node scripts/seed-products.js
- *
- * Environment variables needed:
- *   CRON_SECRET — must match the one in Vercel dashboard
- *   SEED_URL — defaults to http://localhost:3000
+ *   CRON_SECRET=xxx SEED_URL=https://allele.app node scripts/seed-products.js
+ *   CRON_SECRET=xxx SEED_URL=https://allele.app node scripts/seed-products.js shade
+ *   CRON_SECRET=xxx SEED_URL=https://allele.app node scripts/seed-products.js vibe
  */
 
-const baseUrl = process.env.SEED_URL || "http://localhost:3000";
+const baseUrl = process.env.SEED_URL || "https://www.allele.app";
 const cronSecret = process.env.CRON_SECRET || "";
 
-async function main() {
-  console.log(`Seeding products via ${baseUrl}/api/refresh-products ...`);
-  console.log("This will make 288 Perplexity API calls. Estimated time: ~2 minutes.");
-  console.log("");
+const SHADE_SEASONS = [
+  "clear-spring", "true-spring", "light-spring",
+  "light-summer", "true-summer", "soft-summer",
+  "soft-autumn", "true-autumn", "dark-autumn",
+  "dark-winter", "true-winter", "bright-winter",
+];
 
-  const res = await fetch(`${baseUrl}/api/refresh-products`, {
+const VIBE_ARCHETYPES = [
+  "clean-girl", "coastal-grandmother", "quiet-luxury",
+  "dark-academia", "cottagecore", "coquette",
+  "y2k-revival", "balletcore", "scandi-minimalist",
+  "indie-sleaze", "tomboy-luxe",
+];
+
+async function refreshOne(type, id) {
+  const param = type === "shade" ? `season=${id}` : `archetype=${id}`;
+  const url = `${baseUrl}/api/refresh-products?type=${type}&${param}`;
+
+  const res = await fetch(url, {
     method: "POST",
-    headers: {
-      Authorization: `Bearer ${cronSecret}`,
-      "Content-Type": "application/json",
-    },
+    headers: { Authorization: `Bearer ${cronSecret}` },
   });
 
   if (!res.ok) {
-    console.error(`HTTP ${res.status}: ${await res.text()}`);
-    process.exit(1);
+    const text = await res.text().catch(() => "");
+    throw new Error(`HTTP ${res.status}: ${text.slice(0, 200)}`);
   }
 
-  const data = await res.json();
-  console.log("Results:");
-  console.log(`  Success: ${data.success}`);
-  console.log(`  Failed:  ${data.failed}`);
-  console.log(`  Total:   ${data.total}`);
-  console.log(`  Duration: ${(data.duration_ms / 1000).toFixed(1)}s`);
+  return res.json();
+}
 
-  if (data.errors?.length) {
-    console.log(`\nFirst ${data.errors.length} errors:`);
-    data.errors.forEach((e) => console.log(`  - ${e}`));
+async function main() {
+  const filter = process.argv[2]; // "shade", "vibe", or undefined (both)
+  let totalSuccess = 0;
+  let totalFailed = 0;
+
+  if (!filter || filter === "shade") {
+    console.log(`\nSeeding Shade DNA (${SHADE_SEASONS.length} seasons, 24 products each)...\n`);
+    for (const season of SHADE_SEASONS) {
+      try {
+        const result = await refreshOne("shade", season);
+        totalSuccess += result.success;
+        totalFailed += result.failed;
+        console.log(`  ${season}: ${result.success} OK, ${result.failed} failed (${(result.duration_ms / 1000).toFixed(1)}s)`);
+      } catch (err) {
+        console.error(`  ${season}: ERROR — ${err.message}`);
+        totalFailed += 24;
+      }
+    }
   }
+
+  if (!filter || filter === "vibe") {
+    console.log(`\nSeeding Vibe DNA (${VIBE_ARCHETYPES.length} archetypes, 24 products each)...\n`);
+    for (const archetype of VIBE_ARCHETYPES) {
+      try {
+        const result = await refreshOne("vibe", archetype);
+        totalSuccess += result.success;
+        totalFailed += result.failed;
+        console.log(`  ${archetype}: ${result.success} OK, ${result.failed} failed (${(result.duration_ms / 1000).toFixed(1)}s)`);
+      } catch (err) {
+        console.error(`  ${archetype}: ERROR — ${err.message}`);
+        totalFailed += 24;
+      }
+    }
+  }
+
+  console.log(`\nDone! Success: ${totalSuccess}, Failed: ${totalFailed}, Total: ${totalSuccess + totalFailed}`);
 }
 
 main().catch((err) => {

@@ -64,10 +64,15 @@ async function fetchFromPerplexity(prompt) {
 }
 
 /**
- * Refresh all Shade DNA products (288 slots).
+ * Refresh Shade DNA products. If seasonId is provided, only refresh that season (24 calls).
+ * Otherwise refresh all 288 slots.
  */
-async function refreshShade(counters) {
-  for (const season of SEASONS) {
+async function refreshShade(counters, seasonId = null) {
+  const seasonsToRefresh = seasonId
+    ? SEASONS.filter((s) => s.id === seasonId)
+    : SEASONS;
+
+  for (const season of seasonsToRefresh) {
     for (const category of REFRESH_CATEGORIES) {
       for (const tier of TIERS) {
         const key = buildKvKey(season.id, category, tier.name);
@@ -90,10 +95,14 @@ async function refreshShade(counters) {
 }
 
 /**
- * Refresh all Vibe DNA products (264 slots).
+ * Refresh Vibe DNA products. If archetypeId is provided, only refresh that archetype (24 calls).
  */
-async function refreshVibe(counters) {
-  for (const archetype of VIBE_ARCHETYPES) {
+async function refreshVibe(counters, archetypeId = null) {
+  const archetypesToRefresh = archetypeId
+    ? VIBE_ARCHETYPES.filter((a) => a.id === archetypeId)
+    : VIBE_ARCHETYPES;
+
+  for (const archetype of archetypesToRefresh) {
     for (const category of VIBE_CATEGORIES) {
       for (const tier of VIBE_TIERS) {
         const key = buildVibeKvKey(archetype.id, category.key, tier.name);
@@ -133,17 +142,18 @@ export async function POST(request) {
     );
   }
 
-  // Check if a specific product type was requested
   const url = new URL(request.url);
   const type = url.searchParams.get("type"); // "shade", "vibe", or null (both)
+  const season = url.searchParams.get("season"); // e.g. "clear-spring" — refreshes one season only
+  const archetype = url.searchParams.get("archetype"); // e.g. "clean-girl" — refreshes one archetype only
 
   const counters = { success: 0, failed: 0, errors: [] };
 
   if (!type || type === "shade") {
-    await refreshShade(counters);
+    await refreshShade(counters, season || null);
   }
   if (!type || type === "vibe") {
-    await refreshVibe(counters);
+    await refreshVibe(counters, archetype || null);
   }
 
   const duration = Date.now() - startTime;
