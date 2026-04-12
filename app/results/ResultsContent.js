@@ -243,6 +243,7 @@ export default function ResultsContent() {
   const [copied, setCopied] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
   const [downloading, setDownloading] = useState(false);
+  const [kvProducts, setKvProducts] = useState(null);
   const shareCardRef = useRef(null);
 
   const seasonName = searchParams.get("season") || "True Spring";
@@ -253,9 +254,40 @@ export default function ResultsContent() {
   const valueParam = searchParams.get("value") || "Medium";
 
   const seasonData = seasons[seasonName];
-  const { categories, tierMeta } = getProductRecommendations(seasonName);
+  const staticRecs = getProductRecommendations(seasonName);
   const skinToneBg = getSkinTone(skinAnswer, undertone, olive);
   const shopUrl = getShopUrl(seasonName);
+
+  // Hydrate with KV products if available (non-blocking)
+  useEffect(() => {
+    if (!seasonName) return;
+    fetch(`/api/products?season=${encodeURIComponent(seasonName)}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.source === "kv" && data.products) {
+          setKvProducts(data.products);
+        }
+      })
+      .catch(() => {}); // Silently fall back to static
+  }, [seasonName]);
+
+  // Merge KV products into static categories (KV wins per-slot)
+  const { categories, tierMeta } = (() => {
+    if (!kvProducts) return staticRecs;
+    const merged = staticRecs.categories.map((cat) => {
+      const kvCat = kvProducts[cat.key];
+      if (!kvCat) return cat;
+      // Overlay KV data onto static tiers
+      const mergedTiers = { ...cat.tiers };
+      for (const tier of ["budget", "value", "splurge"]) {
+        if (kvCat[tier]?.length > 0) {
+          mergedTiers[tier] = kvCat[tier];
+        }
+      }
+      return { ...cat, tiers: mergedTiers };
+    });
+    return { categories: merged, tierMeta: staticRecs.tierMeta };
+  })();
 
   useEffect(() => {
     if (!seasonData) router.push("/quiz");
