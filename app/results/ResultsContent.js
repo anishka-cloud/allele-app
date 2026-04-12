@@ -5,9 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { seasons } from "@/lib/seasonData";
 import { getProductRecommendations } from "@/lib/productData";
 import { getSkinTone } from "@/lib/skinTones";
-import { getShopUrl, getProductUrl } from "@/lib/shopLinks";
-
-const SHOP_TIER_LABEL = { budget: "Budget", value: "Best Value", splurge: "Splurge" };
+import { getShopUrl } from "@/lib/shopLinks";
 
 /* --- Processing / Loading Animation --- */
 function ProcessingScreen({ onComplete }) {
@@ -94,7 +92,7 @@ function SkinToneSwatch({ hex, skinToneBg, size = 48 }) {
 }
 
 /* --- Tier Product Card --- */
-function TierCard({ tier, product, tierMeta, skinToneBg, delay = 0, shopUrl, productUrl }) {
+function TierCard({ tier, product, tierMeta, skinToneBg, delay = 0, shopUrl }) {
   const meta = tierMeta[tier];
   const isValue = tier === "value";
   const amazonSearchUrl = `https://www.amazon.com/s?k=${encodeURIComponent(`${product.brand} ${product.product} ${product.shade}`)}&tag=anishkanawa00-20`;
@@ -129,7 +127,7 @@ function TierCard({ tier, product, tierMeta, skinToneBg, delay = 0, shopUrl, pro
         <p style={{ fontFamily: "var(--font-inter)", fontSize: "0.9rem", fontWeight: 600, color: "var(--accent-gold)", marginBottom: 12 }}>{product.price}</p>
       </div>
 
-      <a href={product.source === "kv" ? amazonSearchUrl : (productUrl || shopUrl || amazonSearchUrl)} target="_blank" rel="sponsored noopener noreferrer" className="tier-cta" style={{ display: "block", textAlign: "center", textDecoration: "none" }}>
+      <a href={amazonSearchUrl} target="_blank" rel="sponsored noopener noreferrer" className="tier-cta" style={{ display: "block", textAlign: "center", textDecoration: "none" }}>
         Shop This Shade &rarr;
       </a>
     </div>
@@ -137,7 +135,7 @@ function TierCard({ tier, product, tierMeta, skinToneBg, delay = 0, shopUrl, pro
 }
 
 /* --- Product Category Section --- */
-function ProductCategory({ category, tierMeta, skinToneBg, index, footerNote, shopUrl, seasonName }) {
+function ProductCategory({ category, tierMeta, skinToneBg, index, footerNote, shopUrl }) {
   const icon = CategoryIcons[category.icon] || CategoryIcons.lips;
   return (
     <div className="product-category" style={{ animationDelay: `${index * 0.08}s` }}>
@@ -148,7 +146,7 @@ function ProductCategory({ category, tierMeta, skinToneBg, index, footerNote, sh
       <div className="tier-row">
         {["budget", "value", "splurge"].map((tier, i) => (
           category.tiers[tier] && (
-            <TierCard key={tier} tier={tier} product={Array.isArray(category.tiers[tier]) ? category.tiers[tier][0] : category.tiers[tier]} tierMeta={tierMeta} skinToneBg={skinToneBg} delay={0.1 + i * 0.08 + index * 0.03} shopUrl={shopUrl} productUrl={getProductUrl(seasonName, category.key, SHOP_TIER_LABEL[tier])} />
+            <TierCard key={tier} tier={tier} product={Array.isArray(category.tiers[tier]) ? category.tiers[tier][0] : category.tiers[tier]} tierMeta={tierMeta} skinToneBg={skinToneBg} delay={0.1 + i * 0.08 + index * 0.03} shopUrl={shopUrl} />
           )
         ))}
       </div>
@@ -526,8 +524,8 @@ export default function ResultsContent() {
           </p>
         </div>
         <FoundationGuidance undertone={undertone} olive={olive} />
-        {foundationCat && <ProductCategory category={foundationCat} tierMeta={tierMeta} skinToneBg={skinToneBg} shopUrl={shopUrl} seasonName={seasonName} index={0} />}
-        {concealerCat && <ProductCategory category={concealerCat} tierMeta={tierMeta} skinToneBg={skinToneBg} shopUrl={shopUrl} seasonName={seasonName} index={1} footerNote={concealerProTip} />}
+        {foundationCat && <ProductCategory category={foundationCat} tierMeta={tierMeta} skinToneBg={skinToneBg} shopUrl={shopUrl} index={0} />}
+        {concealerCat && <ProductCategory category={concealerCat} tierMeta={tierMeta} skinToneBg={skinToneBg} shopUrl={shopUrl} index={1} footerNote={concealerProTip} />}
       </section>
 
       <div className="editorial-divider" />
@@ -540,8 +538,8 @@ export default function ResultsContent() {
             Lip Color & <span style={{ fontStyle: "italic" }}>Liner</span>
           </h2>
         </div>
-        {lipsCat && <ProductCategory category={lipsCat} tierMeta={tierMeta} skinToneBg={skinToneBg} shopUrl={shopUrl} seasonName={seasonName} index={2} />}
-        {lipLinerCat && <ProductCategory category={lipLinerCat} tierMeta={tierMeta} skinToneBg={skinToneBg} shopUrl={shopUrl} seasonName={seasonName} index={3} />}
+        {lipsCat && <ProductCategory category={lipsCat} tierMeta={tierMeta} skinToneBg={skinToneBg} shopUrl={shopUrl} index={2} />}
+        {lipLinerCat && <ProductCategory category={lipLinerCat} tierMeta={tierMeta} skinToneBg={skinToneBg} shopUrl={shopUrl} index={3} />}
       </section>
 
       <div className="editorial-divider" />
@@ -554,7 +552,7 @@ export default function ResultsContent() {
             Blush <span style={{ fontStyle: "italic" }}>Shades</span>
           </h2>
         </div>
-        {blushCat && <ProductCategory category={blushCat} tierMeta={tierMeta} skinToneBg={skinToneBg} shopUrl={shopUrl} seasonName={seasonName} index={4} />}
+        {blushCat && <ProductCategory category={blushCat} tierMeta={tierMeta} skinToneBg={skinToneBg} shopUrl={shopUrl} index={4} />}
       </section>
 
       <div className="editorial-divider" />
@@ -567,7 +565,7 @@ export default function ResultsContent() {
             Eye <span style={{ fontStyle: "italic" }}>Shadow</span>
           </h2>
         </div>
-        {eyesCat && <ProductCategory category={eyesCat} tierMeta={tierMeta} skinToneBg={skinToneBg} shopUrl={shopUrl} seasonName={seasonName} index={5} />}
+        {eyesCat && <ProductCategory category={eyesCat} tierMeta={tierMeta} skinToneBg={skinToneBg} shopUrl={shopUrl} index={5} />}
       </section>
 
       <div className="editorial-divider" />
@@ -580,7 +578,7 @@ export default function ResultsContent() {
             Bronzer <span style={{ fontStyle: "italic" }}>Shades</span>
           </h2>
         </div>
-        {bronzerCat && <ProductCategory category={bronzerCat} tierMeta={tierMeta} skinToneBg={skinToneBg} shopUrl={shopUrl} seasonName={seasonName} index={6} />}
+        {bronzerCat && <ProductCategory category={bronzerCat} tierMeta={tierMeta} skinToneBg={skinToneBg} shopUrl={shopUrl} index={6} />}
       </section>
 
       <div className="editorial-divider" />
@@ -593,7 +591,7 @@ export default function ResultsContent() {
             Nail <span style={{ fontStyle: "italic" }}>Colors</span>
           </h2>
         </div>
-        {nailsCat && <ProductCategory category={nailsCat} tierMeta={tierMeta} skinToneBg={skinToneBg} shopUrl={shopUrl} seasonName={seasonName} index={7} />}
+        {nailsCat && <ProductCategory category={nailsCat} tierMeta={tierMeta} skinToneBg={skinToneBg} shopUrl={shopUrl} index={7} />}
       </section>
 
       <div className="editorial-divider" />
