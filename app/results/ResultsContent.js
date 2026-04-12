@@ -277,18 +277,28 @@ export default function ResultsContent() {
       .catch(() => {}); // Silently fall back to static
   }, [seasonName]);
 
-  // Merge KV products into static categories (KV wins per-slot)
+  // Merge KV products into static categories (KV wins per-slot).
+  // KV products from Perplexity often lack hex colors, which makes the swatch
+  // circles disappear and the card layout look broken. When KV doesn't supply
+  // a hex, fall back to the static product's hex at the same season/category/
+  // tier slot so every card renders a swatch.
   const { categories, tierMeta } = (() => {
     if (!kvProducts) return staticRecs;
     const merged = staticRecs.categories.map((cat) => {
       const kvCat = kvProducts[cat.key];
       if (!kvCat) return cat;
-      // Overlay KV data onto static tiers
       const mergedTiers = { ...cat.tiers };
       for (const tier of ["budget", "value", "splurge"]) {
-        if (kvCat[tier]?.length > 0) {
-          mergedTiers[tier] = kvCat[tier];
-        }
+        if (!kvCat[tier]?.length) continue;
+        const staticTier = cat.tiers?.[tier];
+        const staticArr = Array.isArray(staticTier) ? staticTier : staticTier ? [staticTier] : [];
+        mergedTiers[tier] = kvCat[tier].map((kvProd, i) => {
+          const fallbackHex = staticArr[i]?.hex || staticArr[0]?.hex;
+          return {
+            ...kvProd,
+            hex: kvProd.hex && kvProd.hex !== "#999999" ? kvProd.hex : fallbackHex,
+          };
+        });
       }
       return { ...cat, tiers: mergedTiers };
     });
