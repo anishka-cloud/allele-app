@@ -97,6 +97,8 @@ function SkinToneSwatch({ hex, skinToneBg, size = 48 }) {
 function TierCard({ tier, product, tierMeta, skinToneBg, delay = 0, shopUrl, productUrl }) {
   const meta = tierMeta[tier];
   const isValue = tier === "value";
+  const amazonSearchUrl = `https://www.amazon.com/s?k=${encodeURIComponent(`${product.brand} ${product.product} ${product.shade}`)}&tag=anishkanawa00-20`;
+  const displayHex = product.hex && product.hex !== "#999999" ? product.hex : null;
 
   return (
     <div
@@ -110,22 +112,24 @@ function TierCard({ tier, product, tierMeta, skinToneBg, delay = 0, shopUrl, pro
 
       {isValue && <div className="most-popular-tag">Most Popular</div>}
 
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "12px", margin: "16px 0 12px" }}>
-        <div style={{ textAlign: "center" }}>
-          <div style={{ width: 36, height: 36, borderRadius: "50%", background: product.hex, boxShadow: `0 2px 8px ${product.hex}40, inset 0 1px 2px rgba(255,255,255,0.2)`, margin: "0 auto" }} />
-          <span style={{ fontSize: "0.55rem", color: "var(--text-muted)", marginTop: 3, display: "block" }}>Pure</span>
+      {displayHex && (
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "12px", margin: "16px 0 12px" }}>
+          <div style={{ textAlign: "center" }}>
+            <div style={{ width: 36, height: 36, borderRadius: "50%", background: displayHex, boxShadow: `0 2px 8px ${displayHex}40, inset 0 1px 2px rgba(255,255,255,0.2)`, margin: "0 auto" }} />
+            <span style={{ fontSize: "0.55rem", color: "var(--text-muted)", marginTop: 3, display: "block" }}>Pure</span>
+          </div>
+          <SkinToneSwatch hex={displayHex} skinToneBg={skinToneBg} size={38} />
         </div>
-        <SkinToneSwatch hex={product.hex} skinToneBg={skinToneBg} size={38} />
-      </div>
+      )}
 
-      <div style={{ textAlign: "center", padding: "0 8px" }}>
+      <div style={{ textAlign: "center", padding: displayHex ? "0 8px" : "16px 8px 0" }}>
         <p style={{ fontFamily: "var(--font-inter)", fontSize: "0.82rem", fontWeight: 600, color: "var(--text-primary)", marginBottom: 2 }}>{product.brand}</p>
         <p style={{ fontFamily: "var(--font-inter)", fontSize: "0.75rem", color: "var(--text-secondary)", fontWeight: 300, marginBottom: 2 }}>{product.product}</p>
         <p style={{ fontFamily: "var(--font-playfair, 'Playfair Display')", fontSize: "0.8rem", fontStyle: "italic", color: "var(--text-primary)", marginBottom: 4 }}>&ldquo;{product.shade}&rdquo;</p>
         <p style={{ fontFamily: "var(--font-inter)", fontSize: "0.9rem", fontWeight: 600, color: "var(--accent-gold)", marginBottom: 12 }}>{product.price}</p>
       </div>
 
-      <a href={product.buy_url || productUrl || shopUrl || "https://shopmy.us/shop/nish"} target="_blank" rel="sponsored noopener noreferrer" className="tier-cta" style={{ display: "block", textAlign: "center", textDecoration: "none" }}>
+      <a href={product.source === "kv" ? amazonSearchUrl : (productUrl || shopUrl || amazonSearchUrl)} target="_blank" rel="sponsored noopener noreferrer" className="tier-cta" style={{ display: "block", textAlign: "center", textDecoration: "none" }}>
         Shop This Shade &rarr;
       </a>
     </div>
