@@ -123,7 +123,7 @@ function TierCard({ tier, product, tierMeta, skinToneBg, delay = 0, shopUrl }) {
         <p style={{ fontFamily: "var(--font-inter)", fontSize: "0.9rem", fontWeight: 600, color: "var(--accent-gold)", marginBottom: 12 }}>{product.price}</p>
       </div>
 
-      <a href={shopUrl || "https://shopmy.us/shop/nish"} target="_blank" rel="sponsored noopener noreferrer" className="tier-cta" style={{ display: "block", textAlign: "center", textDecoration: "none" }}>
+      <a href={product.buy_url || shopUrl || "https://shopmy.us/shop/nish"} target="_blank" rel="sponsored noopener noreferrer" className="tier-cta" style={{ display: "block", textAlign: "center", textDecoration: "none" }}>
         Shop This Shade &rarr;
       </a>
     </div>
