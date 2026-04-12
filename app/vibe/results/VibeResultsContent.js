@@ -125,13 +125,42 @@ export default function VibeResultsContent() {
   const [copied, setCopied] = useState(false);
   const [downloading, setDownloading] = useState(false);
   const [showContent, setShowContent] = useState(false);
+  const [kvProducts, setKvProducts] = useState(null);
 
   const archetypeCode = searchParams.get("archetype") || "CG";
   const secondaryCode = searchParams.get("secondary") || null;
 
   const archetype = archetypes[archetypeCode];
   const secondaryArchetype = secondaryCode ? archetypes[secondaryCode] : null;
-  const products = vibeProducts[archetypeCode] || vibeProducts.CG;
+  const staticProducts = vibeProducts[archetypeCode] || vibeProducts.CG;
+
+  // Hydrate with KV products if available (non-blocking)
+  useEffect(() => {
+    if (!archetypeCode) return;
+    fetch(`/api/vibe-products?archetype=${encodeURIComponent(archetypeCode)}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.source === "kv" && data.products) {
+          setKvProducts(data.products);
+        }
+      })
+      .catch(() => {});
+  }, [archetypeCode]);
+
+  // Merge KV products over static (KV wins per-slot)
+  const products = (() => {
+    if (!kvProducts) return staticProducts;
+    const merged = { ...staticProducts };
+    for (const [catKey, kvCat] of Object.entries(kvProducts)) {
+      if (!merged[catKey]) merged[catKey] = {};
+      for (const tier of ["budget", "value", "splurge"]) {
+        if (kvCat[tier]) {
+          merged[catKey] = { ...merged[catKey], [tier]: { ...merged[catKey][tier], ...kvCat[tier] } };
+        }
+      }
+    }
+    return merged;
+  })();
 
   const proTipMap = {
     top: "top", bottom: "bottom", layer: "layer", shoes: "shoes",

@@ -6,6 +6,13 @@ import {
   buildKvKey,
   buildPerplexityPrompt,
 } from "@/lib/seasons";
+import {
+  VIBE_ARCHETYPES,
+  VIBE_CATEGORIES,
+  VIBE_TIERS,
+  buildVibeKvKey,
+  buildVibePerplexityPrompt,
+} from "@/lib/vibeRefresh";
 
 const KV_TTL = 691200; // 8 days in seconds
 const RATE_LIMIT_MS = 200; // delay between Perplexity calls
@@ -15,10 +22,9 @@ function sleep(ms) {
 }
 
 /**
- * Call Perplexity Sonar API for a single product slot.
+ * Call Perplexity Sonar API with a given prompt.
  */
-async function fetchProduct(season, category, tier) {
-  const prompt = buildPerplexityPrompt(season, category, tier);
+async function fetchFromPerplexity(prompt) {
   const apiKey = process.env.PERPLEXITY_API_KEY;
 
   const res = await fetch("https://api.perplexity.ai/chat/completions", {
@@ -44,19 +50,69 @@ async function fetchProduct(season, category, tier) {
   const content = data.choices?.[0]?.message?.content;
   if (!content) throw new Error("Empty response from Perplexity");
 
-  // Extract JSON from response (handle potential markdown wrapping)
   const jsonMatch = content.match(/\{[\s\S]*\}/);
   if (!jsonMatch) throw new Error(`No JSON found in response: ${content.slice(0, 200)}`);
 
   const product = JSON.parse(jsonMatch[0]);
 
-  // Validate required fields
   const required = ["brand", "product", "shade", "price", "buy_url"];
   for (const field of required) {
     if (!product[field]) throw new Error(`Missing field: ${field}`);
   }
 
   return product;
+}
+
+/**
+ * Refresh all Shade DNA products (288 slots).
+ */
+async function refreshShade(counters) {
+  for (const season of SEASONS) {
+    for (const category of REFRESH_CATEGORIES) {
+      for (const tier of TIERS) {
+        const key = buildKvKey(season.id, category, tier.name);
+        try {
+          const prompt = buildPerplexityPrompt(season, category, tier.name);
+          const product = await fetchFromPerplexity(prompt);
+          product.refreshed_at = new Date().toISOString();
+          await kv.set(key, JSON.stringify(product), { ex: KV_TTL });
+          counters.success++;
+          console.log(`[refresh] OK: ${key}`);
+        } catch (err) {
+          counters.failed++;
+          counters.errors.push(`${key}: ${err.message}`);
+          console.error(`[refresh] FAIL: ${key}: ${err.message}`);
+        }
+        await sleep(RATE_LIMIT_MS);
+      }
+    }
+  }
+}
+
+/**
+ * Refresh all Vibe DNA products (264 slots).
+ */
+async function refreshVibe(counters) {
+  for (const archetype of VIBE_ARCHETYPES) {
+    for (const category of VIBE_CATEGORIES) {
+      for (const tier of VIBE_TIERS) {
+        const key = buildVibeKvKey(archetype.id, category.key, tier.name);
+        try {
+          const prompt = buildVibePerplexityPrompt(archetype, category, tier.name);
+          const product = await fetchFromPerplexity(prompt);
+          product.refreshed_at = new Date().toISOString();
+          await kv.set(key, JSON.stringify(product), { ex: KV_TTL });
+          counters.success++;
+          console.log(`[refresh] OK: ${key}`);
+        } catch (err) {
+          counters.failed++;
+          counters.errors.push(`${key}: ${err.message}`);
+          console.error(`[refresh] FAIL: ${key}: ${err.message}`);
+        }
+        await sleep(RATE_LIMIT_MS);
+      }
+    }
+  }
 }
 
 export async function POST(request) {
@@ -70,7 +126,6 @@ export async function POST(request) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  // Check for Perplexity API key
   if (!process.env.PERPLEXITY_API_KEY) {
     return Response.json(
       { error: "PERPLEXITY_API_KEY not configured" },
@@ -78,48 +133,31 @@ export async function POST(request) {
     );
   }
 
-  let success = 0;
-  let failed = 0;
-  const errors = [];
+  // Check if a specific product type was requested
+  const url = new URL(request.url);
+  const type = url.searchParams.get("type"); // "shade", "vibe", or null (both)
 
-  for (const season of SEASONS) {
-    for (const category of REFRESH_CATEGORIES) {
-      for (const tier of TIERS) {
-        const key = buildKvKey(season.id, category, tier.name);
+  const counters = { success: 0, failed: 0, errors: [] };
 
-        try {
-          const product = await fetchProduct(season, category, tier.name);
-          product.refreshed_at = new Date().toISOString();
-
-          await kv.set(key, JSON.stringify(product), { ex: KV_TTL });
-          success++;
-          console.log(`[refresh] OK: ${key}`);
-        } catch (err) {
-          failed++;
-          const msg = `${key}: ${err.message}`;
-          errors.push(msg);
-          console.error(`[refresh] FAIL: ${msg}`);
-        }
-
-        // Rate limit
-        await sleep(RATE_LIMIT_MS);
-      }
-    }
+  if (!type || type === "shade") {
+    await refreshShade(counters);
+  }
+  if (!type || type === "vibe") {
+    await refreshVibe(counters);
   }
 
   const duration = Date.now() - startTime;
 
   return Response.json({
-    success,
-    failed,
-    total: success + failed,
+    success: counters.success,
+    failed: counters.failed,
+    total: counters.success + counters.failed,
     duration_ms: duration,
-    errors: errors.slice(0, 20), // cap error list
+    errors: counters.errors.slice(0, 30),
   });
 }
 
 // Vercel cron hits GET by default
 export async function GET(request) {
-  // Vercel cron sends authorization via CRON_SECRET automatically
   return POST(request);
 }
