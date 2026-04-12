@@ -7,6 +7,9 @@ import { getProductRecommendations } from "@/lib/productData";
 import { getSkinTone } from "@/lib/skinTones";
 import { getShopUrl } from "@/lib/shopLinks";
 
+// KV hydration is disabled — see useEffect below for context.
+const KV_HYDRATION = false;
+
 /* --- Processing / Loading Animation --- */
 function ProcessingScreen({ onComplete }) {
   const [phase, setPhase] = useState(0);
@@ -262,9 +265,15 @@ export default function ResultsContent() {
   const skinToneBg = getSkinTone(skinAnswer, undertone, olive);
   const shopUrl = getShopUrl(seasonName);
 
-  // Hydrate with KV products if available (non-blocking)
+  // KV hydration is disabled at the module level — Perplexity refresh job is
+  // returning placeholder hex colors (#999999), miscategorized products
+  // (highlighters as concealers, eyeshadows as nail polish), and hallucinated
+  // product names. Until the refresh job is rebuilt with validation, ship the
+  // hand-curated static recommendations from productData.js. The merge code
+  // below is preserved and stays a no-op while kvProducts is null; flip
+  // KV_HYDRATION back on once the upstream pipeline is fixed.
   useEffect(() => {
-    if (!seasonName) return;
+    if (!KV_HYDRATION || !seasonName) return;
     fetch(`/api/products?season=${encodeURIComponent(seasonName)}`)
       .then((res) => res.json())
       .then((data) => {
@@ -272,7 +281,7 @@ export default function ResultsContent() {
           setKvProducts(data.products);
         }
       })
-      .catch(() => {}); // Silently fall back to static
+      .catch(() => {});
   }, [seasonName]);
 
   // Merge KV products into static categories (KV wins per-slot).
