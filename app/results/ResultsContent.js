@@ -442,6 +442,33 @@ export default function ResultsContent() {
         </div>
       </section>
 
+      {/* === SECTION 1.5: The 2026 Edit === */}
+      {seasonData.trendEdit && seasonData.trendEdit.length > 0 && (
+        <section className="px-6 pb-10 text-center max-w-2xl mx-auto animate-fade-in-up">
+          <div className="rounded-2xl px-6 py-8" style={{ background: "rgba(196,162,101,0.05)", border: "1px solid rgba(196,162,101,0.12)" }}>
+            <span className="block mb-2" style={{ fontFamily: "var(--font-inter)", fontSize: "0.65rem", letterSpacing: "0.3em", textTransform: "uppercase", color: "var(--accent-gold)", fontWeight: 600 }}>
+              The 2026 Edit
+            </span>
+            <h2 className="mb-2" style={{ fontFamily: "var(--font-playfair, 'Playfair Display')", fontSize: "clamp(1.4rem, 4vw, 1.8rem)", fontWeight: 600, color: "var(--text-primary)" }}>
+              Trending colors that work for you
+            </h2>
+            <p className="mb-6 max-w-md mx-auto" style={{ fontFamily: "var(--font-inter)", fontSize: "0.8rem", color: "var(--text-secondary)", fontWeight: 300, lineHeight: 1.6 }}>
+              This year&rsquo;s colors, filtered through your season. Shop these with confidence.
+            </p>
+            <div className="flex flex-wrap justify-center gap-5 md:gap-7">
+              {seasonData.trendEdit.map((c, i) => (
+                <div key={i} className="flex flex-col items-center" style={{ minWidth: 72 }}>
+                  <div style={{ width: 56, height: 56, borderRadius: "50%", background: c.hex, boxShadow: `0 3px 12px ${c.hex}50, inset 0 1px 2px rgba(255,255,255,0.25)`, border: "2px solid rgba(255,255,255,0.5)", transition: "transform 0.3s ease" }} className="hover:scale-110" />
+                  <span className="mt-2" style={{ fontFamily: "var(--font-inter)", fontSize: "0.72rem", color: "var(--text-secondary)", fontWeight: 500, letterSpacing: "0.02em", textAlign: "center", lineHeight: 1.3 }}>
+                    {c.name}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* FTC Affiliate Disclosure */}
       <section className="px-6 py-4 max-w-2xl mx-auto animate-fade-in-up">
         <div className="rounded-2xl px-5 py-4" style={{ background: "rgba(196,162,101,0.08)", border: "1px solid rgba(196,162,101,0.15)" }}>
