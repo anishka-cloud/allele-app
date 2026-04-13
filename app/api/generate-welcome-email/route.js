@@ -10,6 +10,14 @@ import {
 
 const TIER_DB_MAP = { Budget: "budget", "Best Value": "value", Splurge: "splurge" };
 
+// KV hydration disabled — the Perplexity refresh job writes placeholder hex
+// (#999999), miscategorizes products (highlighters as concealers, eyeshadows
+// as nail polish), and fabricates product names. See the KV_HYDRATION flag
+// in app/results/ResultsContent.js for the matching disable on the website.
+// Flip back to true only after the refresh pipeline is rebuilt with
+// validation.
+const KV_ENABLED = false;
+
 /**
  * POST /api/generate-welcome-email
  * Body: { season: "Clear Spring" }
@@ -25,11 +33,11 @@ export async function POST(request) {
     return Response.json({ error: "season field required" }, { status: 400 });
   }
 
-  // Try to read KV products for this season
+  // Try to read KV products for this season (gated behind KV_ENABLED).
   let kvProducts = null;
   const season = SEASONS.find((s) => s.name === seasonName);
 
-  if (season) {
+  if (KV_ENABLED && season) {
     try {
       const fetches = [];
       for (const category of REFRESH_CATEGORIES) {
