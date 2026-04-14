@@ -2,6 +2,7 @@ import { Playfair_Display, Inter } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 import { AnalyticsProvider } from "./AnalyticsProvider";
+import { CookieConsent } from "./CookieConsent";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -84,6 +85,7 @@ export default function RootLayout({ children }) {
           This site contains affiliate links. We may earn a small commission when you shop through them, at no extra cost to you. <a href="/disclosure" style={{ color: "#5a4a2a", textDecoration: "underline" }}>Full disclosure</a>.
         </div>
         {children}
+        <CookieConsent />
       </body>
       {process.env.NEXT_PUBLIC_GA_ID && (
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />

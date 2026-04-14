@@ -480,6 +480,8 @@ export default function VibeResultsContent() {
         <p style={{ fontFamily: "var(--font-inter)", fontSize: "0.75rem", color: "var(--text-muted)", letterSpacing: "0.05em" }}>
           &copy; {new Date().getFullYear()} Allele &middot; Vibe DNA &middot;{" "}
           <a href="/disclosure" style={{ color: "var(--text-muted)", textDecoration: "underline" }}>Affiliate Disclosure</a>
+          {" "}&middot;{" "}
+          <a href="/privacy" style={{ color: "var(--text-muted)", textDecoration: "underline" }}>Privacy</a>
         </p>
       </footer>
     </main>
