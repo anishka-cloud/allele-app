@@ -60,6 +60,29 @@ export default function RootLayout({ children }) {
       </head>
       <body className="min-h-screen antialiased">
         <AnalyticsProvider />
+        <div
+          role="note"
+          aria-label="Affiliate disclosure"
+          style={{
+            position: "sticky",
+            top: 0,
+            zIndex: 100,
+            background: "rgba(196,162,101,0.12)",
+            borderBottom: "1px solid rgba(196,162,101,0.22)",
+            padding: "8px 16px",
+            textAlign: "center",
+            fontFamily: "var(--font-inter, system-ui, sans-serif)",
+            fontSize: "0.72rem",
+            color: "#5a4a2a",
+            fontWeight: 400,
+            letterSpacing: "0.01em",
+            lineHeight: 1.45,
+            backdropFilter: "blur(8px)",
+            WebkitBackdropFilter: "blur(8px)",
+          }}
+        >
+          This site contains affiliate links. We may earn a small commission when you shop through them, at no extra cost to you. <a href="/disclosure" style={{ color: "#5a4a2a", textDecoration: "underline" }}>Full disclosure</a>.
+        </div>
         {children}
       </body>
       {process.env.NEXT_PUBLIC_GA_ID && (

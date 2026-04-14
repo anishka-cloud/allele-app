@@ -54,17 +54,20 @@ function VibeTierCard({ product, tierKey, tierMeta, archetype }) {
       <p className="text-xs italic mt-0.5" style={{ color: "var(--text-muted)", fontFamily: "var(--font-playfair)" }}>&ldquo;{product.shade}&rdquo;</p>
       <p className="text-sm font-semibold mt-2" style={{ color: archetype.accentColor, fontFamily: "var(--font-inter)" }}>${product.price}</p>
 
-      <button
-        onClick={() => window.open("https://shopmy.us/shop/nish", "_blank")}
-        className="w-full mt-3 py-2.5 px-4 rounded-full text-xs font-semibold tracking-wider transition-all duration-200 hover:opacity-90"
+      <a
+        href="https://shopmy.us/shop/nish"
+        target="_blank"
+        rel="sponsored noopener noreferrer"
+        className="w-full mt-3 py-2.5 px-4 rounded-full text-xs font-semibold tracking-wider transition-all duration-200 hover:opacity-90 block text-center"
         style={{
           background: "var(--text-primary)",
           color: "white",
           fontFamily: "var(--font-inter)",
+          textDecoration: "none",
         }}
       >
         SHOP THIS VIBE →
-      </button>
+      </a>
     </div>
   );
 }
@@ -404,6 +407,15 @@ export default function VibeResultsContent() {
       {/* Divider */}
       <div className="flex justify-center my-4"><div style={{ width: 50, height: 2, background: archetype.accentColor, borderRadius: 1, opacity: 0.3 }} /></div>
 
+      {/* FTC Affiliate Disclosure */}
+      <section className="px-6 py-4 max-w-2xl mx-auto animate-fade-in-up">
+        <div className="rounded-2xl px-5 py-4" style={{ background: "rgba(196,162,101,0.08)", border: "1px solid rgba(196,162,101,0.15)" }}>
+          <p style={{ fontFamily: "var(--font-inter)", fontSize: "0.8rem", color: "var(--text-secondary)", lineHeight: 1.6, textAlign: "center", fontWeight: 300 }}>
+            {"\ud83d\udca1"} This guide includes affiliate links. When you shop through them, we may earn a small commission at no extra cost to you. We only recommend products we&rsquo;d actually wear.
+          </p>
+        </div>
+      </section>
+
       {/* Product Recommendations */}
       <section className="px-6 py-10 max-w-4xl mx-auto">
         <div className="text-center mb-12">
@@ -466,7 +478,8 @@ export default function VibeResultsContent() {
 
       <footer className="px-6 py-8 text-center" style={{ borderTop: "1px solid var(--border-light)" }}>
         <p style={{ fontFamily: "var(--font-inter)", fontSize: "0.75rem", color: "var(--text-muted)", letterSpacing: "0.05em" }}>
-          &copy; {new Date().getFullYear()} Allele &middot; Vibe DNA
+          &copy; {new Date().getFullYear()} Allele &middot; Vibe DNA &middot;{" "}
+          <a href="/disclosure" style={{ color: "var(--text-muted)", textDecoration: "underline" }}>Affiliate Disclosure</a>
         </p>
       </footer>
     </main>

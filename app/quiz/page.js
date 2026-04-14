@@ -4,6 +4,7 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { questions } from "@/lib/questions";
 import { calculateSeason } from "@/lib/quizLogic";
+import { track } from "@/lib/analytics";
 
 function ContrastVisual({ type }) {
   const visuals = {
@@ -56,10 +57,32 @@ export default function QuizPage() {
   const [isAnimating, setIsAnimating] = useState(false);
   const router = useRouter();
   const containerRef = useRef(null);
+  const startTimeRef = useRef(null);
+  const completedRef = useRef(false);
 
   const question = questions[currentQ];
   const progress = ((currentQ) / questions.length) * 100;
   const progressAfter = ((currentQ + 1) / questions.length) * 100;
+
+  useEffect(() => {
+    startTimeRef.current = Date.now();
+    const params = new URLSearchParams(window.location.search);
+    track.quizStarted(params.get("source") || "homepage");
+
+    const handleBeforeUnload = () => {
+      if (completedRef.current) return;
+      const elapsed = Math.round((Date.now() - startTimeRef.current) / 1000);
+      track.quizAbandoned(currentQ + 1, elapsed);
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      if (!completedRef.current && startTimeRef.current) {
+        const elapsed = Math.round((Date.now() - startTimeRef.current) / 1000);
+        if (elapsed > 3) track.quizAbandoned(currentQ + 1, elapsed);
+      }
+    };
+  }, []);
 
   const handleSelect = useCallback(
     (value) => {
@@ -67,6 +90,8 @@ export default function QuizPage() {
 
       const newAnswers = { ...answers, [question.id]: value };
       setAnswers(newAnswers);
+
+      track.questionAnswered(currentQ + 1, question.id, value);
 
       // Animate out and go to next
       setIsAnimating(true);
@@ -78,7 +103,16 @@ export default function QuizPage() {
         } else {
           // Calculate result and navigate
           const result = calculateSeason(newAnswers);
-          const searchParams = new URLSearchParams({
+          completedRef.current = true;
+          track.quizCompleted({
+            season: result.season,
+            undertone: result.undertone,
+            contrast: result.contrast,
+            value: result.value,
+            chroma: result.chroma,
+            olive: result.oliveFlag ? "1" : "0",
+          });
+          const params = new URLSearchParams({
             season: result.season,
             undertone: result.undertone,
             olive: result.oliveFlag ? "1" : "0",
@@ -90,7 +124,7 @@ export default function QuizPage() {
             value: result.value,
             chroma: result.chroma,
           });
-          router.push(`/results?${searchParams.toString()}`);
+          router.push(`/results?${params.toString()}`);
         }
         setIsAnimating(false);
       }, 400);

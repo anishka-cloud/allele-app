@@ -13,9 +13,9 @@ export async function POST(request) {
     const pubId = process.env.BEEHIIV_PUBLICATION_ID;
 
     if (!apiKey || !pubId) {
-      // Graceful fallback: log the email data and return success
-      console.log("[subscribe] Beehiiv not configured. Email data:", {
-        email, season, undertone, contrast, skin, value, olive,
+      // Graceful fallback: do NOT log PII. Just record the event happened.
+      console.warn("[subscribe] Beehiiv not configured — subscription recorded but not delivered.", {
+        season: season || "unknown",
         timestamp: new Date().toISOString(),
       });
       return NextResponse.json({ success: true, provider: "logged" });
@@ -40,6 +40,8 @@ export async function POST(request) {
             { name: "season", value: season || "" },
             { name: "undertone", value: undertone || "" },
             { name: "contrast", value: contrast || "" },
+            { name: "skin", value: skin || "" },
+            { name: "value", value: value || "" },
             { name: "olive", value: olive || "0" },
           ],
         }),

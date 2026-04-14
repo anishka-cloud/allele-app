@@ -6,6 +6,7 @@ import { seasons } from "@/lib/seasonData";
 import { getProductRecommendations } from "@/lib/productData";
 import { getSkinTone } from "@/lib/skinTones";
 import { getShopUrl } from "@/lib/shopLinks";
+import { track } from "@/lib/analytics";
 
 // KV hydration is disabled — see useEffect below for context.
 const KV_HYDRATION = false;
@@ -95,11 +96,21 @@ function SkinToneSwatch({ hex, skinToneBg, size = 48 }) {
 }
 
 /* --- Tier Product Card --- */
-function TierCard({ tier, product, tierMeta, skinToneBg, delay = 0, shopUrl }) {
+function TierCard({ tier, product, tierMeta, skinToneBg, delay = 0, shopUrl, season, category }) {
   const meta = tierMeta[tier];
   const isValue = tier === "value";
   const amazonSearchUrl = `https://www.amazon.com/s?k=${encodeURIComponent(`${product.brand} ${product.product} ${product.shade}`)}&tag=anishkanawa00-20`;
   const displayHex = product.hex && product.hex !== "#999999" ? product.hex : null;
+  const handleShopClick = () => {
+    track.shopClick({
+      season,
+      category,
+      tier,
+      brand: product.brand,
+      productName: product.product,
+      price: product.price,
+    });
+  };
 
   return (
     <div
@@ -130,7 +141,7 @@ function TierCard({ tier, product, tierMeta, skinToneBg, delay = 0, shopUrl }) {
         <p style={{ fontFamily: "var(--font-inter)", fontSize: "0.9rem", fontWeight: 600, color: "var(--accent-gold)", marginBottom: 12 }}>{product.price}</p>
       </div>
 
-      <a href={amazonSearchUrl} target="_blank" rel="sponsored noopener noreferrer" className="tier-cta" style={{ display: "block", textAlign: "center", textDecoration: "none" }}>
+      <a href={amazonSearchUrl} onClick={handleShopClick} target="_blank" rel="sponsored noopener noreferrer" className="tier-cta" style={{ display: "block", textAlign: "center", textDecoration: "none" }}>
         Shop This Shade &rarr;
       </a>
     </div>
@@ -138,7 +149,7 @@ function TierCard({ tier, product, tierMeta, skinToneBg, delay = 0, shopUrl }) {
 }
 
 /* --- Product Category Section --- */
-function ProductCategory({ category, tierMeta, skinToneBg, index, footerNote, shopUrl }) {
+function ProductCategory({ category, tierMeta, skinToneBg, index, footerNote, shopUrl, season }) {
   const icon = CategoryIcons[category.icon] || CategoryIcons.lips;
   return (
     <div className="product-category" style={{ animationDelay: `${index * 0.08}s` }}>
@@ -149,7 +160,7 @@ function ProductCategory({ category, tierMeta, skinToneBg, index, footerNote, sh
       <div className="tier-row">
         {["budget", "value", "splurge"].map((tier, i) => (
           category.tiers[tier] && (
-            <TierCard key={tier} tier={tier} product={Array.isArray(category.tiers[tier]) ? category.tiers[tier][0] : category.tiers[tier]} tierMeta={tierMeta} skinToneBg={skinToneBg} delay={0.1 + i * 0.08 + index * 0.03} shopUrl={shopUrl} />
+            <TierCard key={tier} tier={tier} product={Array.isArray(category.tiers[tier]) ? category.tiers[tier][0] : category.tiers[tier]} tierMeta={tierMeta} skinToneBg={skinToneBg} delay={0.1 + i * 0.08 + index * 0.03} shopUrl={shopUrl} season={season} category={category.key} />
           )
         ))}
       </div>
@@ -324,6 +335,7 @@ export default function ResultsContent() {
   const handleCopyLink = () => {
     navigator.clipboard.writeText(resultsUrl);
     setCopied(true);
+    track.shareClicked(seasonName, "copy_link");
     setTimeout(() => setCopied(false), 2000);
   };
 
@@ -337,11 +349,15 @@ export default function ResultsContent() {
       facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedText}`,
       whatsapp: `https://wa.me/?text=${encodedText}%20${encodedUrl}`,
     };
-    if (urls[platform]) window.open(urls[platform], "_blank");
+    if (urls[platform]) {
+      track.shareClicked(seasonName, platform);
+      window.open(urls[platform], "_blank");
+    }
   };
 
   const handleNativeShare = () => {
     if (typeof navigator !== "undefined" && navigator.share) {
+      track.shareClicked(seasonName, "native");
       navigator.share({ title: `I'm a ${seasonName} \u2728`, text: shareText, url: resultsUrl }).catch(() => {});
     } else {
       setShareOpen(!shareOpen);
@@ -350,6 +366,7 @@ export default function ResultsContent() {
 
   const handleDownloadCard = () => {
     setDownloading(true);
+    track.downloadCard(seasonName);
     if (shareCardRef.current) {
       import("html-to-image").then(({ toPng }) => {
         toPng(shareCardRef.current, { quality: 0.95, pixelRatio: 2, backgroundColor: "#FFFBF7" })
@@ -560,8 +577,8 @@ export default function ResultsContent() {
           </p>
         </div>
         <FoundationGuidance undertone={undertone} olive={olive} />
-        {foundationCat && <ProductCategory category={foundationCat} tierMeta={tierMeta} skinToneBg={skinToneBg} shopUrl={shopUrl} index={0} />}
-        {concealerCat && <ProductCategory category={concealerCat} tierMeta={tierMeta} skinToneBg={skinToneBg} shopUrl={shopUrl} index={1} footerNote={concealerProTip} />}
+        {foundationCat && <ProductCategory category={foundationCat} tierMeta={tierMeta} skinToneBg={skinToneBg} shopUrl={shopUrl} season={seasonName} index={0} />}
+        {concealerCat && <ProductCategory category={concealerCat} tierMeta={tierMeta} skinToneBg={skinToneBg} shopUrl={shopUrl} season={seasonName} index={1} footerNote={concealerProTip} />}
       </section>
 
       <div className="editorial-divider" />
@@ -574,8 +591,8 @@ export default function ResultsContent() {
             Lip Color & <span style={{ fontStyle: "italic" }}>Liner</span>
           </h2>
         </div>
-        {lipsCat && <ProductCategory category={lipsCat} tierMeta={tierMeta} skinToneBg={skinToneBg} shopUrl={shopUrl} index={2} />}
-        {lipLinerCat && <ProductCategory category={lipLinerCat} tierMeta={tierMeta} skinToneBg={skinToneBg} shopUrl={shopUrl} index={3} />}
+        {lipsCat && <ProductCategory category={lipsCat} tierMeta={tierMeta} skinToneBg={skinToneBg} shopUrl={shopUrl} season={seasonName} index={2} />}
+        {lipLinerCat && <ProductCategory category={lipLinerCat} tierMeta={tierMeta} skinToneBg={skinToneBg} shopUrl={shopUrl} season={seasonName} index={3} />}
       </section>
 
       <div className="editorial-divider" />
@@ -588,7 +605,7 @@ export default function ResultsContent() {
             Blush <span style={{ fontStyle: "italic" }}>Shades</span>
           </h2>
         </div>
-        {blushCat && <ProductCategory category={blushCat} tierMeta={tierMeta} skinToneBg={skinToneBg} shopUrl={shopUrl} index={4} />}
+        {blushCat && <ProductCategory category={blushCat} tierMeta={tierMeta} skinToneBg={skinToneBg} shopUrl={shopUrl} season={seasonName} index={4} />}
       </section>
 
       <div className="editorial-divider" />
@@ -601,7 +618,7 @@ export default function ResultsContent() {
             Eye <span style={{ fontStyle: "italic" }}>Shadow</span>
           </h2>
         </div>
-        {eyesCat && <ProductCategory category={eyesCat} tierMeta={tierMeta} skinToneBg={skinToneBg} shopUrl={shopUrl} index={5} />}
+        {eyesCat && <ProductCategory category={eyesCat} tierMeta={tierMeta} skinToneBg={skinToneBg} shopUrl={shopUrl} season={seasonName} index={5} />}
       </section>
 
       <div className="editorial-divider" />
@@ -614,7 +631,7 @@ export default function ResultsContent() {
             Bronzer <span style={{ fontStyle: "italic" }}>Shades</span>
           </h2>
         </div>
-        {bronzerCat && <ProductCategory category={bronzerCat} tierMeta={tierMeta} skinToneBg={skinToneBg} shopUrl={shopUrl} index={6} />}
+        {bronzerCat && <ProductCategory category={bronzerCat} tierMeta={tierMeta} skinToneBg={skinToneBg} shopUrl={shopUrl} season={seasonName} index={6} />}
       </section>
 
       <div className="editorial-divider" />
@@ -627,7 +644,7 @@ export default function ResultsContent() {
             Nail <span style={{ fontStyle: "italic" }}>Colors</span>
           </h2>
         </div>
-        {nailsCat && <ProductCategory category={nailsCat} tierMeta={tierMeta} skinToneBg={skinToneBg} shopUrl={shopUrl} index={7} />}
+        {nailsCat && <ProductCategory category={nailsCat} tierMeta={tierMeta} skinToneBg={skinToneBg} shopUrl={shopUrl} season={seasonName} index={7} />}
       </section>
 
       <div className="editorial-divider" />
@@ -684,12 +701,15 @@ export default function ResultsContent() {
                   });
                   if (res.ok) {
                     setEmailSubmitted(true);
+                    track.emailSubmitted(seasonName);
                   } else {
                     const data = await res.json().catch(() => ({}));
                     setEmailError(data.error || "Something went wrong. Try again.");
+                    track.emailFailed(seasonName, res.status);
                   }
                 } catch (err) {
                   setEmailError("Something went wrong. Try again.");
+                  track.emailFailed(seasonName, "network_error");
                 } finally {
                   setEmailSubmitting(false);
                 }
