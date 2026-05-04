@@ -8,8 +8,10 @@
   background: var(--cream);
   line-height: 1.5;
 }
-.landing a { color: inherit; text-decoration: none; }
-.landing button { font-family: inherit; border: none; background: none; cursor: pointer; color: inherit; }
+/* Use :where() to keep the reset at zero specificity so the pill rules
+   (.l-cta-primary, .l-nav-cta) below win without manual prefixing. */
+:where(.landing) a { color: inherit; text-decoration: none; }
+:where(.landing) button { font-family: inherit; border: none; background: none; cursor: pointer; color: inherit; }
 .landing * { box-sizing: border-box; }
 
 /* Override the body background that legacy globals.css sets */
@@ -130,7 +132,7 @@ body:has(.landing) { background: var(--cream); }
   margin-bottom: 48px;
   flex-wrap: wrap;
 }
-.landing .l-cta-primary {
+.l-cta-primary {
   display: inline-flex;
   align-items: center;
   gap: 12px;
@@ -144,12 +146,12 @@ body:has(.landing) { background: var(--cream); }
   border-radius: 999px;
   transition: all 0.2s;
 }
-.landing .l-cta-primary:hover {
+.l-cta-primary:hover {
   transform: translateY(-1px);
   box-shadow: 0 10px 30px -10px rgba(26, 22, 19, 0.4);
 }
-.landing .l-cta-primary .arrow { transition: transform 0.2s; }
-.landing .l-cta-primary:hover .arrow { transform: translateX(3px); }
+.l-cta-primary .arrow { transition: transform 0.2s; }
+.l-cta-primary:hover .arrow { transform: translateX(3px); }
 .l-cta-meta {
   font-family: var(--mono);
   font-size: 11px;

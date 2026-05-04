@@ -15,8 +15,10 @@
   text-rendering: optimizeLegibility;
 }
 .dt-results * { box-sizing: border-box; }
-.dt-results a { color: inherit; text-decoration: none; }
-.dt-results button { font: inherit; cursor: pointer; border: 0; background: transparent; color: inherit; }
+/* Use :where() so the reset has zero specificity — class-based pill rules below
+   (.dt-btn-primary, .dt-nav-cta, etc.) need to win without manual prefixing. */
+:where(.dt-results) a { color: inherit; text-decoration: none; }
+:where(.dt-results) button { font: inherit; cursor: pointer; border: 0; background: transparent; color: inherit; }
 body:has(.dt-results) { background: var(--cream); }
 
 /* ============================================================
