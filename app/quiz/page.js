@@ -1,342 +1,459 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { questions } from "@/lib/questions";
-import { calculateSeason } from "@/lib/quizLogic";
+import Link from "next/link";
+import { SEASONS } from "@/lib/handoffSeasons";
+import {
+  QUIZ,
+  scoreFromAnswers,
+  topSeasons,
+  confidence,
+  narrowingState,
+  SEASON_IDS,
+} from "@/lib/handoffQuiz";
 import { track } from "@/lib/analytics";
+import "./quiz.css";
 
-function ContrastVisual({ type }) {
-  const visuals = {
-    low_contrast: (
-      <div className="flex items-center gap-1.5">
-        <div className="w-5 h-5 rounded-full" style={{ background: "#E8D5B7" }} />
-        <div className="w-5 h-5 rounded-full" style={{ background: "#D4B896" }} />
-        <div className="w-5 h-5 rounded-full" style={{ background: "#C4AA82" }} />
+function Nav() {
+  return (
+    <nav className="qz-nav">
+      <div className="qz-nav-inner">
+        <Link href="/" className="qz-nav-brand">allele</Link>
+        <div className="qz-nav-meta">
+          <span>Shade DNA</span>
+          <span className="qz-dot" />
+          <span>Chapter 01 / 02</span>
+        </div>
+        <Link href="/results?season=True+Autumn" className="qz-nav-skip">
+          Skip to a sample result →
+        </Link>
       </div>
-    ),
-    medium_contrast: (
-      <div className="flex items-center gap-1.5">
-        <div className="w-5 h-5 rounded-full" style={{ background: "#F0D5B7" }} />
-        <div className="w-5 h-5 rounded-full" style={{ background: "#8B6B4A" }} />
-        <div className="w-5 h-5 rounded-full" style={{ background: "#7B8B55" }} />
-      </div>
-    ),
-    high_contrast: (
-      <div className="flex items-center gap-1.5">
-        <div className="w-5 h-5 rounded-full" style={{ background: "#F5E6D3" }} />
-        <div className="w-5 h-5 rounded-full" style={{ background: "#2B1D0E" }} />
-        <div className="w-5 h-5 rounded-full" style={{ background: "#3B2B1B" }} />
-      </div>
-    ),
-  };
-  return visuals[type] || null;
+    </nav>
+  );
 }
 
-function ColorSwatches({ swatches }) {
+function TopBar({ step, total, narrow }) {
   return (
-    <div className="flex items-center gap-1.5 mt-2">
-      {swatches.map((color, i) => (
-        <div
-          key={i}
-          className="w-5 h-5 rounded-full flex-shrink-0"
-          style={{
-            background: color,
-            boxShadow: "0 1px 4px rgba(0,0,0,0.12), inset 0 1px 1px rgba(255,255,255,0.2)",
-          }}
-        />
-      ))}
+    <div className="qz-topbar">
+      <div className="qz-topbar-inner">
+        <div className="qz-topbar-left">
+          <span className="qz-topbar-label">Question</span>
+          <span className="qz-topbar-num">
+            <strong>{String(step + 1).padStart(2, "0")}</strong> / {total}
+          </span>
+        </div>
+        <div className="qz-topbar-track">
+          <div className="qz-topbar-fill" style={{ width: `${(step / total) * 100}%` }} />
+          {Array.from({ length: total }).map((_, i) => (
+            <span
+              key={i}
+              className={`qz-tick${i < step ? " done" : ""}${i === step ? " active" : ""}`}
+              style={{ left: `${(i / (total - 1)) * 100}%` }}
+            />
+          ))}
+        </div>
+        <div className="qz-topbar-right">
+          <span className="qz-topbar-label">Status</span>
+          <div className={`qz-narrow qz-narrow-${narrow.phase}`}>
+            <span className={`qz-narrow-dot qz-narrow-dot-${narrow.phase}`} />
+            <span className="qz-narrow-label">{narrow.label}</span>
+          </div>
+        </div>
+      </div>
+      {narrow.subSeasonPair && (
+        <div className="qz-topbar-subrow">
+          <span className="qz-topbar-sublabel">Between</span>
+          <span className="qz-topbar-pair">
+            <em>{narrow.subSeasonPair.a}</em>
+            <span className="qz-topbar-pair-nums">
+              {narrow.subSeasonPair.aPct} / {narrow.subSeasonPair.bPct}
+            </span>
+            <em>{narrow.subSeasonPair.b}</em>
+          </span>
+        </div>
+      )}
     </div>
   );
 }
 
+function AxisMeter({ label, leftLabel, rightLabel, value, color, answered }) {
+  const pct = ((Math.max(-1, Math.min(1, value)) + 1) / 2) * 100;
+  const filled = answered > 0;
+  return (
+    <div className={`qz-meter${filled ? " filled" : " empty"}`}>
+      <div className="qz-meter-head">
+        <span className="qz-meter-label">{label}</span>
+        <span className="qz-meter-val">
+          {!filled ? (
+            "—"
+          ) : value > 0.15 ? (
+            rightLabel
+          ) : value < -0.15 ? (
+            leftLabel
+          ) : (
+            <em>Neutral</em>
+          )}
+        </span>
+      </div>
+      <div className="qz-meter-scale">
+        <span className="qz-meter-endL">{leftLabel}</span>
+        <div className="qz-meter-track">
+          <div className="qz-meter-axis" />
+          <div
+            className="qz-meter-dot"
+            style={{
+              left: `${pct}%`,
+              background: color,
+              opacity: filled ? 1 : 0,
+              transform: `translate(-50%, -50%) scale(${filled ? 1 : 0.6})`,
+            }}
+          />
+        </div>
+        <span className="qz-meter-endR">{rightLabel}</span>
+      </div>
+    </div>
+  );
+}
+
+function SeasonsRail({ ranked, answered }) {
+  const rankedIds = new Set(ranked.slice(0, 4).map((r) => r.id));
+  return (
+    <div className="qz-rail">
+      <div className="qz-rail-head">
+        <span className="qz-rail-label">Narrowing</span>
+        <span className="qz-rail-count">
+          {answered === 0
+            ? "All 12 possible"
+            : `${ranked.filter((r) => r.distance < 1.1).length || 1} still likely`}
+        </span>
+      </div>
+      <div className="qz-rail-cells">
+        {SEASON_IDS.map((id) => {
+          const s = SEASONS[id];
+          const isTop = rankedIds.has(id);
+          const isLead = ranked[0]?.id === id && answered >= 3;
+          // Round 3 fix #3: with zero answers, every season is identically possible.
+          const neutral = answered === 0;
+          const cls = neutral
+            ? "neutral"
+            : isTop
+            ? "alive"
+            : "faded";
+          return (
+            <div
+              key={id}
+              className={`qz-rail-cell ${cls}${!neutral && isLead ? " lead" : ""}`}
+              title={s.name}
+            >
+              <div className="qz-rail-swatches">
+                {s.palette.slice(0, 3).map((c, i) => (
+                  <div key={i} style={{ background: c }} />
+                ))}
+              </div>
+              <span className="qz-rail-name">{s.name}</span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function Question({ q, step, onAnswer }) {
+  return (
+    <div className="qz-q" key={step}>
+      <div className="qz-q-meta">
+        <span className="qz-q-num">N° {String(step + 1).padStart(2, "0")}</span>
+        <span className="qz-q-hair" />
+        <span className="qz-q-sub-meta">{q.sub}</span>
+      </div>
+      <h2 className="qz-q-headline">{q.q}</h2>
+      <div className="qz-options">
+        {q.options.map((o) => (
+          <button
+            key={o.key + o.label}
+            className="qz-option"
+            onClick={() => onAnswer(o)}
+          >
+            {o.swatches && o.swatches.length > 1 ? (
+              <span className="qz-option-swatches">
+                {o.swatches.map((sw, si) => (
+                  <span key={si} className="qz-option-swatch-mini" style={{ background: sw }} />
+                ))}
+              </span>
+            ) : (
+              <span
+                className="qz-option-swatch"
+                style={{ background: o.swatch || (o.swatches && o.swatches[0]) }}
+              />
+            )}
+            <span className="qz-option-text">{o.label}</span>
+            <span className="qz-option-arrow">→</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+const AXIS_FLASH_THRESHOLDS = {
+  u: { high: "Warmer undertone", low: "Cooler undertone" },
+  d: { high: "Deeper", low: "Lighter" },
+  c: { high: "Brighter", low: "Softer" },
+};
+
+const AXIS_WEIGHT_LOOKUP = {
+  warm:  { u: 0.7 },
+  cool:  { u: -0.7 },
+  deep:  { d: 0.7 },
+  fair:  { d: -0.8 },
+  light: { d: -0.5 },
+  "warm-deep":   { u: 0.5, d: 0.4 },
+  "warm-bright": { u: 0.3, c: 0.5 },
+  "warm-soft":   { u: 0.3, c: -0.3 },
+  "warm-light":  { u: 0.4, d: -0.4 },
+  "warm-red":    { u: 0.6, c: 0.3 },
+  "cool-bright": { u: -0.4, c: 0.5 },
+  "cool-deep":   { u: -0.4, d: 0.3 },
+  "cool-soft":   { u: -0.3, c: -0.4 },
+  "cool-light":  { u: -0.4, d: -0.4 },
+  "high-contrast": { c: 0.4, d: 0.3 },
+  dramatic: { c: 0.5, d: 0.4 },
+  "low-contrast": { c: -0.4 },
+  muted: { c: -0.5 },
+  spring: { family: "spring" },
+  summer: { family: "summer" },
+  autumn: { family: "autumn" },
+  winter: { family: "winter" },
+};
+
+function flashLabelForAnswer(key) {
+  const w = AXIS_WEIGHT_LOOKUP[key] || {};
+  if (w.u != null && Math.abs(w.u) > 0.3) return AXIS_FLASH_THRESHOLDS.u[w.u > 0 ? "high" : "low"];
+  if (w.d != null && Math.abs(w.d) > 0.3) return AXIS_FLASH_THRESHOLDS.d[w.d > 0 ? "high" : "low"];
+  if (w.c != null && Math.abs(w.c) > 0.3) return AXIS_FLASH_THRESHOLDS.c[w.c > 0 ? "high" : "low"];
+  if (w.family) return `${w.family} season`;
+  return "Noted";
+}
+
 export default function QuizPage() {
-  const [currentQ, setCurrentQ] = useState(0);
-  const [answers, setAnswers] = useState({});
-  const [direction, setDirection] = useState("forward");
-  const [isAnimating, setIsAnimating] = useState(false);
   const router = useRouter();
-  const containerRef = useRef(null);
+  const startedRef = useRef(false);
   const startTimeRef = useRef(null);
   const completedRef = useRef(false);
+  const [step, setStep] = useState(0);
+  const [answers, setAnswers] = useState([]);
+  const [flash, setFlash] = useState(null);
+  const [isAnimating, setIsAnimating] = useState(false);
 
-  const question = questions[currentQ];
-  const progress = ((currentQ) / questions.length) * 100;
-  const progressAfter = ((currentQ + 1) / questions.length) * 100;
+  const score = useMemo(() => scoreFromAnswers(answers), [answers]);
+  const ranked = useMemo(() => topSeasons(score, 12), [score]);
+  const conf = Math.round(confidence(score, ranked) * 100);
+  const narrow = useMemo(() => narrowingState(score, ranked), [score, ranked]);
 
+  // Lifecycle: quizStarted, quizAbandoned
   useEffect(() => {
+    if (startedRef.current) return;
+    startedRef.current = true;
     startTimeRef.current = Date.now();
-    const params = new URLSearchParams(window.location.search);
-    track.quizStarted(params.get("source") || "homepage");
+    const params = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
+    track.quizStarted(params?.get("source") || "homepage");
 
     const handleBeforeUnload = () => {
       if (completedRef.current) return;
       const elapsed = Math.round((Date.now() - startTimeRef.current) / 1000);
-      track.quizAbandoned(currentQ + 1, elapsed);
+      track.quizAbandoned(step + 1, elapsed);
     };
-    window.addEventListener("beforeunload", handleBeforeUnload);
+    if (typeof window !== "undefined") {
+      window.addEventListener("beforeunload", handleBeforeUnload);
+    }
     return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
+      if (typeof window !== "undefined") {
+        window.removeEventListener("beforeunload", handleBeforeUnload);
+      }
       if (!completedRef.current && startTimeRef.current) {
         const elapsed = Math.round((Date.now() - startTimeRef.current) / 1000);
-        if (elapsed > 3) track.quizAbandoned(currentQ + 1, elapsed);
+        if (elapsed > 3) track.quizAbandoned(step + 1, elapsed);
       }
     };
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleSelect = useCallback(
-    (value) => {
-      if (isAnimating) return;
+  const q = QUIZ[step];
+  const lead = ranked[0];
+  const complete = answers.length === QUIZ.length;
 
-      const newAnswers = { ...answers, [question.id]: value };
-      setAnswers(newAnswers);
-
-      track.questionAnswered(currentQ + 1, question.id, value);
-
-      // Animate out and go to next
-      setIsAnimating(true);
-      setDirection("forward");
-
-      setTimeout(() => {
-        if (currentQ < questions.length - 1) {
-          setCurrentQ((prev) => prev + 1);
-        } else {
-          // Calculate result and navigate
-          const result = calculateSeason(newAnswers);
-          completedRef.current = true;
-          track.quizCompleted({
-            season: result.season,
-            undertone: result.undertone,
-            contrast: result.contrast,
-            value: result.value,
-            chroma: result.chroma,
-            olive: result.oliveFlag ? "1" : "0",
-          });
-          const params = new URLSearchParams({
-            season: result.season,
-            undertone: result.undertone,
-            olive: result.oliveFlag ? "1" : "0",
-            contrast: result.contrast,
-            skin: newAnswers[7] || "medium",
-            hair: newAnswers[5] || "deep_cool",
-            hairDepth: newAnswers[6] || "medium",
-            eyes: newAnswers[8] || "medium",
-            value: result.value,
-            chroma: result.chroma,
-          });
-          router.push(`/results?${params.toString()}`);
-        }
-        setIsAnimating(false);
-      }, 400);
-    },
-    [answers, currentQ, isAnimating, question, router]
-  );
-
-  const handleBack = useCallback(() => {
-    if (currentQ === 0 || isAnimating) return;
+  const handleAnswer = (opt) => {
+    if (isAnimating) return;
     setIsAnimating(true);
-    setDirection("backward");
+
+    const newAnswers = [
+      ...answers,
+      {
+        step,
+        key: opt.key,
+        label: opt.label,
+        swatch: opt.swatch || (opt.swatches && opt.swatches[0]),
+        swatches: opt.swatches,
+      },
+    ];
+    setAnswers(newAnswers);
+    track.questionAnswered(step + 1, q.q.slice(0, 60), opt.key);
+
+    setFlash({ key: Date.now(), label: flashLabelForAnswer(opt.key) });
 
     setTimeout(() => {
-      setCurrentQ((prev) => prev - 1);
+      setFlash(null);
+      if (step < QUIZ.length - 1) {
+        setStep(step + 1);
+      }
       setIsAnimating(false);
-    }, 300);
-  }, [currentQ, isAnimating]);
+    }, 650);
+  };
+
+  const back = () => {
+    if (step === 0) return;
+    setStep(step - 1);
+    setAnswers(answers.slice(0, -1));
+  };
+
+  const goToResult = () => {
+    if (!lead) return;
+    completedRef.current = true;
+    const seasonName = SEASONS[lead.id]?.name || "True Autumn";
+    track.quizCompleted({
+      season: seasonName,
+      undertone: SEASONS[lead.id]?.undertone,
+      contrast: SEASONS[lead.id]?.chroma,
+      value: SEASONS[lead.id]?.depth,
+      chroma: SEASONS[lead.id]?.chroma,
+    });
+    router.push(`/results?season=${encodeURIComponent(seasonName)}`);
+  };
+
+  if (!q && !complete) return null;
 
   return (
-    <main className="min-h-screen flex flex-col" style={{ background: "var(--bg-primary)" }}>
-      {/* Top bar */}
-      <header className="px-6 pt-6 pb-4 flex items-center justify-between">
-        <button
-          id="quiz-back-btn"
-          onClick={handleBack}
-          className="flex items-center gap-2 transition-opacity duration-200"
-          style={{
-            opacity: currentQ === 0 ? 0.3 : 1,
-            pointerEvents: currentQ === 0 ? "none" : "auto",
-            fontFamily: "var(--font-inter, 'Inter')",
-            fontSize: "0.85rem",
-            color: "var(--text-muted)",
-            background: "none",
-            border: "none",
-            cursor: "pointer",
-          }}
-        >
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          Back
-        </button>
-        <span
-          style={{
-            fontFamily: "var(--font-inter, 'Inter')",
-            fontSize: "0.75rem",
-            color: "var(--text-muted)",
-            letterSpacing: "0.1em",
-          }}
-        >
-          {currentQ + 1} / {questions.length}
-        </span>
-      </header>
+    <main className="qz-shell">
+      <Nav />
+      <TopBar step={complete ? QUIZ.length : step} total={QUIZ.length} narrow={narrow} />
 
-      {/* Progress bar */}
-      <div className="px-6 mb-8">
-        <div
-          className="w-full h-[3px] rounded-full overflow-hidden"
-          style={{ background: "var(--border-light)" }}
-        >
-          <div
-            className="h-full rounded-full transition-all duration-700 ease-out"
-            style={{
-              width: `${isAnimating && direction === "forward" ? progressAfter : progress}%`,
-              background: "linear-gradient(90deg, var(--accent-rose), var(--accent-gold))",
-            }}
-          />
-        </div>
-      </div>
-
-      {/* Question area */}
-      <div className="flex-1 px-6 pb-12 max-w-2xl mx-auto w-full" ref={containerRef}>
-        <div
-          key={currentQ}
-          className={
-            isAnimating
-              ? direction === "forward"
-                ? "animate-slide-out-left"
-                : "animate-slide-out-left"
-              : "animate-slide-in-right"
-          }
-        >
-          {/* Question text */}
-          <div className="mb-8">
-            <h2
-              className="mb-3"
-              style={{
-                fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif",
-                fontSize: "clamp(1.3rem, 4vw, 1.75rem)",
-                fontWeight: 500,
-                lineHeight: 1.3,
-                color: "var(--text-primary)",
-              }}
-            >
-              {question.question}
-            </h2>
-            {question.subtitle && (
-              <p
-                style={{
-                  fontFamily: "var(--font-inter, 'Inter')",
-                  fontSize: "0.9rem",
-                  color: "var(--text-muted)",
-                  fontWeight: 300,
-                  lineHeight: 1.5,
-                }}
-              >
-                {question.subtitle}
+      <div className="qz-main">
+        <div className="qz-stage">
+          {!complete ? (
+            <Question q={q} step={step} onAnswer={handleAnswer} />
+          ) : (
+            <div className="qz-complete">
+              <div className="qz-q-meta">
+                <span className="qz-q-num">Result</span>
+                <span className="qz-q-hair" />
+                <span className="qz-q-sub-meta">12 of 12</span>
+              </div>
+              <h2 className="qz-q-headline">Your shade is ready.</h2>
+              <p className="qz-complete-body">
+                Based on your answers, you&rsquo;re a <em>{lead?.name}</em>. We narrowed from 12 to 1 with <strong>{conf}% confidence</strong>.
+                <br />
+                <span className="qz-complete-hint">
+                  Retake with natural daylight on bare skin for the sharpest read.
+                </span>
               </p>
+              <button className="qz-complete-cta" onClick={goToResult}>
+                Reveal your Shade DNA <span>→</span>
+              </button>
+            </div>
+          )}
+
+          <div className="qz-back-row">
+            {step > 0 && !complete && (
+              <button className="qz-back" onClick={back}>← Back</button>
+            )}
+            {flash && (
+              <div className="qz-flash-wrap">
+                <div className="qz-flash" key={flash.key}>
+                  <span className="qz-flash-label">+</span>
+                  <span className="qz-flash-text">{flash.label}</span>
+                </div>
+              </div>
             )}
           </div>
-
-          {/* Options */}
-          <div className="flex flex-col gap-3">
-            {question.options.map((option, i) => {
-              const isSelected = answers[question.id] === option.value;
-              return (
-                <button
-                  key={option.value}
-                  id={`quiz-option-${question.id}-${option.value}`}
-                  className="quiz-option text-left w-full"
-                  onClick={() => handleSelect(option.value)}
-                  style={{
-                    padding: "16px 20px",
-                    borderRadius: "14px",
-                    border: isSelected
-                      ? "2px solid var(--text-primary)"
-                      : "1.5px solid var(--border-light)",
-                    background: isSelected ? "rgba(26, 26, 26, 0.03)" : "white",
-                    boxShadow: isSelected ? "0 0 0 1px var(--text-primary)" : "var(--shadow-soft)",
-                    animation: "fadeInUp 0.5s ease-out forwards",
-                    animationDelay: `${0.05 + i * 0.07}s`,
-                    opacity: 0,
-                    cursor: "pointer",
-                  }}
-                >
-                  <div className="flex items-center gap-4">
-                    {/* Color indicator */}
-                    {option.color && (
-                      <div
-                        className="w-10 h-10 rounded-full flex-shrink-0"
-                        style={{
-                          background: option.color,
-                          boxShadow:
-                            "0 2px 6px rgba(0,0,0,0.1), inset 0 1px 2px rgba(255,255,255,0.2)",
-                          border: option.border ? "1.5px solid #E0E0E0" : "none",
-                        }}
-                      />
-                    )}
-
-                    <div className="flex-1">
-                      <span
-                        style={{
-                          fontFamily: "var(--font-inter, 'Inter')",
-                          fontSize: "0.95rem",
-                          fontWeight: isSelected ? 500 : 400,
-                          color: "var(--text-primary)",
-                          lineHeight: 1.4,
-                        }}
-                      >
-                        {option.label}
-                      </span>
-                      {option.description && (
-                        <span
-                          className="block mt-0.5"
-                          style={{
-                            fontFamily: "var(--font-inter, 'Inter')",
-                            fontSize: "0.8rem",
-                            color: "var(--text-muted)",
-                            fontWeight: 300,
-                          }}
-                        >
-                          {option.description}
-                        </span>
-                      )}
-                      {/* Contrast visuals */}
-                      {option.visual && (
-                        <div className="mt-2">
-                          <ContrastVisual type={option.visual} />
-                        </div>
-                      )}
-                      {/* Color swatches for Q11 */}
-                      {option.swatches && <ColorSwatches swatches={option.swatches} />}
-                    </div>
-
-                    {/* Selection indicator */}
-                    <div
-                      className="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center transition-all duration-200"
-                      style={{
-                        border: isSelected
-                          ? "none"
-                          : "1.5px solid var(--text-muted)",
-                        background: isSelected ? "var(--text-primary)" : "transparent",
-                      }}
-                    >
-                      {isSelected && (
-                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                          <path
-                            d="M2.5 6L5 8.5L9.5 4"
-                            stroke="white"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      )}
-                    </div>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
         </div>
+
+        <aside className="qz-aside">
+          <div className="qz-aside-head">
+            <span className="qz-aside-eyebrow">Live analysis</span>
+            <span className="qz-aside-title">
+              <em>
+                {answers.length === 0
+                  ? "Waiting"
+                  : answers.length < 4
+                  ? "Gathering"
+                  : answers.length < 9
+                  ? "Narrowing"
+                  : "Converging"}
+              </em>
+            </span>
+          </div>
+
+          <div className="qz-meters">
+            <AxisMeter
+              label="Undertone"
+              leftLabel="Cool"
+              rightLabel="Warm"
+              value={score.undertone}
+              color={score.undertone > 0 ? "#C4A265" : "#8FA9C4"}
+              answered={answers.length}
+            />
+            <AxisMeter
+              label="Depth"
+              leftLabel="Light"
+              rightLabel="Deep"
+              value={score.depth}
+              color="#3A2817"
+              answered={answers.length}
+            />
+            <AxisMeter
+              label="Chroma"
+              leftLabel="Soft"
+              rightLabel="Bright"
+              value={score.chroma}
+              color={score.chroma > 0 ? "#E83F6F" : "#A8A89A"}
+              answered={answers.length}
+            />
+          </div>
+
+          <SeasonsRail ranked={ranked} answered={answers.length} />
+
+          {answers.length >= 3 && !complete && lead && (
+            <div className="qz-lead">
+              <div className="qz-lead-head">
+                <span className="qz-lead-label">Current frontrunner</span>
+                <span className="qz-lead-conf">{conf}%</span>
+              </div>
+              <div className="qz-lead-card" style={{ "--accent": lead.accent }}>
+                <div className="qz-lead-swatches">
+                  {lead.palette.slice(0, 6).map((c, i) => (
+                    <div key={i} className="qz-lead-swatch" style={{ background: c }} />
+                  ))}
+                </div>
+                <div className="qz-lead-body">
+                  <div className="qz-lead-family">— {lead.family} —</div>
+                  <div className="qz-lead-name">{lead.name}</div>
+                </div>
+              </div>
+              {ranked[1] && (
+                <div className="qz-lead-note">
+                  Still distinguishing from <em>{ranked[1].name}</em>.
+                </div>
+              )}
+            </div>
+          )}
+
+          {answers.length === 0 && (
+            <div className="qz-empty-note">
+              As you answer, we&rsquo;ll show how your coloring maps across three axes — and which of the twelve shades are still in play.
+            </div>
+          )}
+        </aside>
       </div>
     </main>
   );
