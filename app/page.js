@@ -76,7 +76,7 @@ export default function Home() {
         <h1
           className="text-center max-w-3xl mb-6 animate-fade-in-up stagger-2"
           style={{
-            fontFamily: "var(--font-playfair, 'Playfair Display')",
+            fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif",
             fontSize: "clamp(2rem, 6vw, 3.75rem)",
             fontWeight: 500,
             lineHeight: 1.1,
@@ -171,7 +171,7 @@ export default function Home() {
             </span>
             <h2
               style={{
-                fontFamily: "var(--font-playfair, 'Playfair Display')",
+                fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif",
                 fontSize: "clamp(1.5rem, 4vw, 2.25rem)",
                 fontWeight: 500,
                 color: "var(--text-primary)",
@@ -219,7 +219,7 @@ export default function Home() {
                 <h3
                   className="mb-3"
                   style={{
-                    fontFamily: "var(--font-playfair, 'Playfair Display')",
+                    fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif",
                     fontSize: "1.25rem",
                     fontWeight: 600,
                     color: "var(--text-primary)",
@@ -249,7 +249,7 @@ export default function Home() {
         <h2
           className="mb-4"
           style={{
-            fontFamily: "var(--font-playfair, 'Playfair Display')",
+            fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif",
             fontSize: "clamp(1.4rem, 3.5vw, 2rem)",
             fontWeight: 500,
             color: "var(--text-primary)",

@@ -28,7 +28,7 @@ export default function PrivacyPage() {
         <h1
           className="mb-4"
           style={{
-            fontFamily: "var(--font-playfair, 'Playfair Display')",
+            fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif",
             fontSize: "clamp(1.8rem, 5vw, 2.5rem)",
             fontWeight: 600,
             color: "var(--text-primary)",
@@ -62,7 +62,7 @@ export default function PrivacyPage() {
         >
           <h2
             style={{
-              fontFamily: "var(--font-playfair, 'Playfair Display')",
+              fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif",
               fontSize: "1.25rem",
               fontWeight: 600,
               color: "var(--text-primary)",
@@ -81,7 +81,7 @@ export default function PrivacyPage() {
 
           <h2
             style={{
-              fontFamily: "var(--font-playfair, 'Playfair Display')",
+              fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif",
               fontSize: "1.25rem",
               fontWeight: 600,
               color: "var(--text-primary)",
@@ -120,7 +120,7 @@ export default function PrivacyPage() {
 
           <h2
             style={{
-              fontFamily: "var(--font-playfair, 'Playfair Display')",
+              fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif",
               fontSize: "1.25rem",
               fontWeight: 600,
               color: "var(--text-primary)",
@@ -139,7 +139,7 @@ export default function PrivacyPage() {
 
           <h2
             style={{
-              fontFamily: "var(--font-playfair, 'Playfair Display')",
+              fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif",
               fontSize: "1.25rem",
               fontWeight: 600,
               color: "var(--text-primary)",
@@ -163,7 +163,7 @@ export default function PrivacyPage() {
 
           <h2
             style={{
-              fontFamily: "var(--font-playfair, 'Playfair Display')",
+              fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif",
               fontSize: "1.25rem",
               fontWeight: 600,
               color: "var(--text-primary)",
@@ -189,7 +189,7 @@ export default function PrivacyPage() {
 
           <h2
             style={{
-              fontFamily: "var(--font-playfair, 'Playfair Display')",
+              fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif",
               fontSize: "1.25rem",
               fontWeight: 600,
               color: "var(--text-primary)",
@@ -213,7 +213,7 @@ export default function PrivacyPage() {
 
           <h2
             style={{
-              fontFamily: "var(--font-playfair, 'Playfair Display')",
+              fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif",
               fontSize: "1.25rem",
               fontWeight: 600,
               color: "var(--text-primary)",
@@ -231,7 +231,7 @@ export default function PrivacyPage() {
 
           <h2
             style={{
-              fontFamily: "var(--font-playfair, 'Playfair Display')",
+              fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif",
               fontSize: "1.25rem",
               fontWeight: 600,
               color: "var(--text-primary)",
@@ -249,7 +249,7 @@ export default function PrivacyPage() {
 
           <h2
             style={{
-              fontFamily: "var(--font-playfair, 'Playfair Display')",
+              fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif",
               fontSize: "1.25rem",
               fontWeight: 600,
               color: "var(--text-primary)",
@@ -266,7 +266,7 @@ export default function PrivacyPage() {
 
           <h2
             style={{
-              fontFamily: "var(--font-playfair, 'Playfair Display')",
+              fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif",
               fontSize: "1.25rem",
               fontWeight: 600,
               color: "var(--text-primary)",

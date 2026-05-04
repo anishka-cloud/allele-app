@@ -47,7 +47,7 @@ function ProcessingScreen({ onComplete }) {
           />
         ))}
       </div>
-      <p className="animate-fade-in" key={phase} style={{ fontFamily: "var(--font-playfair, 'Playfair Display')", fontSize: "1.15rem", fontStyle: "italic", color: "var(--text-secondary)", fontWeight: 400 }}>
+      <p className="animate-fade-in" key={phase} style={{ fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif", fontSize: "1.15rem", fontStyle: "italic", color: "var(--text-secondary)", fontWeight: 400 }}>
         {phrases[phase]}
       </p>
       <div className="flex gap-2 mt-8">
@@ -137,7 +137,7 @@ function TierCard({ tier, product, tierMeta, skinToneBg, delay = 0, shopUrl, sea
       <div style={{ textAlign: "center", padding: displayHex ? "0 8px" : "16px 8px 0" }}>
         <p style={{ fontFamily: "var(--font-inter)", fontSize: "0.82rem", fontWeight: 600, color: "var(--text-primary)", marginBottom: 2 }}>{product.brand}</p>
         <p style={{ fontFamily: "var(--font-inter)", fontSize: "0.75rem", color: "var(--text-secondary)", fontWeight: 300, marginBottom: 2 }}>{product.product}</p>
-        <p style={{ fontFamily: "var(--font-playfair, 'Playfair Display')", fontSize: "0.8rem", fontStyle: "italic", color: "var(--text-primary)", marginBottom: 4 }}>&ldquo;{product.shade}&rdquo;</p>
+        <p style={{ fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif", fontSize: "0.8rem", fontStyle: "italic", color: "var(--text-primary)", marginBottom: 4 }}>&ldquo;{product.shade}&rdquo;</p>
         <p style={{ fontFamily: "var(--font-inter)", fontSize: "0.9rem", fontWeight: 600, color: "var(--accent-gold)", marginBottom: 12 }}>{product.price}</p>
       </div>
 
@@ -155,7 +155,7 @@ function ProductCategory({ category, tierMeta, skinToneBg, index, footerNote, sh
     <div className="product-category" style={{ animationDelay: `${index * 0.08}s` }}>
       <div className="flex items-center gap-3 mb-5">
         <span style={{ color: "var(--accent-gold)" }}>{icon}</span>
-        <h3 style={{ fontFamily: "var(--font-playfair, 'Playfair Display')", fontSize: "1.25rem", fontWeight: 600, color: "var(--text-primary)" }}>{category.label}</h3>
+        <h3 style={{ fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif", fontSize: "1.25rem", fontWeight: 600, color: "var(--text-primary)" }}>{category.label}</h3>
       </div>
       <div className="tier-row">
         {["budget", "value", "splurge"].map((tier, i) => (
@@ -242,7 +242,7 @@ function CelebrityTwins({ seasonData, skinAnswer }) {
       <span style={{ fontFamily: "var(--font-inter)", fontSize: "0.75rem", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.15em", display: "block", marginBottom: "8px" }}>
         Celebrity Style Twins
       </span>
-      <p style={{ fontFamily: "var(--font-playfair, 'Playfair Display')", fontSize: "1.1rem", fontStyle: "italic", color: "var(--text-primary)" }}>
+      <p style={{ fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif", fontSize: "1.1rem", fontStyle: "italic", color: "var(--text-primary)" }}>
         {names.join(", ")}
       </p>
     </div>
@@ -426,10 +426,10 @@ export default function ResultsContent() {
         <span className="block mb-4 animate-fade-in-down" style={{ fontFamily: "var(--font-inter)", fontSize: "0.7rem", letterSpacing: "0.3em", textTransform: "uppercase", color: "var(--accent-gold)", fontWeight: 500 }}>
           Your Color Season
         </span>
-        <h1 className="mb-2 animate-fade-in-up stagger-1" style={{ fontFamily: "var(--font-playfair, 'Playfair Display')", fontSize: "clamp(2.2rem, 8vw, 4rem)", fontWeight: 700, lineHeight: 1.05, color: "var(--text-primary)" }}>
+        <h1 className="mb-2 animate-fade-in-up stagger-1" style={{ fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif", fontSize: "clamp(2.2rem, 8vw, 4rem)", fontWeight: 700, lineHeight: 1.05, color: "var(--text-primary)" }}>
           You&apos;re a
         </h1>
-        <h1 className="mb-8 animate-fade-in-up stagger-2" style={{ fontFamily: "var(--font-playfair, 'Playfair Display')", fontSize: "clamp(2.2rem, 8vw, 4rem)", fontWeight: 700, lineHeight: 1.05, fontStyle: "italic", color: accentColor }}>
+        <h1 className="mb-8 animate-fade-in-up stagger-2" style={{ fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif", fontSize: "clamp(2.2rem, 8vw, 4rem)", fontWeight: 700, lineHeight: 1.05, fontStyle: "italic", color: accentColor }}>
           {seasonName}
         </h1>
 
@@ -466,7 +466,7 @@ export default function ResultsContent() {
             <span className="block mb-2" style={{ fontFamily: "var(--font-inter)", fontSize: "0.65rem", letterSpacing: "0.3em", textTransform: "uppercase", color: "var(--accent-gold)", fontWeight: 600 }}>
               The 2026 Edit
             </span>
-            <h2 className="mb-2" style={{ fontFamily: "var(--font-playfair, 'Playfair Display')", fontSize: "clamp(1.4rem, 4vw, 1.8rem)", fontWeight: 600, color: "var(--text-primary)" }}>
+            <h2 className="mb-2" style={{ fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif", fontSize: "clamp(1.4rem, 4vw, 1.8rem)", fontWeight: 600, color: "var(--text-primary)" }}>
               Trending colors that work for you
             </h2>
             <p className="mb-6 max-w-md mx-auto" style={{ fontFamily: "var(--font-inter)", fontSize: "0.8rem", color: "var(--text-secondary)", fontWeight: 300, lineHeight: 1.6 }}>
@@ -501,10 +501,10 @@ export default function ResultsContent() {
           <span style={{ display: "block", textAlign: "center", marginBottom: 6, fontFamily: "var(--font-inter)", fontSize: "0.6rem", letterSpacing: "0.35em", textTransform: "uppercase", color: "var(--accent-gold)", fontWeight: 600 }}>
             Shade DNA by Allele
           </span>
-          <p style={{ textAlign: "center", fontFamily: "var(--font-playfair, 'Playfair Display')", fontSize: "clamp(1.1rem, 3vw, 1.4rem)", fontWeight: 400, color: "var(--text-secondary)", marginBottom: 4, letterSpacing: "0.02em" }}>
+          <p style={{ textAlign: "center", fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif", fontSize: "clamp(1.1rem, 3vw, 1.4rem)", fontWeight: 400, color: "var(--text-secondary)", marginBottom: 4, letterSpacing: "0.02em" }}>
             You&rsquo;re a
           </p>
-          <h2 style={{ textAlign: "center", fontFamily: "var(--font-playfair, 'Playfair Display')", fontSize: "clamp(2.4rem, 7vw, 3.4rem)", fontWeight: 700, fontStyle: "italic", color: "var(--text-primary)", lineHeight: 1.05, marginBottom: 8 }}>
+          <h2 style={{ textAlign: "center", fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif", fontSize: "clamp(2.4rem, 7vw, 3.4rem)", fontWeight: 700, fontStyle: "italic", color: "var(--text-primary)", lineHeight: 1.05, marginBottom: 8 }}>
             {seasonName}
           </h2>
           <div style={{ width: 40, height: 3, background: accentColor, borderRadius: 2, margin: "0 auto 20px" }} />
@@ -569,7 +569,7 @@ export default function ResultsContent() {
           <span className="block mb-3" style={{ fontFamily: "var(--font-inter)", fontSize: "0.7rem", letterSpacing: "0.3em", textTransform: "uppercase", color: "var(--accent-gold)", fontWeight: 500 }}>
             Your Base
           </span>
-          <h2 style={{ fontFamily: "var(--font-playfair, 'Playfair Display')", fontSize: "clamp(1.5rem, 4vw, 2.25rem)", fontWeight: 600, color: "var(--text-primary)" }}>
+          <h2 style={{ fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif", fontSize: "clamp(1.5rem, 4vw, 2.25rem)", fontWeight: 600, color: "var(--text-primary)" }}>
             Foundation & <span style={{ fontStyle: "italic" }}>Concealer</span>
           </h2>
           <p style={{ fontFamily: "var(--font-inter)", fontSize: "0.85rem", color: "var(--text-muted)", fontWeight: 300, marginTop: 8 }}>
@@ -587,7 +587,7 @@ export default function ResultsContent() {
       <section className="px-4 sm:px-6 py-12 max-w-5xl mx-auto">
         <div className="text-center mb-12">
           <span className="block mb-3" style={{ fontFamily: "var(--font-inter)", fontSize: "0.7rem", letterSpacing: "0.3em", textTransform: "uppercase", color: "var(--accent-gold)", fontWeight: 500 }}>Your Lips</span>
-          <h2 style={{ fontFamily: "var(--font-playfair, 'Playfair Display')", fontSize: "clamp(1.5rem, 4vw, 2.25rem)", fontWeight: 600, color: "var(--text-primary)" }}>
+          <h2 style={{ fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif", fontSize: "clamp(1.5rem, 4vw, 2.25rem)", fontWeight: 600, color: "var(--text-primary)" }}>
             Lip Color & <span style={{ fontStyle: "italic" }}>Liner</span>
           </h2>
         </div>
@@ -601,7 +601,7 @@ export default function ResultsContent() {
       <section className="px-4 sm:px-6 py-12 max-w-5xl mx-auto">
         <div className="text-center mb-12">
           <span className="block mb-3" style={{ fontFamily: "var(--font-inter)", fontSize: "0.7rem", letterSpacing: "0.3em", textTransform: "uppercase", color: "var(--accent-gold)", fontWeight: 500 }}>Your Cheeks</span>
-          <h2 style={{ fontFamily: "var(--font-playfair, 'Playfair Display')", fontSize: "clamp(1.5rem, 4vw, 2.25rem)", fontWeight: 600, color: "var(--text-primary)" }}>
+          <h2 style={{ fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif", fontSize: "clamp(1.5rem, 4vw, 2.25rem)", fontWeight: 600, color: "var(--text-primary)" }}>
             Blush <span style={{ fontStyle: "italic" }}>Shades</span>
           </h2>
         </div>
@@ -614,7 +614,7 @@ export default function ResultsContent() {
       <section className="px-4 sm:px-6 py-12 max-w-5xl mx-auto">
         <div className="text-center mb-12">
           <span className="block mb-3" style={{ fontFamily: "var(--font-inter)", fontSize: "0.7rem", letterSpacing: "0.3em", textTransform: "uppercase", color: "var(--accent-gold)", fontWeight: 500 }}>Your Eyes</span>
-          <h2 style={{ fontFamily: "var(--font-playfair, 'Playfair Display')", fontSize: "clamp(1.5rem, 4vw, 2.25rem)", fontWeight: 600, color: "var(--text-primary)" }}>
+          <h2 style={{ fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif", fontSize: "clamp(1.5rem, 4vw, 2.25rem)", fontWeight: 600, color: "var(--text-primary)" }}>
             Eye <span style={{ fontStyle: "italic" }}>Shadow</span>
           </h2>
         </div>
@@ -627,7 +627,7 @@ export default function ResultsContent() {
       <section className="px-4 sm:px-6 py-12 max-w-5xl mx-auto">
         <div className="text-center mb-12">
           <span className="block mb-3" style={{ fontFamily: "var(--font-inter)", fontSize: "0.7rem", letterSpacing: "0.3em", textTransform: "uppercase", color: "var(--accent-gold)", fontWeight: 500 }}>Your Glow</span>
-          <h2 style={{ fontFamily: "var(--font-playfair, 'Playfair Display')", fontSize: "clamp(1.5rem, 4vw, 2.25rem)", fontWeight: 600, color: "var(--text-primary)" }}>
+          <h2 style={{ fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif", fontSize: "clamp(1.5rem, 4vw, 2.25rem)", fontWeight: 600, color: "var(--text-primary)" }}>
             Bronzer <span style={{ fontStyle: "italic" }}>Shades</span>
           </h2>
         </div>
@@ -640,7 +640,7 @@ export default function ResultsContent() {
       <section className="px-4 sm:px-6 py-12 max-w-5xl mx-auto">
         <div className="text-center mb-12">
           <span className="block mb-3" style={{ fontFamily: "var(--font-inter)", fontSize: "0.7rem", letterSpacing: "0.3em", textTransform: "uppercase", color: "var(--accent-gold)", fontWeight: 500 }}>Your Nails</span>
-          <h2 style={{ fontFamily: "var(--font-playfair, 'Playfair Display')", fontSize: "clamp(1.5rem, 4vw, 2.25rem)", fontWeight: 600, color: "var(--text-primary)" }}>
+          <h2 style={{ fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif", fontSize: "clamp(1.5rem, 4vw, 2.25rem)", fontWeight: 600, color: "var(--text-primary)" }}>
             Nail <span style={{ fontStyle: "italic" }}>Colors</span>
           </h2>
         </div>
@@ -652,7 +652,7 @@ export default function ResultsContent() {
       {/* === SECTION 9: Colors to Avoid === */}
       <section className="px-6 py-12 max-w-3xl mx-auto">
         <div className="text-center mb-8">
-          <h2 style={{ fontFamily: "var(--font-playfair, 'Playfair Display')", fontSize: "clamp(1.3rem, 3vw, 1.75rem)", fontWeight: 600, color: "var(--text-primary)" }}>
+          <h2 style={{ fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif", fontSize: "clamp(1.3rem, 3vw, 1.75rem)", fontWeight: 600, color: "var(--text-primary)" }}>
             Colors to <span style={{ fontStyle: "italic" }}>Avoid</span>
           </h2>
           <p className="mt-2" style={{ fontFamily: "var(--font-inter)", fontSize: "0.9rem", color: "var(--text-muted)", fontWeight: 300 }}>
@@ -683,7 +683,7 @@ export default function ResultsContent() {
         <div className="rounded-3xl p-8 md:p-12 text-center" style={{ background: "var(--bg-secondary)", border: "1px solid var(--border-light)" }}>
           {!emailSubmitted ? (
             <>
-              <h3 className="mb-3" style={{ fontFamily: "var(--font-playfair, 'Playfair Display')", fontSize: "clamp(1.2rem, 3vw, 1.5rem)", fontWeight: 600, color: "var(--text-primary)" }}>
+              <h3 className="mb-3" style={{ fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif", fontSize: "clamp(1.2rem, 3vw, 1.5rem)", fontWeight: 600, color: "var(--text-primary)" }}>
                 Stay in the loop<br /><span style={{ fontStyle: "italic" }}>with Allele</span>
               </h3>
               <p className="mb-6" style={{ fontFamily: "var(--font-inter)", fontSize: "0.9rem", color: "var(--text-muted)", fontWeight: 300 }}>
@@ -728,7 +728,7 @@ export default function ResultsContent() {
           ) : (
             <div className="animate-fade-in-up">
               <div className="text-3xl mb-3">{"\u2728"}</div>
-              <h3 className="mb-2" style={{ fontFamily: "var(--font-playfair, 'Playfair Display')", fontSize: "1.3rem", fontWeight: 600, color: "var(--text-primary)" }}>You&apos;re in!</h3>
+              <h3 className="mb-2" style={{ fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif", fontSize: "1.3rem", fontWeight: 600, color: "var(--text-primary)" }}>You&apos;re in!</h3>
               <p style={{ fontFamily: "var(--font-inter)", fontSize: "0.9rem", color: "var(--text-muted)", fontWeight: 300 }}>
                 We&apos;ll keep you posted on new quizzes and shade updates.
               </p>
@@ -742,7 +742,7 @@ export default function ResultsContent() {
         <span className="text-xs tracking-[0.3em] uppercase mb-4 block" style={{ color: "var(--accent-gold)", fontFamily: "var(--font-inter)", fontWeight: 600 }}>
           Also from Allele
         </span>
-        <h2 className="mb-4" style={{ fontFamily: "var(--font-playfair)", fontSize: "clamp(1.4rem, 3.5vw, 2rem)", fontWeight: 500, color: "var(--text-primary)" }}>
+        <h2 className="mb-4" style={{ fontFamily: "var(--font-display, 'Lora')", fontSize: "clamp(1.4rem, 3.5vw, 2rem)", fontWeight: 500, color: "var(--text-primary)" }}>
           Know your <span style={{ fontStyle: "italic" }}>aesthetic archetype</span>?
         </h2>
         <p className="mb-8" style={{ fontFamily: "var(--font-inter)", fontSize: "0.95rem", color: "var(--text-muted)", fontWeight: 300 }}>

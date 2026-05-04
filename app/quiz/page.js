@@ -212,7 +212,7 @@ export default function QuizPage() {
             <h2
               className="mb-3"
               style={{
-                fontFamily: "var(--font-playfair, 'Playfair Display')",
+                fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif",
                 fontSize: "clamp(1.3rem, 4vw, 1.75rem)",
                 fontWeight: 500,
                 lineHeight: 1.3,

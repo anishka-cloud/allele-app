@@ -28,7 +28,7 @@ export default function DisclosurePage() {
         <h1
           className="mb-4"
           style={{
-            fontFamily: "var(--font-playfair, 'Playfair Display')",
+            fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif",
             fontSize: "clamp(1.8rem, 5vw, 2.5rem)",
             fontWeight: 600,
             color: "var(--text-primary)",
@@ -59,7 +59,7 @@ export default function DisclosurePage() {
           <h2
             className="mb-3 mt-10"
             style={{
-              fontFamily: "var(--font-playfair)",
+              fontFamily: "var(--font-display, 'Lora')",
               fontSize: "1.3rem",
               fontWeight: 600,
               color: "var(--text-primary)",
@@ -74,7 +74,7 @@ export default function DisclosurePage() {
           <h2
             className="mb-3 mt-10"
             style={{
-              fontFamily: "var(--font-playfair)",
+              fontFamily: "var(--font-display, 'Lora')",
               fontSize: "1.3rem",
               fontWeight: 600,
               color: "var(--text-primary)",
@@ -92,7 +92,7 @@ export default function DisclosurePage() {
           <h2
             className="mb-3 mt-10"
             style={{
-              fontFamily: "var(--font-playfair)",
+              fontFamily: "var(--font-display, 'Lora')",
               fontSize: "1.3rem",
               fontWeight: 600,
               color: "var(--text-primary)",
@@ -107,7 +107,7 @@ export default function DisclosurePage() {
           <h2
             className="mb-3 mt-10"
             style={{
-              fontFamily: "var(--font-playfair)",
+              fontFamily: "var(--font-display, 'Lora')",
               fontSize: "1.3rem",
               fontWeight: 600,
               color: "var(--text-primary)",

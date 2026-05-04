@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@300;400;500;600;700&display=swap");
 @import "tailwindcss";
 
 :root {
@@ -21,8 +21,9 @@
   --color-background: var(--bg-primary);
   --color-foreground: var(--text-primary);
   --font-sans: "Inter", sans-serif;
-  --font-serif: "Playfair Display", serif;
+  --font-serif: "Lora", "GT Sectra", Georgia, serif;
   --font-mono: "Inter", monospace;
+  --display: "Lora", "GT Sectra", Georgia, serif;
 }
 
 * {

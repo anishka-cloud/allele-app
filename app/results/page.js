@@ -42,7 +42,7 @@ export default function ResultsPage() {
     <Suspense
       fallback={
         <div className="min-h-screen flex items-center justify-center" style={{ background: "var(--bg-primary)" }}>
-          <div className="animate-pulse-soft" style={{ fontFamily: "var(--font-playfair, 'Playfair Display')", fontSize: "1.2rem", color: "var(--text-muted)" }}>
+          <div className="animate-pulse-soft" style={{ fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif", fontSize: "1.2rem", color: "var(--text-muted)" }}>
             Loading your results...
           </div>
         </div>
