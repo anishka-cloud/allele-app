@@ -15,6 +15,32 @@
   --shadow-soft: 0 2px 20px rgba(0, 0, 0, 0.04);
   --shadow-medium: 0 4px 30px rgba(0, 0, 0, 0.08);
   --shadow-lifted: 0 8px 40px rgba(0, 0, 0, 0.12);
+
+  /* Chromatic Cartography editorial tokens */
+  --cream:     #FFFBF7;
+  --cream-2:   #F8F2E9;
+  --cream-3:   #F0E7D9;
+  --cream-4:   #E8DECE;
+  --ink:       #1A1613;
+  --ink-80:    rgba(26, 22, 19, 0.80);
+  --ink-60:    rgba(26, 22, 19, 0.60);
+  --ink-40:    rgba(26, 22, 19, 0.40);
+  --ink-20:    rgba(26, 22, 19, 0.20);
+  --ink-10:    rgba(26, 22, 19, 0.10);
+  --ink-06:    rgba(26, 22, 19, 0.06);
+  --gold:      #C4A265;
+  --gold-soft: #D9BD8A;
+  --rust:      #B5500B;
+  --rule:      rgba(26, 22, 19, 0.14);
+  --rule-soft: rgba(26, 22, 19, 0.08);
+
+  --serif:   'Lora', 'GT Sectra', Georgia, serif;
+  --display: 'Lora', 'GT Sectra', Georgia, serif;
+  --sans:    'Inter', -apple-system, 'Helvetica Neue', sans-serif;
+  --mono:    'JetBrains Mono', 'SF Mono', 'IBM Plex Mono', monospace;
+
+  --container: 1340px;
+  --gutter: 48px;
 }
 
 @theme inline {
@@ -23,7 +49,6 @@
   --font-sans: "Inter", sans-serif;
   --font-serif: "Lora", "GT Sectra", Georgia, serif;
   --font-mono: "Inter", monospace;
-  --display: "Lora", "GT Sectra", Georgia, serif;
 }
 
 * {
