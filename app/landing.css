@@ -130,7 +130,7 @@ body:has(.landing) { background: var(--cream); }
   margin-bottom: 48px;
   flex-wrap: wrap;
 }
-.l-cta-primary {
+.landing .l-cta-primary {
   display: inline-flex;
   align-items: center;
   gap: 12px;
@@ -144,12 +144,12 @@ body:has(.landing) { background: var(--cream); }
   border-radius: 999px;
   transition: all 0.2s;
 }
-.l-cta-primary:hover {
+.landing .l-cta-primary:hover {
   transform: translateY(-1px);
   box-shadow: 0 10px 30px -10px rgba(26, 22, 19, 0.4);
 }
-.l-cta-primary .arrow { transition: transform 0.2s; }
-.l-cta-primary:hover .arrow { transform: translateX(3px); }
+.landing .l-cta-primary .arrow { transition: transform 0.2s; }
+.landing .l-cta-primary:hover .arrow { transform: translateX(3px); }
 .l-cta-meta {
   font-family: var(--mono);
   font-size: 11px;
