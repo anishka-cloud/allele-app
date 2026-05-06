@@ -8,10 +8,10 @@ export async function generateMetadata({ searchParams }) {
   const season = sp?.season || "True Spring";
 
   return {
-    title: `I'm a ${season} ✨ Shade DNA by Allele`,
+    title: `I'm a ${season} · Shade DNA by Allele`,
     description: `Take the 2-minute quiz to find YOUR perfect makeup colors. Based on color science, not guesswork.`,
     openGraph: {
-      title: `I'm a ${season} ✨ Shade DNA`,
+      title: `I'm a ${season} · Shade DNA`,
       description: `Take the quiz to find your color season and perfect makeup shades.`,
       url: `https://www.allele.app/results?season=${encodeURIComponent(season)}`,
       images: [
@@ -27,7 +27,7 @@ export async function generateMetadata({ searchParams }) {
     },
     twitter: {
       card: "summary_large_image",
-      title: `I'm a ${season} ✨ Shade DNA`,
+      title: `I'm a ${season} · Shade DNA`,
       description: `Find YOUR color season. Free 2-min quiz.`,
       images: [`https://www.allele.app/api/og?season=${encodeURIComponent(season)}`],
     },

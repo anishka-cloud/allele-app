@@ -20,7 +20,7 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: "Shade DNA by Allele — Find Your Perfect Makeup Colors",
+  title: "Shade DNA by Allele · Find Your Perfect Makeup Colors",
   description:
     "Discover your color season and find the exact makeup shades that make you glow. Based on color science, not guesswork. Take the 2-minute quiz now.",
   keywords: "shade dna, color analysis, color season, makeup shades, seasonal color analysis, beauty quiz",
@@ -37,7 +37,7 @@ export const metadata = {
         url: "/og/shade-dna-hero.png",
         width: 1200,
         height: 630,
-        alt: "Shade DNA by Allele — Find Your Perfect Makeup Colors",
+        alt: "Shade DNA by Allele · Find Your Perfect Makeup Colors",
       },
     ],
   },
