@@ -15,8 +15,8 @@ const KV_HYDRATION = false;
 function ProcessingScreen({ onComplete }) {
   const [phase, setPhase] = useState(0);
   const phrases = [
-    "Analyzing your coloring...",
-    "Mapping your undertones...",
+    "Reading your coloring...",
+    "Tracing your undertones...",
     "Finding your season...",
     "Curating your palette...",
   ];
@@ -118,7 +118,6 @@ function TierCard({ tier, product, tierMeta, skinToneBg, delay = 0, shopUrl, sea
       style={{ animation: "fadeInUp 0.6s ease-out forwards", animationDelay: `${delay}s`, opacity: 0 }}
     >
       <div className="tier-badge" data-tier={tier}>
-        <span>{meta.emoji}</span>
         <span>{meta.label}</span>
       </div>
 

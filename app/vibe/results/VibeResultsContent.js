@@ -26,7 +26,7 @@ function VibeTierCard({ product, tierKey, tierMeta, archetype }) {
           letterSpacing: "0.08em",
         }}
       >
-        {tierMeta.emoji} {tierMeta.label}
+        {tierMeta.label}
       </span>
       {isValue && (
         <span
