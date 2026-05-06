@@ -22,13 +22,13 @@ const inter = Inter({
 export const metadata = {
   title: "Shade DNA by Allele · Find Your Perfect Makeup Colors",
   description:
-    "Discover your color season and find the exact makeup shades that make you glow. Based on color science, not guesswork. Take the 2-minute quiz now.",
+    "Find the makeup shades that actually make you glow. Discover your color season in two minutes. Based on color science, not guesswork.",
   keywords: "shade dna, color analysis, color season, makeup shades, seasonal color analysis, beauty quiz",
   metadataBase: new URL("https://www.allele.app"),
   openGraph: {
-    title: "Find Your Perfect Makeup Colors in 2 Minutes",
+    title: "Your makeup isn't working. It's the wrong season.",
     description:
-      "Based on color science, not guesswork. Discover which shades actually make you glow.",
+      "Find the shades that actually make you glow. Based on color science. Two minutes. No signup.",
     type: "website",
     url: "https://www.allele.app",
     siteName: "Allele",
@@ -43,8 +43,8 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Find Your Perfect Makeup Colors in 2 Minutes",
-    description: "Based on color science, not guesswork. Free 2-min quiz.",
+    title: "Your makeup isn't working. It's the wrong season.",
+    description: "Find the shades that actually make you glow. Free, two minutes.",
     images: ["/og/shade-dna-hero.png"],
   },
   alternates: {
