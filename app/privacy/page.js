@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Privacy Policy — Allele",
+  title: "Privacy Policy · Allele",
   description: "How Allele collects, uses, and protects your data.",
 };
 
@@ -105,11 +105,11 @@ export default function PrivacyPage() {
           </p>
           <ul style={{ paddingLeft: "1.5rem", marginBottom: "1rem" }}>
             <li style={{ marginBottom: "0.5rem" }}>
-              <strong>Google Analytics 4</strong> — measures page visits, quiz completions, and
+              <strong>Google Analytics 4:</strong> measures page visits, quiz completions, and
               product clicks. Uses cookies.
             </li>
             <li style={{ marginBottom: "0.5rem" }}>
-              <strong>PostHog</strong> — tracks user journeys through the quiz funnel to improve
+              <strong>PostHog:</strong> tracks user journeys through the quiz funnel to improve
               the experience. Uses cookies.
             </li>
           </ul>

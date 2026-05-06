@@ -179,12 +179,12 @@ function FoundationGuidance({ undertone, olive }) {
   const isCool = undertone === "Cool";
 
   const guidanceText = isWarm
-    ? "Look for foundations labeled \"warm,\" \"golden,\" or \"yellow\" undertone. Avoid anything with pink or blue bases — they'll look ashy on your skin."
+    ? "Look for foundations labeled \"warm,\" \"golden,\" or \"yellow\" undertone. Avoid anything with pink or blue bases. They'll look ashy on your skin."
     : isCool
-    ? "Look for foundations labeled \"cool,\" \"pink,\" or \"neutral-cool\" undertone. Avoid yellow or golden bases — they'll look sallow."
-    : "You have a neutral undertone — you can flex between warm and cool foundations. Look for shades labeled \"neutral\" or \"N\" for the closest match.";
+    ? "Look for foundations labeled \"cool,\" \"pink,\" or \"neutral-cool\" undertone. Avoid yellow or golden bases. They'll look sallow."
+    : "You have a neutral undertone. You can flex between warm and cool foundations. Look for shades labeled \"neutral\" or \"N\" for the closest match.";
 
-  const oliveText = "Olive undertones are tricky — most brands run too pink or too yellow. Try Fenty Beauty (flexible range), Armani Luminous Silk (built for olive), or Lisa Eldridge (created by an olive-skinned makeup artist). Look for shades with a slight green/grey cast.";
+  const oliveText = "Olive undertones are tricky. Most brands run too pink or too yellow. Try Fenty Beauty (flexible range), Armani Luminous Silk (built for olive), or Lisa Eldridge (created by an olive-skinned makeup artist). Look for shades with a slight green/grey cast.";
 
   return (
     <div className="foundation-guidance animate-fade-in-up">

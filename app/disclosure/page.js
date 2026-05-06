@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Affiliate Disclosure — Allele",
+  title: "Affiliate Disclosure · Allele",
   description: "Allele's affiliate disclosure and transparency statement.",
 };
 
