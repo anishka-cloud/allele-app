@@ -166,7 +166,6 @@ function ProductCategory({ category, tierMeta, skinToneBg, index, footerNote, sh
       </div>
       {footerNote && (
         <div className="pro-tip-footer">
-          <span className="pro-tip-icon">💡</span>
           <p>{footerNote}</p>
         </div>
       )}
@@ -329,7 +328,7 @@ export default function ResultsContent() {
 
   if (!seasonData) return null;
 
-  const shareText = `I just discovered my Shade DNA \u2014 I'm a ${seasonName}! \u2728 Find your perfect makeup colors \u2192`;
+  const shareText = `I'm a ${seasonName}. Found my season at allele.app.`;
   const resultsUrl = typeof window !== "undefined" ? window.location.href : "";
 
   const handleCopyLink = () => {
@@ -358,7 +357,7 @@ export default function ResultsContent() {
   const handleNativeShare = () => {
     if (typeof navigator !== "undefined" && navigator.share) {
       track.shareClicked(seasonName, "native");
-      navigator.share({ title: `I'm a ${seasonName} \u2728`, text: shareText, url: resultsUrl }).catch(() => {});
+      navigator.share({ title: `I'm a ${seasonName}.`, text: shareText, url: resultsUrl }).catch(() => {});
     } else {
       setShareOpen(!shareOpen);
     }
@@ -490,7 +489,7 @@ export default function ResultsContent() {
       <section className="px-6 py-4 max-w-2xl mx-auto animate-fade-in-up">
         <div className="rounded-2xl px-5 py-4" style={{ background: "rgba(196,162,101,0.08)", border: "1px solid rgba(196,162,101,0.15)" }}>
           <p style={{ fontFamily: "var(--font-inter)", fontSize: "0.8rem", color: "var(--text-secondary)", lineHeight: 1.6, textAlign: "center", fontWeight: 300 }}>
-            {"\ud83d\udca1"} This guide includes affiliate links. When you shop through them, we may earn a small commission at no extra cost to you. We only recommend products we&rsquo;d actually wear.
+            This guide includes affiliate links. When you shop through them, we may earn a small commission at no extra cost to you. Every product is chosen because it actually works for your season.
           </p>
         </div>
       </section>
@@ -727,7 +726,7 @@ export default function ResultsContent() {
             </>
           ) : (
             <div className="animate-fade-in-up">
-              <div className="text-3xl mb-3">{"\u2728"}</div>
+              <div className="text-3xl mb-3" style={{ color: "var(--accent-gold)" }}>{"\u2713"}</div>
               <h3 className="mb-2" style={{ fontFamily: "var(--font-playfair, 'Playfair Display')", fontSize: "1.3rem", fontWeight: 600, color: "var(--text-primary)" }}>You&apos;re in!</h3>
               <p style={{ fontFamily: "var(--font-inter)", fontSize: "0.9rem", color: "var(--text-muted)", fontWeight: 300 }}>
                 We&apos;ll keep you posted on new quizzes and shade updates.
