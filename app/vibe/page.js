@@ -193,7 +193,7 @@ export default function VibeLanding() {
             className="btn-primary"
             style={{ borderRadius: "100px", padding: "16px 48px", fontSize: "14px" }}
           >
-            Take the Quiz
+            Find My Vibe
           </button>
         </Link>
       </section>

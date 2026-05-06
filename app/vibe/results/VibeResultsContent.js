@@ -112,7 +112,7 @@ function VibeProductCategory({ categoryData, products, archetype, proTip }) {
           style={{ background: "var(--bg-secondary)", border: "1px solid var(--border-light)" }}
         >
           <p style={{ fontFamily: "var(--font-playfair)", fontSize: "0.85rem", color: "var(--text-secondary)", fontStyle: "italic", lineHeight: 1.6 }}>
-            💡 Pro tip: {proTip}
+            Pro tip: {proTip}
           </p>
         </div>
       )}
@@ -178,7 +178,7 @@ export default function VibeResultsContent() {
 
   if (!archetype) return null;
 
-  const shareText = `I just discovered my Vibe DNA — I'm ${archetype.name}${secondaryArchetype ? ` with ${secondaryArchetype.name} energy` : ""}! ✨ Find your aesthetic archetype →`;
+  const shareText = `I'm ${archetype.name}${secondaryArchetype ? ` with ${secondaryArchetype.name} energy` : ""}. Found my vibe at allele.app/vibe.`;
   const shareUrl = typeof window !== "undefined" ? window.location.origin + "/vibe" : "";
 
   const handleCopyLink = () => {
@@ -411,7 +411,7 @@ export default function VibeResultsContent() {
       <section className="px-6 py-4 max-w-2xl mx-auto animate-fade-in-up">
         <div className="rounded-2xl px-5 py-4" style={{ background: "rgba(196,162,101,0.08)", border: "1px solid rgba(196,162,101,0.15)" }}>
           <p style={{ fontFamily: "var(--font-inter)", fontSize: "0.8rem", color: "var(--text-secondary)", lineHeight: 1.6, textAlign: "center", fontWeight: 300 }}>
-            {"\ud83d\udca1"} This guide includes affiliate links. When you shop through them, we may earn a small commission at no extra cost to you. We only recommend products we&rsquo;d actually wear.
+            This guide includes affiliate links. When you shop through them, we may earn a small commission at no extra cost to you. Every product is chosen because it actually works for your archetype.
           </p>
         </div>
       </section>
