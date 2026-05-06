@@ -40,6 +40,67 @@ const steps = [
   },
 ];
 
+// "Before" — dusty, muddy, undertone-fighting neutrals that most beauty brands push as "universal"
+const WRONG_SHADES = [
+  { hex: "#9B8579", name: "Muddy Taupe" },
+  { hex: "#B8A296", name: "Ashy Beige" },
+  { hex: "#8A7565", name: "Dull Brown" },
+  { hex: "#7D6E5C", name: "Muted Olive" },
+];
+
+// "After" — a real Clear Spring palette: saturated, clear, flattering
+const RIGHT_SHADES = [
+  { hex: "#F47556", name: "Bright Coral" },
+  { hex: "#E0332A", name: "Warm Poppy" },
+  { hex: "#00B8C4", name: "Hot Turquoise" },
+  { hex: "#F4C03A", name: "Golden Yellow" },
+];
+
+function SwatchGrid({ shades, label, muted = false }) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "14px" }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: "14px",
+        }}
+      >
+        {shades.map((s, i) => (
+          <div
+            key={i}
+            style={{
+              width: 72,
+              height: 72,
+              borderRadius: "50%",
+              background: s.hex,
+              boxShadow: muted
+                ? `0 2px 10px rgba(0,0,0,0.08)`
+                : `0 4px 18px ${s.hex}50, inset 0 1px 2px rgba(255,255,255,0.2)`,
+              border: "1px solid rgba(0,0,0,0.04)",
+              opacity: muted ? 0.72 : 1,
+              transition: "transform 0.6s ease",
+            }}
+            className="hover:scale-110"
+          />
+        ))}
+      </div>
+      <span
+        style={{
+          fontFamily: "var(--font-inter, 'Inter')",
+          fontSize: "0.68rem",
+          letterSpacing: "0.24em",
+          textTransform: "uppercase",
+          color: muted ? "var(--text-muted)" : "var(--accent-gold)",
+          fontWeight: 500,
+        }}
+      >
+        {label}
+      </span>
+    </div>
+  );
+}
+
 export default function Home() {
 
 
@@ -66,41 +127,42 @@ export default function Home() {
             className="text-xs tracking-[0.3em] uppercase"
             style={{ color: "var(--accent-gold)", fontFamily: "var(--font-inter, 'Inter')" }}
           >
-            Shade DNA
+            A Shade DNA Specimen
           </span>
         </div>
 
         <div className="editorial-divider animate-fade-in stagger-1" />
 
-        {/* Headline */}
+        {/* Headline — pain-point-first, pattern-interrupt */}
         <h1
-          className="text-center max-w-3xl mb-6 animate-fade-in-up stagger-2"
+          className="text-center max-w-3xl mb-5 animate-fade-in-up stagger-2"
           style={{
             fontFamily: "var(--font-playfair, 'Playfair Display')",
-            fontSize: "clamp(2rem, 6vw, 3.75rem)",
+            fontSize: "clamp(2.1rem, 6vw, 3.75rem)",
             fontWeight: 500,
-            lineHeight: 1.1,
+            lineHeight: 1.08,
             letterSpacing: "-0.02em",
             color: "var(--text-primary)",
           }}
         >
-          Find Your Perfect
+          Your makeup isn&apos;t working.
           <br />
-          Makeup Colors
+          It&apos;s the
           <span
             style={{
               fontStyle: "italic",
-              color: "var(--accent-rose)",
+              color: "var(--accent-gold)",
             }}
           >
             {" "}
-            in 2 Minutes
+            wrong season
+            <span style={{ fontStyle: "normal", color: "var(--text-primary)" }}>.</span>
           </span>
         </h1>
 
         {/* Subhead */}
         <p
-          className="text-center max-w-lg mb-10 animate-fade-in-up stagger-3"
+          className="text-center max-w-xl mb-12 animate-fade-in-up stagger-3"
           style={{
             fontFamily: "var(--font-inter, 'Inter')",
             fontSize: "clamp(0.95rem, 2vw, 1.1rem)",
@@ -109,19 +171,63 @@ export default function Home() {
             fontWeight: 300,
           }}
         >
-          Based on color science, not guesswork.
+          Find the shades that actually make you glow.
           <br />
-          Discover which shades actually make you glow.
+          Based on color science. Two minutes. No signup.
         </p>
 
+        {/* Before / After swatch visual */}
+        <div
+          className="flex items-center justify-center gap-6 md:gap-10 mb-12 animate-fade-in-up stagger-4"
+          style={{ flexWrap: "wrap" }}
+        >
+          <SwatchGrid shades={WRONG_SHADES} label="What you have" muted />
+
+          {/* Arrow */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "8px",
+              padding: "0 4px",
+            }}
+          >
+            <svg width="44" height="44" viewBox="0 0 44 44" fill="none" aria-hidden="true">
+              <circle cx="22" cy="22" r="21" stroke="#C4A265" strokeOpacity="0.35" strokeWidth="1" fill="none" />
+              <path
+                d="M14 22H30M30 22L24 16M30 22L24 28"
+                stroke="#C4A265"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            <span
+              style={{
+                fontFamily: "var(--font-playfair, 'Playfair Display')",
+                fontSize: "0.78rem",
+                fontStyle: "italic",
+                color: "var(--text-muted)",
+                letterSpacing: "0.02em",
+                whiteSpace: "nowrap",
+              }}
+            >
+              your season
+            </span>
+          </div>
+
+          <SwatchGrid shades={RIGHT_SHADES} label="What works for you" />
+        </div>
+
         {/* CTA */}
-        <Link href="/quiz" className="animate-fade-in-up stagger-4">
+        <Link href="/quiz?source=homepage-hero" className="animate-fade-in-up stagger-4">
           <button
             id="cta-take-quiz"
             className="btn-primary"
             style={{ borderRadius: "100px", padding: "18px 56px", fontSize: "14px" }}
           >
-            Take the Quiz
+            Find My Season
             <svg
               className="ml-3"
               width="16"
@@ -143,16 +249,16 @@ export default function Home() {
 
         {/* Social proof */}
         <p
-          className="mt-8 animate-fade-in-up stagger-5"
+          className="mt-6 animate-fade-in-up stagger-5"
           style={{
             fontFamily: "var(--font-inter, 'Inter')",
-            fontSize: "0.85rem",
+            fontSize: "0.82rem",
             color: "var(--text-muted)",
             fontWeight: 400,
             letterSpacing: "0.02em",
           }}
         >
-          Free &middot; No signup required &middot; Takes 2 minutes
+          Free &middot; 12 color seasons &middot; 2 minutes
         </p>
       </section>
 
@@ -268,7 +374,7 @@ export default function Home() {
         >
           It only takes 2 minutes. No email required.
         </p>
-        <Link href="/quiz">
+        <Link href="/quiz?source=homepage-footer">
           <button
             id="cta-take-quiz-bottom"
             className="btn-primary"
@@ -294,7 +400,10 @@ export default function Home() {
             letterSpacing: "0.05em",
           }}
         >
-          © {new Date().getFullYear()} Allele · Shade DNA
+          © {new Date().getFullYear()} Allele · Shade DNA ·{" "}
+          <Link href="/disclosure" style={{ color: "var(--text-muted)", textDecoration: "underline" }}>Affiliate Disclosure</Link>
+          {" · "}
+          <Link href="/privacy" style={{ color: "var(--text-muted)", textDecoration: "underline" }}>Privacy</Link>
         </p>
       </footer>
     </main>
