@@ -8,6 +8,7 @@ import {
   TIERS,
   productsFor,
   neutralsFor,
+  contrastFor,
   isDarkHex,
   metalGradient,
   seasonIdFromName,
@@ -146,6 +147,31 @@ function Hero({ s, seasonId }) {
             )}
             <div className="dt-specimen-foot">allele.app · your shade, your science</div>
           </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Contrast({ seasonId }) {
+  const c = contrastFor(seasonId);
+  return (
+    <section className="dt-contrast" style={{ padding: "60px 24px", background: "var(--cream-2, #F8F2E9)" }}>
+      <div className="dt-section-head" style={{ maxWidth: "1120px", margin: "0 auto 32px", display: "flex", alignItems: "baseline", gap: "20px", justifyContent: "space-between" }}>
+        <span className="dt-section-num" style={{ fontFamily: "var(--font-mono, 'JetBrains Mono'), monospace", fontSize: "0.7rem", letterSpacing: "0.18em", color: "var(--accent, #B5500B)" }}>·</span>
+        <h2 className="dt-section-title" style={{ fontFamily: "var(--font-display, 'Lora'), Georgia, serif", fontSize: "clamp(1.6rem, 3.4vw, 2.4rem)", fontWeight: 500, lineHeight: 1.1, color: "var(--ink, #1A1613)", flex: 1, textAlign: "center" }}>
+          The <em style={{ color: "var(--accent, #B5500B)" }}>contrast</em> read
+        </h2>
+        <span className="dt-section-meta" style={{ fontFamily: "var(--font-mono, 'JetBrains Mono'), monospace", fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--ink-60, rgba(26,22,19,.60))" }}>
+          {c.label}
+        </span>
+      </div>
+      <div style={{ maxWidth: "640px", margin: "0 auto", textAlign: "center" }}>
+        <p style={{ fontFamily: "var(--font-display, 'Lora'), Georgia, serif", fontStyle: "italic", fontSize: "clamp(1.05rem, 2vw, 1.3rem)", color: "var(--ink-80, rgba(26,22,19,.80))", lineHeight: 1.55, marginBottom: "20px" }}>
+          {c.body}
+        </p>
+        <div style={{ fontFamily: "var(--font-mono, 'JetBrains Mono'), monospace", fontSize: "0.7rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "var(--ink-60, rgba(26,22,19,.60))" }}>
+          {c.pairs}
         </div>
       </div>
     </section>
@@ -662,6 +688,7 @@ export default function ResultsContent() {
     <main className="dt-results">
       <Nav seasonId={seasonId} onChange={onSeasonChange} />
       <Hero s={s} seasonId={seasonId} />
+      <Contrast seasonId={seasonId} />
       <Drape s={s} seasonId={seasonId} />
       <Basics seasonId={seasonId} />
       <Edit s={s} seasonId={seasonId} />
