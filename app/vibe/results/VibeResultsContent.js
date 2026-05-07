@@ -26,7 +26,7 @@ function VibeTierCard({ product, tierKey, tierMeta, archetype }) {
           letterSpacing: "0.08em",
         }}
       >
-        {tierMeta.label}
+        {tierMeta.emoji} {tierMeta.label}
       </span>
       {isValue && (
         <span
@@ -51,7 +51,7 @@ function VibeTierCard({ product, tierKey, tierMeta, archetype }) {
 
       <h4 className="font-bold text-sm" style={{ fontFamily: "var(--font-inter)", color: "var(--text-primary)" }}>{product.brand}</h4>
       <p className="text-xs mt-0.5" style={{ color: "var(--text-secondary)", fontFamily: "var(--font-inter)" }}>{product.product}</p>
-      <p className="text-xs italic mt-0.5" style={{ color: "var(--text-muted)", fontFamily: "var(--font-playfair)" }}>&ldquo;{product.shade}&rdquo;</p>
+      <p className="text-xs italic mt-0.5" style={{ color: "var(--text-muted)", fontFamily: "var(--font-display, 'Lora')" }}>&ldquo;{product.shade}&rdquo;</p>
       <p className="text-sm font-semibold mt-2" style={{ color: archetype.accentColor, fontFamily: "var(--font-inter)" }}>${product.price}</p>
 
       <a
@@ -80,7 +80,7 @@ function VibeProductCategory({ categoryData, products, archetype, proTip }) {
         <div>
           <h3
             style={{
-              fontFamily: "var(--font-playfair, 'Playfair Display')",
+              fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif",
               fontSize: "1.5rem",
               fontWeight: 600,
               color: "var(--text-primary)",
@@ -111,8 +111,8 @@ function VibeProductCategory({ categoryData, products, archetype, proTip }) {
           className="mt-4 p-4 rounded-xl"
           style={{ background: "var(--bg-secondary)", border: "1px solid var(--border-light)" }}
         >
-          <p style={{ fontFamily: "var(--font-playfair)", fontSize: "0.85rem", color: "var(--text-secondary)", fontStyle: "italic", lineHeight: 1.6 }}>
-            Pro tip: {proTip}
+          <p style={{ fontFamily: "var(--font-display, 'Lora')", fontSize: "0.85rem", color: "var(--text-secondary)", fontStyle: "italic", lineHeight: 1.6 }}>
+            💡 Pro tip: {proTip}
           </p>
         </div>
       )}
@@ -178,7 +178,7 @@ export default function VibeResultsContent() {
 
   if (!archetype) return null;
 
-  const shareText = `I'm ${archetype.name}${secondaryArchetype ? ` with ${secondaryArchetype.name} energy` : ""}. Found my vibe at allele.app/vibe.`;
+  const shareText = `I just discovered my Vibe DNA — I'm ${archetype.name}${secondaryArchetype ? ` with ${secondaryArchetype.name} energy` : ""}! ✨ Find your aesthetic archetype →`;
   const shareUrl = typeof window !== "undefined" ? window.location.origin + "/vibe" : "";
 
   const handleCopyLink = () => {
@@ -228,7 +228,7 @@ export default function VibeResultsContent() {
       <main className="min-h-screen flex items-center justify-center" style={{ background: archetype.bgGradient }}>
         <div className="text-center animate-fade-in">
           <div className="inline-block w-10 h-10 border-2 border-t-transparent rounded-full animate-spin mb-6" style={{ borderColor: archetype.accentColor, borderTopColor: "transparent" }} />
-          <p style={{ fontFamily: "var(--font-playfair)", fontSize: "1.2rem", fontStyle: "italic", color: "var(--text-secondary)" }}>
+          <p style={{ fontFamily: "var(--font-display, 'Lora')", fontSize: "1.2rem", fontStyle: "italic", color: "var(--text-secondary)" }}>
             Decoding your aesthetic DNA...
           </p>
         </div>
@@ -248,7 +248,7 @@ export default function VibeResultsContent() {
         </span>
         <h1
           style={{
-            fontFamily: "var(--font-playfair, 'Playfair Display')",
+            fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif",
             fontSize: "clamp(2.5rem, 8vw, 4rem)",
             fontWeight: 700,
             fontStyle: "italic",
@@ -263,7 +263,7 @@ export default function VibeResultsContent() {
           <p
             className="mb-6"
             style={{
-              fontFamily: "var(--font-playfair)",
+              fontFamily: "var(--font-display, 'Lora')",
               fontSize: "clamp(1rem, 3vw, 1.3rem)",
               fontStyle: "italic",
               color: "var(--text-secondary)",
@@ -335,14 +335,14 @@ export default function VibeResultsContent() {
           <span style={{ display: "block", textAlign: "center", marginBottom: 6, fontFamily: "var(--font-inter)", fontSize: "0.6rem", letterSpacing: "0.35em", textTransform: "uppercase", color: archetype.accentColor, fontWeight: 600 }}>
             Vibe DNA by Allele
           </span>
-          <p style={{ textAlign: "center", fontFamily: "var(--font-playfair)", fontSize: "clamp(1rem, 3vw, 1.3rem)", fontWeight: 400, color: "var(--text-secondary)", marginBottom: 4 }}>
+          <p style={{ textAlign: "center", fontFamily: "var(--font-display, 'Lora')", fontSize: "clamp(1rem, 3vw, 1.3rem)", fontWeight: 400, color: "var(--text-secondary)", marginBottom: 4 }}>
             I&rsquo;m a
           </p>
-          <h2 style={{ textAlign: "center", fontFamily: "var(--font-playfair)", fontSize: "clamp(2.2rem, 7vw, 3.2rem)", fontWeight: 700, fontStyle: "italic", color: "var(--text-primary)", lineHeight: 1.05, marginBottom: secondaryArchetype ? 4 : 8 }}>
+          <h2 style={{ textAlign: "center", fontFamily: "var(--font-display, 'Lora')", fontSize: "clamp(2.2rem, 7vw, 3.2rem)", fontWeight: 700, fontStyle: "italic", color: "var(--text-primary)", lineHeight: 1.05, marginBottom: secondaryArchetype ? 4 : 8 }}>
             {archetype.name}
           </h2>
           {secondaryArchetype && (
-            <p style={{ textAlign: "center", fontFamily: "var(--font-playfair)", fontSize: "0.95rem", fontStyle: "italic", color: "var(--text-secondary)", marginBottom: 8 }}>
+            <p style={{ textAlign: "center", fontFamily: "var(--font-display, 'Lora')", fontSize: "0.95rem", fontStyle: "italic", color: "var(--text-secondary)", marginBottom: 8 }}>
               with {secondaryArchetype.name} energy
             </p>
           )}
@@ -352,7 +352,7 @@ export default function VibeResultsContent() {
               <span key={i} style={{ fontSize: "1.2rem" }}>{archetype.moodboardEmojis[i]}</span>
             ))}
           </div>
-          <p style={{ textAlign: "center", fontFamily: "var(--font-playfair)", fontSize: "0.85rem", fontStyle: "italic", color: "var(--text-secondary)", marginBottom: 16 }}>
+          <p style={{ textAlign: "center", fontFamily: "var(--font-display, 'Lora')", fontSize: "0.85rem", fontStyle: "italic", color: "var(--text-secondary)", marginBottom: 16 }}>
             &ldquo;{archetype.shareTagline}&rdquo;
           </p>
           <p style={{ textAlign: "center", fontFamily: "var(--font-inter)", fontSize: "0.65rem", color: "var(--text-muted)", letterSpacing: "0.12em", textTransform: "uppercase" }}>
@@ -399,7 +399,7 @@ export default function VibeResultsContent() {
         <span className="text-xs tracking-[0.3em] uppercase mb-4 block" style={{ color: archetype.accentColor, fontFamily: "var(--font-inter)", fontWeight: 600 }}>
           Celebrity Style Twins
         </span>
-        <p style={{ fontFamily: "var(--font-playfair)", fontSize: "clamp(1.2rem, 3vw, 1.6rem)", fontWeight: 500, fontStyle: "italic", color: "var(--text-primary)" }}>
+        <p style={{ fontFamily: "var(--font-display, 'Lora')", fontSize: "clamp(1.2rem, 3vw, 1.6rem)", fontWeight: 500, fontStyle: "italic", color: "var(--text-primary)" }}>
           {archetype.celebrities.join(", ")}
         </p>
       </section>
@@ -411,7 +411,7 @@ export default function VibeResultsContent() {
       <section className="px-6 py-4 max-w-2xl mx-auto animate-fade-in-up">
         <div className="rounded-2xl px-5 py-4" style={{ background: "rgba(196,162,101,0.08)", border: "1px solid rgba(196,162,101,0.15)" }}>
           <p style={{ fontFamily: "var(--font-inter)", fontSize: "0.8rem", color: "var(--text-secondary)", lineHeight: 1.6, textAlign: "center", fontWeight: 300 }}>
-            This guide includes affiliate links. When you shop through them, we may earn a small commission at no extra cost to you. Every product is chosen because it actually works for your archetype.
+            {"\ud83d\udca1"} This guide includes affiliate links. When you shop through them, we may earn a small commission at no extra cost to you. We only recommend products we&rsquo;d actually wear.
           </p>
         </div>
       </section>
@@ -422,7 +422,7 @@ export default function VibeResultsContent() {
           <span className="text-xs tracking-[0.3em] uppercase mb-4 block" style={{ color: archetype.accentColor, fontFamily: "var(--font-inter)", fontWeight: 600 }}>
             Your {archetype.name} Essentials
           </span>
-          <h2 style={{ fontFamily: "var(--font-playfair)", fontSize: "clamp(1.5rem, 4vw, 2.25rem)", fontWeight: 500, color: "var(--text-primary)" }}>
+          <h2 style={{ fontFamily: "var(--font-display, 'Lora')", fontSize: "clamp(1.5rem, 4vw, 2.25rem)", fontWeight: 500, color: "var(--text-primary)" }}>
             Shop Your <span style={{ fontStyle: "italic" }}>Vibe</span>
           </h2>
           <p style={{ fontFamily: "var(--font-inter)", fontSize: "0.9rem", color: "var(--text-muted)", fontWeight: 300, marginTop: 8 }}>
@@ -446,7 +446,7 @@ export default function VibeResultsContent() {
         <span className="text-xs tracking-[0.3em] uppercase mb-4 block" style={{ color: "var(--accent-gold)", fontFamily: "var(--font-inter)", fontWeight: 600 }}>
           Also from Allele
         </span>
-        <h2 className="mb-4" style={{ fontFamily: "var(--font-playfair)", fontSize: "clamp(1.4rem, 3.5vw, 2rem)", fontWeight: 500, color: "var(--text-primary)" }}>
+        <h2 className="mb-4" style={{ fontFamily: "var(--font-display, 'Lora')", fontSize: "clamp(1.4rem, 3.5vw, 2rem)", fontWeight: 500, color: "var(--text-primary)" }}>
           Know your <span style={{ fontStyle: "italic" }}>color season</span>?
         </h2>
         <p className="mb-8" style={{ fontFamily: "var(--font-inter)", fontSize: "0.95rem", color: "var(--text-muted)", fontWeight: 300 }}>
