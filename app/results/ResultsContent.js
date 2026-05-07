@@ -457,42 +457,51 @@ export default function ResultsContent() {
         </div>
       </section>
 
-      {/* === SECTION 1.25: Your Everyday Neutrals === */}
-      {seasonData.neutrals && seasonData.neutrals.length > 0 && (
-        <section className="px-6 pb-10 text-center max-w-3xl mx-auto animate-fade-in-up">
-          <span className="block mb-3" style={{ fontFamily: "var(--font-inter)", fontSize: "0.65rem", letterSpacing: "0.3em", textTransform: "uppercase", color: "var(--accent-gold)", fontWeight: 600 }}>
-            Your Everyday
-          </span>
-          <h2 className="mb-2" style={{ fontFamily: "var(--font-playfair, 'Playfair Display')", fontSize: "clamp(1.4rem, 4vw, 1.8rem)", fontWeight: 600, color: "var(--text-primary)" }}>
-            Wear These as Your Base
-          </h2>
-          <p className="mb-8 max-w-md mx-auto" style={{ fontFamily: "var(--font-inter)", fontSize: "0.85rem", color: "var(--text-secondary)", fontWeight: 300, lineHeight: 1.6 }}>
-            The neutrals that work with your coloring. These are what you actually wear most days.
-          </p>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-6 max-w-2xl mx-auto">
-            {seasonData.neutrals.map((n, i) => (
-              <div key={i} className="flex flex-col items-center" style={{ minWidth: 80 }}>
-                <div
-                  style={{
-                    width: 56,
-                    height: 56,
-                    borderRadius: "50%",
-                    background: n.hex,
-                    boxShadow: `0 3px 12px ${n.hex}40, inset 0 1px 2px rgba(255,255,255,0.2)`,
-                    border: "2px solid rgba(255,255,255,0.5)",
-                    transition: "transform 0.3s ease",
-                    marginBottom: 10,
-                  }}
-                  className="hover:scale-110"
-                />
-                <span style={{ fontFamily: "var(--font-inter)", fontSize: "0.72rem", color: "var(--text-primary)", fontWeight: 500, letterSpacing: "0.02em", textAlign: "center", marginBottom: 4, lineHeight: 1.3 }}>
-                  {n.name}
-                </span>
-                <span style={{ fontFamily: "var(--font-playfair, 'Playfair Display')", fontSize: "0.72rem", fontStyle: "italic", color: "var(--text-muted)", fontWeight: 400, textAlign: "center", lineHeight: 1.3 }}>
-                  {n.wear}
-                </span>
-              </div>
-            ))}
+      {/* === SECTION 1.25: Your Wardrobe Anchors === */}
+      {seasonData.basics && seasonData.basics.length > 0 && (
+        <section className="px-6 pb-12 max-w-6xl mx-auto animate-fade-in-up">
+          <div className="text-center mb-10 max-w-2xl mx-auto">
+            <span className="block mb-3" style={{ fontFamily: "var(--font-inter)", fontSize: "0.65rem", letterSpacing: "0.3em", textTransform: "uppercase", color: "var(--accent-gold)", fontWeight: 600 }}>
+              02 · Wardrobe Anchors
+            </span>
+            <h2 className="mb-3" style={{ fontFamily: "var(--font-playfair, 'Playfair Display')", fontSize: "clamp(1.6rem, 4.5vw, 2.25rem)", fontWeight: 600, color: "var(--text-primary)", lineHeight: 1.15 }}>
+              Your <span style={{ fontStyle: "italic", color: "var(--accent-gold)" }}>wardrobe anchors</span>
+            </h2>
+            <p style={{ fontFamily: "var(--font-inter)", fontSize: "0.9rem", color: "var(--text-secondary)", fontWeight: 300, lineHeight: 1.6 }}>
+              If you don&apos;t gravitate to the statement colors, that&apos;s fine. Most of what you wear is neutral. Here&apos;s what every basic should be, translated into your season.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-5">
+            {seasonData.basics.map((b, i) => {
+              const r = parseInt(b.hex.slice(1, 3), 16);
+              const g = parseInt(b.hex.slice(3, 5), 16);
+              const bl = parseInt(b.hex.slice(5, 7), 16);
+              const luminance = (0.299 * r + 0.587 * g + 0.114 * bl) / 255;
+              const numColor = luminance > 0.55 ? "rgba(0,0,0,0.4)" : "rgba(255,255,255,0.65)";
+              return (
+                <div key={b.piece} style={{ background: "white", border: "1px solid var(--border-light)", borderRadius: 12, overflow: "hidden" }}>
+                  <div style={{ background: b.hex, height: 130, position: "relative" }}>
+                    <span style={{ position: "absolute", bottom: 8, left: 12, fontFamily: "var(--font-inter)", fontSize: "0.65rem", letterSpacing: "0.1em", color: numColor, fontWeight: 500 }}>
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                  </div>
+                  <div style={{ padding: "14px 16px 18px" }}>
+                    <div style={{ fontFamily: "var(--font-inter)", fontSize: "0.62rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--text-muted)", fontWeight: 500, marginBottom: 4 }}>
+                      Your {b.piece}
+                    </div>
+                    <div style={{ fontFamily: "var(--font-playfair, 'Playfair Display')", fontSize: "1.05rem", fontWeight: 600, color: "var(--text-primary)", lineHeight: 1.2, marginBottom: 4 }}>
+                      → {b.name}
+                    </div>
+                    <div style={{ fontFamily: "var(--font-inter)", fontSize: "0.65rem", letterSpacing: "0.08em", color: "var(--text-muted)", fontWeight: 400, marginBottom: 8 }}>
+                      {b.hex.replace("#", "").toUpperCase()}
+                    </div>
+                    <p style={{ fontFamily: "var(--font-playfair, 'Playfair Display')", fontSize: "0.78rem", fontStyle: "italic", color: "var(--text-secondary)", lineHeight: 1.5, fontWeight: 400, margin: 0 }}>
+                      {b.rationale}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </section>
       )}
