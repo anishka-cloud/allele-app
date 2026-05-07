@@ -81,14 +81,14 @@ export default function Home() {
               drawn in.
             </h1>
             <p className="l-hero-sub">
-              Twelve questions. One archetype. A palette matched to your skin, your eyes, and the <em>light you live in</em> — then every shade you need to wear it.
+              Twelve questions. One archetype. A palette matched to your skin, your eyes, and the <em>light you live in</em>. Free to take. Free to retake. Yours forever.
             </p>
             <div className="l-hero-cta-row">
               <Link className="l-cta-primary" href="/quiz">
                 <span>Begin the analysis</span>
                 <span className="arrow">→</span>
               </Link>
-              <span className="l-cta-meta">2:30 min · Free forever</span>
+              <span className="l-cta-meta">2:30 min · No app · No subscription</span>
             </div>
             <div className="l-hero-meta">
               <div className="l-hero-meta-item"><strong>12</strong><span>Archetypes</span></div>
