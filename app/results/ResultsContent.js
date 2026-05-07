@@ -9,6 +9,7 @@ import {
   productsFor,
   neutralsFor,
   contrastFor,
+  pinterestPredictsFor,
   isDarkHex,
   metalGradient,
   seasonIdFromName,
@@ -173,6 +174,40 @@ function Contrast({ seasonId }) {
         <div style={{ fontFamily: "var(--font-mono, 'JetBrains Mono'), monospace", fontSize: "0.7rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "var(--ink-60, rgba(26,22,19,.60))" }}>
           {c.pairs}
         </div>
+      </div>
+    </section>
+  );
+}
+
+function PredictsThisYear({ seasonId }) {
+  const colors = pinterestPredictsFor(seasonId);
+  if (!colors.length) return null;
+  return (
+    <section className="dt-predicts" style={{ padding: "60px 24px", background: "var(--cream, #FFFBF7)" }}>
+      <div className="dt-section-head" style={{ maxWidth: "1120px", margin: "0 auto 32px", display: "flex", alignItems: "baseline", gap: "20px", justifyContent: "space-between" }}>
+        <span className="dt-section-num" style={{ fontFamily: "var(--font-mono, 'JetBrains Mono'), monospace", fontSize: "0.65rem", letterSpacing: "0.18em", color: "var(--accent, #B5500B)", textTransform: "uppercase" }}>2026</span>
+        <h2 className="dt-section-title" style={{ fontFamily: "var(--font-display, 'Lora'), Georgia, serif", fontSize: "clamp(1.6rem, 3.4vw, 2.4rem)", fontWeight: 500, lineHeight: 1.1, color: "var(--ink, #1A1613)", flex: 1, textAlign: "center" }}>
+          This year, <em style={{ color: "var(--accent, #B5500B)" }}>in your season</em>
+        </h2>
+        <span className="dt-section-meta" style={{ fontFamily: "var(--font-mono, 'JetBrains Mono'), monospace", fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--ink-60, rgba(26,22,19,.60))" }}>
+          Pinterest Predicts
+        </span>
+      </div>
+      <div style={{ maxWidth: "880px", margin: "0 auto", display: "grid", gridTemplateColumns: `repeat(${colors.length}, 1fr)`, gap: "32px" }}>
+        {colors.map((c) => (
+          <div key={c.name} style={{ textAlign: "center" }}>
+            <div style={{ width: "120px", height: "120px", borderRadius: "50%", background: c.hex, margin: "0 auto 18px", boxShadow: `0 8px 32px ${c.hex}50, inset 0 2px 4px rgba(255,255,255,0.15)`, border: "3px solid rgba(255,255,255,0.6)" }} />
+            <div style={{ fontFamily: "var(--font-display, 'Lora'), Georgia, serif", fontSize: "1.35rem", fontWeight: 500, color: "var(--ink, #1A1613)", marginBottom: "8px", letterSpacing: "-0.01em" }}>
+              {c.name}
+            </div>
+            <div style={{ fontFamily: "var(--font-mono, 'JetBrains Mono'), monospace", fontSize: "0.65rem", letterSpacing: "0.1em", color: "var(--ink-40, rgba(26,22,19,.40))", marginBottom: "12px" }}>
+              {c.hex}
+            </div>
+            <p style={{ fontFamily: "var(--font-display, 'Lora'), Georgia, serif", fontStyle: "italic", fontSize: "0.95rem", color: "var(--ink-80, rgba(26,22,19,.80))", lineHeight: 1.55, margin: 0 }}>
+              {c.body}
+            </p>
+          </div>
+        ))}
       </div>
     </section>
   );
@@ -690,6 +725,7 @@ export default function ResultsContent() {
       <Hero s={s} seasonId={seasonId} />
       <Contrast seasonId={seasonId} />
       <Drape s={s} seasonId={seasonId} />
+      <PredictsThisYear seasonId={seasonId} />
       <Basics seasonId={seasonId} />
       <Edit s={s} seasonId={seasonId} />
       <Collect s={s} />
