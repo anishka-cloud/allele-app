@@ -84,7 +84,7 @@ function AxisMeter({ label, leftLabel, rightLabel, value, color, answered }) {
         <span className="qz-meter-label">{label}</span>
         <span className="qz-meter-val">
           {!filled ? (
-            "—"
+            "·"
           ) : value > 0.15 ? (
             rightLabel
           ) : value < -0.15 ? (
@@ -434,7 +434,7 @@ export default function QuizPage() {
                   ))}
                 </div>
                 <div className="qz-lead-body">
-                  <div className="qz-lead-family">— {lead.family} —</div>
+                  <div className="qz-lead-family">· {lead.family} ·</div>
                   <div className="qz-lead-name">{lead.name}</div>
                 </div>
               </div>
@@ -448,7 +448,7 @@ export default function QuizPage() {
 
           {answers.length === 0 && (
             <div className="qz-empty-note">
-              As you answer, we&rsquo;ll show how your coloring maps across three axes — and which of the twelve shades are still in play.
+              As you answer, we&rsquo;ll show how your coloring maps across three axes, and which of the twelve shades are still in play.
             </div>
           )}
         </aside>

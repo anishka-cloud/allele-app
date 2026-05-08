@@ -134,7 +134,7 @@ function Hero({ s, seasonId }) {
             <div className="dt-specimen-tl">allele</div>
             <div className="dt-specimen-tr">{num}</div>
             <div className="dt-specimen-body">
-              <div className="dt-specimen-family">— {s.family} —</div>
+              <div className="dt-specimen-family">· {s.family} ·</div>
               <div className="dt-specimen-name">{s.name}</div>
               <div className="dt-specimen-tag">{s.tagline}</div>
             </div>
@@ -152,7 +152,7 @@ function Hero({ s, seasonId }) {
             </div>
             {s.celebs?.length > 0 && (
               <div className="dt-specimen-twins">
-                <div className="dt-specimen-twins-label">— Style twins —</div>
+                <div className="dt-specimen-twins-label">Style twins</div>
                 <div className="dt-specimen-twins-names">
                   {s.celebs.slice(0, 3).map((c, i) => (
                     <span key={i}>
@@ -328,11 +328,11 @@ function Basics({ seasonId }) {
         <span className="dt-section-num">02</span>
         <h2 className="dt-section-title">Your <em>wardrobe anchors</em></h2>
         <span className="dt-section-meta">
-          The eight pieces every closet is built around — in your exact shade
+          The eight pieces every closet is built around. In your exact shade.
         </span>
       </div>
       <p className="dt-basics-intro">
-        If you don&rsquo;t gravitate to the statement colors, that&rsquo;s fine. Most of what you wear is <em>neutral</em>. Here&rsquo;s what every basic should be — translated into your season.
+        If you don&rsquo;t gravitate to the statement colors, that&rsquo;s fine. Most of what you wear is <em>neutral</em>. Here&rsquo;s what every basic should be, translated into your season.
       </p>
       <div className="dt-basics-grid">
         {n.basics.map((b, i) => {
@@ -508,15 +508,15 @@ function Collect({ s }) {
           <div className="dt-section-num">04</div>
           <h2 className="dt-collect-title">The <em>dossier</em></h2>
           <p className="dt-collect-body">
-            We&rsquo;ll send the long-form letter — every shade with names and hexes, your wardrobe anchors, the 24-product edit, and tips you can save for the dressing room.
+            We&rsquo;ll send the long-form letter: every shade with names and hexes, your wardrobe anchors, the 24-product edit, and tips you can save for the dressing room.
           </p>
         </div>
         <form className="dt-collect-form" onSubmit={submit}>
           {status === "success" ? (
             <div className="dt-collect-success">
-              <div className="dt-collect-success-eyebrow">— Sent —</div>
+              <div className="dt-collect-success-eyebrow">Sent</div>
               <div className="dt-collect-success-body">
-                Check your inbox — your dossier is on its way.
+                Check your inbox. Your dossier is on its way.
               </div>
             </div>
           ) : (
@@ -545,7 +545,7 @@ function Collect({ s }) {
               </div>
               {status === "error" && (
                 <div className="dt-collect-error">
-                  Something went wrong. Try again — or DM us if it keeps failing.
+                  Something went wrong. Try again, or DM us if it keeps failing.
                 </div>
               )}
               <div className="dt-collect-fine">
@@ -567,7 +567,7 @@ function Deeper({ s }) {
           <div className="dt-section-num">05</div>
           <h2 className="dt-deeper-title">Go deeper.</h2>
           <p className="dt-deeper-body">
-            Shade DNA is Chapter One. Your <em>Signature</em> emerges when we combine your color science with your style vibe — curated closet, outfit engine, one-second yes/no shopping filter.
+            Shade DNA is Volume I. Your <em>Signature</em> emerges when we combine your color science with your style vibe: curated closet, outfit engine, one-second yes/no shopping filter.
           </p>
           <Link href="/vibe/quiz" className="dt-btn dt-btn-primary dark">
             Unlock Signature <span>→</span>
@@ -656,7 +656,7 @@ function Share({ s, seasonId }) {
             <div className="dt-share-card-tl">allele</div>
             <div className="dt-share-card-tr">{num}</div>
             <div className="dt-share-card-center">
-              <div className="dt-share-card-eyebrow">— {s.family} —</div>
+              <div className="dt-share-card-eyebrow">· {s.family} ·</div>
               <div className="dt-share-card-name">{s.name}</div>
               <div className="dt-share-card-tag">{s.tagline}</div>
               <div className="dt-share-card-rail">

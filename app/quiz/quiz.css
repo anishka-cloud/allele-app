@@ -782,6 +782,12 @@ body:has(.qz-shell) { background: var(--cream); }
     max-width: 92%;
   }
 
+  /* Topbar subrow (Between Dark Autumn vs True Autumn) */
+  .qz-topbar-subrow { flex-wrap: wrap; gap: 6px; }
+  .qz-topbar-sublabel { font-size: 9.5px; }
+  .qz-topbar-pair { font-size: 12px; gap: 8px; flex-wrap: wrap; }
+  .qz-topbar-pair em { font-size: 12px; }
+
   /* Aside (live reading) */
   .qz-aside { margin-top: 8px; padding: 22px 18px; }
   .qz-aside-eyebrow { font-size: 9.5px; }

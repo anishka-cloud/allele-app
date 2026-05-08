@@ -20,7 +20,7 @@ body:has(.landing) { background: var(--cream); }
 /* ============ Nav ============ */
 .l-nav {
   position: sticky;
-  top: 32px;
+  top: 0;
   z-index: 50;
   background: rgba(255, 251, 247, 0.88);
   backdrop-filter: blur(16px);
@@ -1148,18 +1148,20 @@ body:has(.landing) { background: var(--cream); }
   /* Section padding */
   .l-twelve, .l-method, .l-axes, .l-showcase, .l-science, .l-voices { padding: 48px 16px; }
   .l-final { padding: 56px 16px 64px; }
-  .l-section-num, .l-section-meta { font-size: 9.5px; }
-  .l-section-title { font-size: clamp(28px, 7.5vw, 40px); line-height: 1.05; }
+  .l-section-head-num, .l-section-head-meta { font-size: 9.5px; }
+  .l-section-head-title { font-size: clamp(28px, 7.5vw, 40px); line-height: 1.05; }
 
   /* Family rows / specimens */
   .l-family-label { font-size: 22px; }
-  .l-family-specimen { padding: 22px 18px; }
-  .l-family-specimen-name { font-size: 22px; }
+  .l-specimen-card { padding: 22px 18px; }
+  .l-specimen-card-name { font-size: 22px; }
 
   /* Axes / method / showcase / science blocks */
   .l-axis-title { font-size: 22px; }
-  .l-method-card { padding: 22px 18px; }
-  .l-showcase-preview { padding: 28px 22px; }
+  .l-method-step { padding: 22px 18px; }
+  /* Showcase preview: drop aspect-ratio + overflow:hidden so the rewritten
+     longer whisper doesn't get clipped at the bottom of the container. */
+  .l-showcase-preview { padding: 28px 22px; aspect-ratio: auto; overflow: visible; height: auto; }
 
   /* Footer */
   .l-footer { padding: 32px 16px 24px; }

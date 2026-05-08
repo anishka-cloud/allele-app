@@ -177,19 +177,19 @@ export default function Home() {
               <div className="l-method-step-num">01</div>
               <div className="l-method-step-label">Twelve questions</div>
               <h3 className="l-method-step-title">You <em>answer.</em></h3>
-              <p className="l-method-step-body">Undertone, depth, contrast — drawn out in twelve precise questions. No guesswork, no jargon. Sixty seconds.</p>
+              <p className="l-method-step-body">Undertone, depth, contrast. Drawn out in twelve precise questions. No guesswork, no jargon. Sixty seconds.</p>
             </div>
             <div className="l-method-step">
               <div className="l-method-step-num">02</div>
               <div className="l-method-step-label">One archetype</div>
               <h3 className="l-method-step-title">We <em>find you.</em></h3>
-              <p className="l-method-step-body">One of twelve seasons. Your palette emerges like a constellation — eight colors that will always work, and a whisper of who you are in color.</p>
+              <p className="l-method-step-body">One of twelve seasons. Your palette emerges like a constellation: eight colors that will always work, and a whisper of who you are in color.</p>
             </div>
             <div className="l-method-step">
               <div className="l-method-step-num">03</div>
               <div className="l-method-step-label">Ninety-six shades</div>
               <h3 className="l-method-step-title">You <em>shop what fits.</em></h3>
-              <p className="l-method-step-body">Foundation, blush, lip, eye — four categories, three price tiers. Every shade matched to your coloring. Links out; no storefront to defend.</p>
+              <p className="l-method-step-body">Foundation, blush, lip, eye. Four categories, three price tiers. Every shade matched to your coloring. Links out; no storefront to defend.</p>
             </div>
           </div>
         </div>
@@ -201,11 +201,11 @@ export default function Home() {
           <div className="l-section-head" style={{ borderColor: "var(--ink)" }}>
             <div className="l-section-head-num">§ 03</div>
             <h2 className="l-section-head-title">Three axes. <em>One you.</em></h2>
-            <div className="l-section-head-meta">Why twelve seasons — not four</div>
+            <div className="l-section-head-meta">Why twelve seasons, not four</div>
           </div>
 
           <div className="l-axes-intro">
-            <p>The twelve-season method isn&rsquo;t aesthetic. It&rsquo;s a coordinate system. Three measurable properties of human coloring — <em>undertone</em>, <em>depth</em>, and <em>chroma</em> — and where you land on each one tells us which palette belongs to you.</p>
+            <p>The twelve-season method isn&rsquo;t aesthetic. It&rsquo;s a coordinate system. Three measurable properties of human coloring (<em>undertone</em>, <em>depth</em>, and <em>chroma</em>), and where you land on each one tells us which palette belongs to you.</p>
             <p className="l-axes-intro-callout">A trained colorist with a stack of physical drapes will find the same answer. We just don&rsquo;t charge $500 to do it.</p>
           </div>
 
@@ -214,7 +214,7 @@ export default function Home() {
               <div className="l-axis-num">§ I</div>
               <div className="l-axis-label">Axis One</div>
               <h3 className="l-axis-title">Undertone.</h3>
-              <p className="l-axis-def">The temperature beneath your skin. Warm leans yellow-gold-peach. Cool leans pink-rose-blue. Most people are not 50/50 — they have a real bias, even when they swear they don&rsquo;t.</p>
+              <p className="l-axis-def">The temperature beneath your skin. Warm leans yellow-gold-peach. Cool leans pink-rose-blue. Most people are not 50/50. They have a real bias, even when they swear they don&rsquo;t.</p>
               <div className="l-axis-vis">
                 <div className="l-axis-bar">
                   <div className="l-axis-bar-fill" style={{ background: "linear-gradient(90deg, #F2D5A8 0%, #F4EBD8 50%, #E8D5DC 100%)" }}></div>
@@ -225,8 +225,8 @@ export default function Home() {
                 </div>
               </div>
               <div className="l-axis-tells">
-                <div className="l-axis-tell"><span className="l-axis-tell-key">Tell —</span> Veins inside the wrist read green (warm) or blue-purple (cool).</div>
-                <div className="l-axis-tell"><span className="l-axis-tell-key">Tell —</span> Gold jewelry warms your face; silver flatters; one wins.</div>
+                <div className="l-axis-tell"><span className="l-axis-tell-key">Tell</span> Veins inside the wrist read green (warm) or blue-purple (cool).</div>
+                <div className="l-axis-tell"><span className="l-axis-tell-key">Tell</span> Gold jewelry warms your face; silver flatters; one wins.</div>
               </div>
             </div>
 
@@ -234,7 +234,7 @@ export default function Home() {
               <div className="l-axis-num">§ II</div>
               <div className="l-axis-label">Axis Two</div>
               <h3 className="l-axis-title">Depth.</h3>
-              <p className="l-axis-def">The light value of your overall coloring — skin, hair, and eyes averaged together. Light depth blooms next to pastels and washes against black. Dark depth holds its own beside true black and gets erased by pale.</p>
+              <p className="l-axis-def">The light value of your overall coloring: skin, hair, and eyes averaged together. Light depth blooms next to pastels and washes against black. Dark depth holds its own beside true black and gets erased by pale.</p>
               <div className="l-axis-vis">
                 <div className="l-axis-stack">
                   <div className="l-axis-stack-row" style={{ background: "#F4EBD8" }}><span>Light</span></div>
@@ -244,8 +244,8 @@ export default function Home() {
                 </div>
               </div>
               <div className="l-axis-tells">
-                <div className="l-axis-tell"><span className="l-axis-tell-key">Tell —</span> A black turtleneck either frames your face or eats it.</div>
-                <div className="l-axis-tell"><span className="l-axis-tell-key">Tell —</span> Your hair, eye, and skin contrast — close together, or stark?</div>
+                <div className="l-axis-tell"><span className="l-axis-tell-key">Tell</span> A black turtleneck either frames your face or eats it.</div>
+                <div className="l-axis-tell"><span className="l-axis-tell-key">Tell</span> Your hair, eye, and skin contrast: close together, or stark?</div>
               </div>
             </div>
 
@@ -253,7 +253,7 @@ export default function Home() {
               <div className="l-axis-num">§ III</div>
               <div className="l-axis-label">Axis Three · The hidden one</div>
               <h3 className="l-axis-title">Chroma.</h3>
-              <p className="l-axis-def">The intensity of pigment your face can carry without being overwhelmed. <em>Bright chroma</em> faces hold true reds and emeralds. <em>Muted chroma</em> faces glow in dusty mauves and sages — and look strange in saturated color, no matter how flattering the undertone.</p>
+              <p className="l-axis-def">The intensity of pigment your face can carry without being overwhelmed. <em>Bright chroma</em> faces hold true reds and emeralds. <em>Muted chroma</em> faces glow in dusty mauves and sages, and look strange in saturated color, no matter how flattering the undertone.</p>
               <div className="l-axis-vis">
                 <div className="l-axis-chroma-row">
                   <div className="l-axis-chroma-cell" style={{ background: "#DC143C" }}></div>
@@ -274,8 +274,8 @@ export default function Home() {
                 </div>
               </div>
               <div className="l-axis-tells">
-                <div className="l-axis-tell"><span className="l-axis-tell-key">Tell —</span> A pure-red lipstick: striking on you, or somehow garish?</div>
-                <div className="l-axis-tell"><span className="l-axis-tell-key">Tell —</span> The &ldquo;you look great today&rdquo; colors are usually right at your chroma.</div>
+                <div className="l-axis-tell"><span className="l-axis-tell-key">Tell</span> A pure-red lipstick: striking on you, or somehow garish?</div>
+                <div className="l-axis-tell"><span className="l-axis-tell-key">Tell</span> The &ldquo;you look great today&rdquo; colors are usually right at your chroma.</div>
               </div>
               <div className="l-axis-feature-note">Most online tests skip this axis. It&rsquo;s why they get you wrong.</div>
             </div>
@@ -300,7 +300,7 @@ export default function Home() {
           <div className="l-showcase-copy">
             <div className="l-showcase-copy-eyebrow">The Result</div>
             <h2>A book of <em>one.</em></h2>
-            <p>Your archetype arrives as a single editorial page — part certificate, part shopping list, part <em>letter to yourself.</em></p>
+            <p>Your archetype arrives as a single editorial page: part certificate, part shopping list, part <em>letter to yourself.</em></p>
             <p>Bookmark it. Print it. Open it in the fitting room when the light is bad and the lipsticks all look the same.</p>
             <ul className="l-showcase-bullets">
               <li><strong>01 Palette</strong><span>Your eight signature shades, with names and hexes.</span></li>
@@ -390,7 +390,7 @@ export default function Home() {
 
           <div className="l-voice">
             <div className="l-voice-quote-mark">II</div>
-            <p className="l-voice-body">Receive the dossier. <em>A long-form letter</em> — your science, your shade, your edit. Written in plain English. No jargon.</p>
+            <p className="l-voice-body">Receive the dossier. <em>A long-form letter</em>: your science, your shade, your edit. Written in plain English. No jargon.</p>
             <div className="l-voice-attr">
               <div className="l-voice-avatar" style={{ background: "linear-gradient(135deg,#8DA9C4,#6B8CAD)" }}></div>
               <div>

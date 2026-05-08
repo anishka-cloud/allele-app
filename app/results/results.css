@@ -1579,12 +1579,15 @@ body:has(.dt-results) { background: var(--cream); }
   .dt-contrast { padding: 44px 16px !important; }
   .dt-contrast > div { gap: 18px !important; grid-template-columns: 1fr !important; }
 
-  /* Predicts (inline-styled section) */
+  /* Predicts (inline-styled section) — force 2-col grid + smaller swatches on phone */
   .dt-predicts { padding: 44px 16px !important; }
   .dt-predicts > div:first-child { flex-direction: column; align-items: flex-start !important; gap: 8px !important; margin-bottom: 24px !important; text-align: left !important; }
   .dt-predicts > div:first-child h2 { font-size: 26px !important; text-align: left !important; }
-  .dt-predicts > div:last-child { gap: 24px !important; }
-  .dt-predicts > div:last-child > div > div:first-child { width: 88px !important; height: 88px !important; }
+  .dt-predicts > div:last-child {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 28px 18px !important;
+  }
+  .dt-predicts > div:last-child > div > div:first-child { width: 72px !important; height: 72px !important; }
 
   /* Drape */
   .dt-drape { padding: 56px 16px; }

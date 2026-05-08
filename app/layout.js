@@ -65,9 +65,6 @@ export default function RootLayout({ children }) {
           role="note"
           aria-label="Affiliate disclosure"
           style={{
-            position: "sticky",
-            top: 0,
-            zIndex: 100,
             background: "rgba(196,162,101,0.12)",
             borderBottom: "1px solid rgba(196,162,101,0.22)",
             padding: "8px 16px",
