@@ -676,7 +676,7 @@ function Footer() {
           <Link href="/disclosure">FTC disclosure</Link>
         </div>
       </div>
-      <div className="dt-footer-fine">© 2026 · Allele · Your shade, your science.</div>
+      <div className="dt-footer-fine">© 2026 · Allele · Made in Los Angeles</div>
     </footer>
   );
 }

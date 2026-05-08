@@ -1542,3 +1542,77 @@ body:has(.dt-results) { background: var(--cream); }
   .dt-collect-inner { grid-template-columns: 1fr; gap: 32px; }
   .dt-collect-row { flex-direction: column; }
 }
+
+/* Phone-tight (≤640px) — added 2026-05-07 mobile pass */
+@media (max-width: 640px) {
+  :root { --edge: 16px; }
+
+  /* Nav */
+  .dt-nav { padding: 12px 16px; }
+
+  /* Hero */
+  .dt-hero { padding: 56px 16px 48px; }
+  .dt-hero-eyebrow { flex-wrap: wrap; gap: 6px 10px; font-size: 9.5px; }
+  .dt-hero-name { font-size: 56px; line-height: 0.95; letter-spacing: -0.025em; }
+  .dt-hero-tag { font-size: 13px; }
+  .dt-hero-whisper { font-size: 17px; line-height: 1.4; }
+  .dt-hero-palette { gap: 6px; flex-wrap: wrap; }
+  .dt-hero-palette .chip { width: 32px; height: 32px; }
+  .dt-attr-k { font-size: 9.5px; }
+  .dt-attr-v { font-size: 13px; }
+
+  /* Contrast (inline-styled section) */
+  .dt-contrast { padding: 44px 16px !important; }
+  .dt-contrast > div { gap: 18px !important; grid-template-columns: 1fr !important; }
+
+  /* Predicts (inline-styled section) */
+  .dt-predicts { padding: 44px 16px !important; }
+  .dt-predicts > div:first-child { flex-direction: column; align-items: flex-start !important; gap: 8px !important; margin-bottom: 24px !important; text-align: left !important; }
+  .dt-predicts > div:first-child h2 { font-size: 26px !important; text-align: left !important; }
+  .dt-predicts > div:last-child { gap: 24px !important; }
+  .dt-predicts > div:last-child > div > div:first-child { width: 88px !important; height: 88px !important; }
+
+  /* Drape */
+  .dt-drape { padding: 56px 16px; }
+  .dt-drape-rail { grid-template-columns: repeat(2, 1fr); aspect-ratio: 1 / 1; gap: 4px; }
+  .dt-band-head { font-size: 18px; }
+  .dt-band-desc { font-size: 13px; }
+
+  /* Basics */
+  .dt-basics { padding: 56px 16px; }
+  .dt-basics-grid { grid-template-columns: 1fr; gap: 18px; }
+  .dt-basic { padding: 22px 18px; }
+  .dt-basic-v { font-size: 22px; }
+
+  /* Edit / products */
+  .dt-edit { padding: 56px 16px; }
+  .dt-edit-intro { grid-template-columns: 1fr; gap: 22px; }
+  .dt-edit-grid { grid-template-columns: 1fr; gap: 18px; }
+  .dt-tier-picker { align-items: flex-start; }
+
+  /* Collect */
+  .dt-results section.dt-collect { padding: 56px 16px; }
+  .dt-collect-form { padding: 26px 22px; }
+  .dt-collect-title { font-size: 36px; line-height: 1.05; }
+  .dt-collect-input { font-size: 15px; padding: 12px 16px; }
+
+  /* Deeper */
+  .dt-deeper { padding: 56px 16px; }
+  .dt-deeper-title { font-size: 38px; line-height: 1.05; }
+  .dt-deeper-body { font-size: 15px; }
+  .dt-deeper-card { padding: 22px 18px; }
+  .dt-deeper-card-body { font-size: 14px; }
+
+  /* Share */
+  .dt-share { padding: 56px 16px; }
+  .dt-share-title { font-size: 30px; line-height: 1.05; }
+  .dt-share-body { font-size: 14px; }
+  .dt-share-targets { flex-wrap: wrap; gap: 8px; }
+  .dt-share-target { padding: 12px 16px; font-size: 12px; }
+  .dt-share-card { padding: 26px 20px; }
+  .dt-share-card-name { font-size: 30px; line-height: 1.05; }
+
+  /* Footer */
+  .dt-footer { padding: 36px 16px 24px; }
+  .dt-footer-grid { grid-template-columns: 1fr 1fr; gap: 22px 16px; }
+}

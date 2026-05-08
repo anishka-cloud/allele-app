@@ -1114,3 +1114,55 @@ body:has(.landing) { background: var(--cream); }
   .l-footer-legal { flex-direction: column; }
   .l-nav-inner { padding: 16px 24px; }
 }
+
+/* Phone-tight (≤640px) — added 2026-05-07 mobile pass */
+@media (max-width: 640px) {
+  /* Nav */
+  .l-nav-inner { padding: 12px 14px; gap: 10px; }
+  .l-nav-wordmark { font-size: 1.35rem; }
+  .l-nav-cta { padding: 9px 12px; font-size: 10.5px; letter-spacing: 0.08em; }
+
+  /* Hero */
+  .l-hero { padding: 28px 16px 24px; }
+  .l-hero-eyebrow { flex-wrap: wrap; gap: 8px 10px; font-size: 9.5px; }
+  .l-swatch-row { gap: 6px; }
+  .l-hero-headline { font-size: clamp(38px, 11vw, 54px); line-height: 0.98; letter-spacing: -0.02em; }
+  .l-hero-headline br { display: none; }
+  .l-hero-sub { font-size: 15.5px; line-height: 1.55; }
+  .l-hero-cta-row { flex-direction: column; align-items: stretch; gap: 12px; }
+  .l-cta-primary { width: 100%; justify-content: center; padding: 16px 18px; }
+  .l-cta-meta { text-align: center; font-size: 10.5px; }
+  .l-hero-meta { grid-template-columns: repeat(2, 1fr); gap: 14px 18px; margin-top: 28px; }
+  .l-hero-meta-item strong { font-size: 26px; }
+  .l-hero-meta-item span { font-size: 9.5px; }
+  .l-hero-card { padding: 22px 18px; margin-top: 8px; }
+  .l-hero-card-name { font-size: 26px; line-height: 1.05; }
+  .l-hero-card-tag { font-size: 11px; }
+  .l-hero-card-attrs { flex-wrap: wrap; gap: 6px; }
+  .l-hero-card-attrs span { font-size: 9.5px; padding: 4px 8px; }
+  .l-hero-card-palette { gap: 6px; }
+  .l-hero-card-palette .chip { width: 28px; height: 28px; }
+  .l-hero-card-whisper { font-size: 14px; line-height: 1.45; }
+  .l-hero-card-twins-names em { display: inline-block; }
+
+  /* Section padding */
+  .l-twelve, .l-method, .l-axes, .l-showcase, .l-science, .l-voices { padding: 48px 16px; }
+  .l-final { padding: 56px 16px 64px; }
+  .l-section-num, .l-section-meta { font-size: 9.5px; }
+  .l-section-title { font-size: clamp(28px, 7.5vw, 40px); line-height: 1.05; }
+
+  /* Family rows / specimens */
+  .l-family-label { font-size: 22px; }
+  .l-family-specimen { padding: 22px 18px; }
+  .l-family-specimen-name { font-size: 22px; }
+
+  /* Axes / method / showcase / science blocks */
+  .l-axis-title { font-size: 22px; }
+  .l-method-card { padding: 22px 18px; }
+  .l-showcase-preview { padding: 28px 22px; }
+
+  /* Footer */
+  .l-footer { padding: 32px 16px 24px; }
+  .l-footer-inner { grid-template-columns: 1fr; gap: 22px; }
+  .l-footer-legal { flex-direction: column; gap: 10px; }
+}

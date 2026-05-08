@@ -741,3 +741,58 @@ body:has(.qz-shell) { background: var(--cream); }
   .qz-topbar-inner { grid-template-columns: 1fr; gap: 12px; }
   .qz-topbar-right { justify-self: start; }
 }
+
+/* Phone-tight (≤640px) — added 2026-05-07 mobile pass */
+@media (max-width: 640px) {
+  :root { --edge: 16px; }
+
+  /* Nav + topbar */
+  .qz-nav-inner { padding: 12px 16px; }
+  .qz-nav-brand { font-size: 1.2rem; }
+  .qz-topbar-inner { padding: 12px 16px; gap: 10px; }
+  .qz-topbar-label { font-size: 9.5px; }
+
+  /* Question */
+  .qz-stage { padding: 28px 16px 16px; }
+  .qz-q { gap: 18px; }
+  .qz-q-eyebrow { font-size: 9.5px; }
+  .qz-q-headline { font-size: 30px; line-height: 1.1; letter-spacing: -0.01em; }
+  .qz-q-sub-meta { font-size: 13px; }
+
+  /* Options */
+  .qz-options { gap: 10px; }
+  .qz-option { padding: 14px 16px; }
+  .qz-option-text { font-size: 15px; line-height: 1.4; }
+  .qz-option-swatch { width: 36px; height: 36px; }
+
+  /* Mobile-only scroll hint after the answer options */
+  .qz-options::after {
+    content: "↓ Your live reading updates below";
+    grid-column: 1 / -1;
+    margin: 14px auto 4px;
+    padding: 9px 14px;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-60);
+    background: rgba(181, 80, 11, 0.06);
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    width: fit-content;
+    max-width: 92%;
+  }
+
+  /* Aside (live reading) */
+  .qz-aside { margin-top: 8px; padding: 22px 18px; }
+  .qz-aside-eyebrow { font-size: 9.5px; }
+  .qz-aside-title { font-size: 17px; }
+  .qz-meter-label { font-size: 11px; }
+  .qz-meter-val { font-size: 11px; }
+  .qz-rail-head { font-size: 11px; }
+
+  /* Actions */
+  .qz-actions { flex-wrap: wrap; gap: 8px; }
+  .qz-back, .qz-flash { font-size: 11px; padding: 10px 14px; }
+}
