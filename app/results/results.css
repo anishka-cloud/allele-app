@@ -1548,18 +1548,32 @@ body:has(.dt-results) { background: var(--cream); }
   :root { --edge: 16px; }
 
   /* Nav */
-  .dt-nav { padding: 12px 16px; }
+  .dt-nav-inner { padding: 12px 16px; gap: 12px; grid-template-columns: auto auto; }
+  .dt-nav-links { display: none; }
+  .dt-nav-brand { font-size: 22px; }
+  .dt-nav-right { gap: 8px; }
+  .dt-nav-season { font-size: 12px; padding: 6px 10px; max-width: 140px; }
+  .dt-nav-cta { font-size: 11px; padding: 8px 12px; white-space: nowrap; }
 
-  /* Hero */
-  .dt-hero { padding: 56px 16px 48px; }
+  /* Hero — section padding override needs the high-specificity selector */
+  .dt-results section.dt-hero { padding: 56px 16px 48px; }
+  .dt-hero-grid { grid-template-columns: 1fr; gap: 36px; }
   .dt-hero-eyebrow { flex-wrap: wrap; gap: 6px 10px; font-size: 9.5px; }
   .dt-hero-name { font-size: 56px; line-height: 0.95; letter-spacing: -0.025em; }
-  .dt-hero-tag { font-size: 13px; }
-  .dt-hero-whisper { font-size: 17px; line-height: 1.4; }
-  .dt-hero-palette { gap: 6px; flex-wrap: wrap; }
-  .dt-hero-palette .chip { width: 32px; height: 32px; }
+  .dt-hero-name br { display: block; }
+  .dt-hero-whisper { font-size: 17px; line-height: 1.45; }
+  .dt-hero-attrs {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px 14px;
+    padding: 22px 0;
+    margin-bottom: 32px;
+  }
   .dt-attr-k { font-size: 9.5px; }
-  .dt-attr-v { font-size: 13px; }
+  .dt-attr-v { font-size: 15px; line-height: 1.3; }
+  .dt-hero-ctas { flex-direction: column; gap: 10px; margin-bottom: 32px; }
+  .dt-btn { width: 100%; justify-content: center; padding: 14px 18px; border-radius: 14px; }
+  .dt-twins { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .dt-twins-names { font-size: 14px; line-height: 1.5; }
 
   /* Contrast (inline-styled section) */
   .dt-contrast { padding: 44px 16px !important; }
