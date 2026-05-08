@@ -61,7 +61,7 @@ export default function Home() {
       {/* ============ Hero ============ */}
       <section className="l-hero">
         <div className="l-hero-eyebrow">
-          <span>Chromatic Cartography · No. 01</span>
+          <span>Allele · Vol. I · Shade DNA</span>
           <span className="hairline"></span>
           <span>Est. 2026</span>
           <div className="l-swatch-row">
@@ -305,8 +305,8 @@ export default function Home() {
             <ul className="l-showcase-bullets">
               <li><strong>01 Palette</strong><span>Your eight signature shades, with names and hexes.</span></li>
               <li><strong>02 Products</strong><span>Twenty-four matched picks across four categories.</span></li>
-              <li><strong>03 Tiers</strong><span>Budget, best value, splurge — you decide the spend.</span></li>
-              <li><strong>04 Archetype</strong><span>A whisper describing your coloring in plain language.</span></li>
+              <li><strong>03 Tiers</strong><span>Budget, best value, splurge. You decide the spend.</span></li>
+              <li><strong>04 Archetype</strong><span>A one-line identity for your coloring, plus what washes you out.</span></li>
               <li><strong>05 Share card</strong><span>An Instagram-ready specimen card for the post.</span></li>
             </ul>
           </div>
@@ -324,7 +324,7 @@ export default function Home() {
               ))}
             </div>
             <div className="l-showcase-preview-quote">
-              &ldquo;Burnt orange, rust, forest, deep gold. The cathedral in October.&rdquo;
+              &ldquo;Caramel, rust, olive, deep gold. Your nude has gold in it. Cool taupes wash you out.&rdquo;
             </div>
           </div>
         </div>
@@ -336,8 +336,8 @@ export default function Home() {
           <div>
             <h2>A field guide to <em>yourself</em>.</h2>
             <div className="l-science-body">
-              <p>You are reading Shade DNA — Chapter One of twelve. This chapter maps the physics of your coloring into one of twelve seasons. The other chapters — Vibe, Signature, and the ones still in the lab — use different lenses on the same person.</p>
-              <p>Shade DNA began with a question: <em>why do some colors make you, and others un-make you?</em> The answer is not taste or trend — it is coloring, the interference pattern of your skin, eyes, and hair against light. Physics. Yours. This is where we start.</p>
+              <p>You are reading Shade DNA, Volume I in an open series. This volume maps the physics of your coloring into one of twelve seasons. The next volumes (Vibe, Signature, Carry-On, and the ones still in the lab) use different lenses on the same person.</p>
+              <p>Shade DNA began with a question: <em>why do some colors make you, and others un-make you?</em> The answer is not taste or trend. It is coloring: the interference pattern of your skin, eyes, and hair against light. Physics. Yours. This is where we start.</p>
               <p>Twelve families. Three variants each. <em>One of them is yours.</em></p>
             </div>
           </div>

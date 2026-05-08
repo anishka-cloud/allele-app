@@ -63,7 +63,19 @@ function Hero({ s, seasonId }) {
           <h1 className="dt-hero-name">
             <em>{first}</em>{rest.length ? <><br />{rest.join(" ")}</> : null}
           </h1>
+          {s.archetype && (
+            <div className="dt-hero-archetype">
+              <span className="dt-hero-archetype-label">Archetype</span>
+              <span className="dt-hero-archetype-line">{s.archetype}</span>
+            </div>
+          )}
           <p className="dt-hero-whisper">{s.whisper}</p>
+          {s.washesYouOut && (
+            <div className="dt-hero-warning">
+              <span className="dt-hero-warning-label">What washes you out</span>
+              <span className="dt-hero-warning-line">{s.washesYouOut}</span>
+            </div>
+          )}
 
           <div className="dt-hero-attrs">
             <div className="dt-attr">
@@ -98,6 +110,13 @@ function Hero({ s, seasonId }) {
                 {s.celebs.map((c, i) => (
                   <span key={i}>
                     <em>{c.name}</em>
+                    {c.signatureColor && (
+                      <span
+                        className="dt-twins-swatch"
+                        style={{ background: c.signatureColor }}
+                        aria-hidden="true"
+                      />
+                    )}
                     {c.contested && (
                       <sup className="dt-twins-contested" title="Sources disagree">*</sup>
                     )}
@@ -374,10 +393,13 @@ function Edit({ s, seasonId }) {
       <div className="dt-edit-intro">
         <div>
           <p className="dt-edit-body">
-            These are curated to your exact coloring. Each product is hand-matched by undertone, depth, and chroma — not just &ldquo;warm&rdquo; or &ldquo;cool.&rdquo;
+            These are curated to your exact coloring. Each product is hand-matched by undertone, depth, and chroma. Not just &ldquo;warm&rdquo; or &ldquo;cool.&rdquo;
           </p>
+          {s.shadeGuidance && (
+            <p className="dt-shade-guidance">{s.shadeGuidance}</p>
+          )}
           <div className="dt-ftc">
-            Links are affiliate. We earn a small commission — costs you nothing, keeps Allele free.
+            Links are affiliate. We earn a small commission. Costs you nothing, keeps Allele free.
           </div>
         </div>
         <div className="dt-tier-picker">
