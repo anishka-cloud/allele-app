@@ -208,14 +208,12 @@ body:has(.qz-shell) { background: var(--cream); }
   gap: 10px;
 }
 .qz-topbar-pair em { font-style: italic; color: var(--ink); }
-.qz-topbar-pair-nums {
+.qz-topbar-pair-vs {
   font-family: var(--mono);
   font-size: 10px;
-  letter-spacing: 0.08em;
-  color: var(--ink-60);
-  padding: 2px 8px;
-  background: var(--cream-3);
-  border-radius: 999px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-40);
 }
 
 .qz-complete-hint {

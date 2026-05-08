@@ -66,9 +66,7 @@ function TopBar({ step, total, narrow }) {
           <span className="qz-topbar-sublabel">Between</span>
           <span className="qz-topbar-pair">
             <em>{narrow.subSeasonPair.a}</em>
-            <span className="qz-topbar-pair-nums">
-              {narrow.subSeasonPair.aPct} / {narrow.subSeasonPair.bPct}
-            </span>
+            <span className="qz-topbar-pair-vs">vs</span>
             <em>{narrow.subSeasonPair.b}</em>
           </span>
         </div>
