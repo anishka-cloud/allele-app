@@ -15,9 +15,86 @@ import {
   seasonIdFromName,
 } from "@/lib/handoffSeasons";
 import { track } from "@/lib/analytics";
+import { getShopUrl } from "@/lib/shopLinks";
 import "./results.css";
 
 const SEASON_IDS = Object.keys(SEASONS);
+const FOUNDATION_URL = "https://shopmy.us/shop/collections/4652210";
+const CONCEALER_URL = "https://shopmy.us/shop/collections/4653190";
+
+const UNDERTONE_GUIDANCE = {
+  "Clear Spring": "Look for warm, peach-golden shades (W or NW). Gold jewelry suits you - not silver. Avoid pink or cool bases.",
+  "True Spring": "Look for warm golden-yellow shades (W or NW). The warmest season - cool or pink foundations will look gray.",
+  "Light Spring": "Look for light warm-peach shades. Avoid pink bases - they amplify redness. Stay in the warm column.",
+  "Soft Summer": "Look for cool-neutral, muted rose shades (C or NC). Silver suits you better than gold. Avoid golden or warm bases.",
+  "True Summer": "Look for cool, rosy-pink shades (C or NC). Your veins run blue - cool foundations disappear; warm ones go orange.",
+  "Light Summer": "Look for light cool-pink shades. Avoid peach or warm tones - even 'neutral' fair shades often run too warm.",
+  "Soft Autumn": "Look for warm neutral-golden shades - earthy, not bright. Avoid pink or cool bases. 'Warm beige' is your zone.",
+  "True Autumn": "Look for warm amber-golden shades (W or NW). Look for 'honey', 'golden', or 'caramel' at your depth.",
+  "Dark Autumn": "Look for deep warm-golden shades. Avoid ashy or cool-dark - these are the most common mistake for deep warm skin.",
+  "Dark Winter": "Look for deep cool-neutral shades (C or NC). Avoid warm, amber, or golden - they'll read orange on cool deep skin.",
+  "True Winter": "Look for cool shades at your depth (C or NC). Warm foundations go visibly orange. Fair to deep - always cool.",
+  "Bright Winter": "Look for cool-neutral shades with clarity. Avoid warm, yellow, or muted foundations - they flatten your natural contrast.",
+};
+
+const FOUNDATION_CARDS = [
+  {
+    name: "Fenty Beauty Pro Filt'r Soft Matte",
+    rating: "4.0",
+    reviews: "17,400+",
+    shades: "51",
+    price: "$40",
+    source: "Sephora",
+  },
+  {
+    name: "Armani Luminous Silk",
+    rating: "4.4",
+    reviews: "2,800+",
+    shades: "46",
+    price: "$48-$69",
+    source: "Sephora",
+  },
+  {
+    name: "Charlotte Tilbury Airbrush Flawless",
+    rating: "4.3",
+    reviews: "768",
+    shades: "36",
+    price: "$52",
+    source: "Sephora",
+  },
+  {
+    name: "MAC Studio Fix Fluid SPF 15",
+    rating: "4.3",
+    reviews: "501",
+    shades: "67",
+    price: "$39",
+    source: "Sephora / MAC",
+  },
+  {
+    name: "L'Oreal True Match",
+    rating: "4.3",
+    reviews: "5,482",
+    shades: "~45",
+    price: "~$10",
+    source: "Target",
+  },
+  {
+    name: "Maybelline Fit Me Matte + Poreless",
+    rating: "4.4",
+    reviews: "6,273",
+    shades: "~40",
+    price: "~$10",
+    source: "Target",
+  },
+  {
+    name: "Too Faced Born This Way",
+    rating: "4.3",
+    reviews: "20,000+",
+    shades: "45+",
+    price: "$47",
+    source: "Sephora / Ulta",
+  },
+];
 
 function Nav({ seasonId, onChange }) {
   return (
@@ -379,6 +456,8 @@ function Edit({ s, seasonId }) {
   const products = useMemo(() => productsFor(seasonId), [seasonId]);
   const [tier, setTier] = useState("best-value");
   const entries = Object.entries(products);
+  const shopUrl = getShopUrl(s.name);
+  const undertoneGuidance = UNDERTONE_GUIDANCE[s.name];
 
   return (
     <section id="edit" className="dt-edit" style={{ "--accent": s.accent }}>
@@ -418,6 +497,71 @@ function Edit({ s, seasonId }) {
         </div>
       </div>
 
+      <div className="dt-foundation">
+        <div className="dt-foundation-copy">
+          <div className="dt-foundation-k">Foundation &amp; Concealer</div>
+          <h3 className="dt-foundation-title">Match undertone first.</h3>
+          {undertoneGuidance && (
+            <p className="dt-foundation-guidance">{undertoneGuidance}</p>
+          )}
+          <div className="dt-foundation-actions">
+            <a
+              href={FOUNDATION_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="dt-btn dt-btn-primary"
+              onClick={() => {
+                track.shopClick({
+                  season: s.name,
+                  category: "foundation",
+                  tier: "collection",
+                  brand: "ShopMy",
+                  productName: "Best Foundations",
+                  price: "varies",
+                });
+              }}
+            >
+              Shop Foundations <span>↗</span>
+            </a>
+            <a
+              href={CONCEALER_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="dt-btn dt-btn-ghost"
+              onClick={() => {
+                track.shopClick({
+                  season: s.name,
+                  category: "concealer",
+                  tier: "collection",
+                  brand: "ShopMy",
+                  productName: "Best Concealers",
+                  price: "varies",
+                });
+              }}
+            >
+              Shop Concealers <span>↗</span>
+            </a>
+          </div>
+        </div>
+
+        <div className="dt-foundation-grid">
+          {FOUNDATION_CARDS.map((foundation) => (
+            <article key={foundation.name} className="dt-foundation-card">
+              <div className="dt-foundation-card-head">
+                <span>{foundation.rating} stars</span>
+                <span>{foundation.reviews} reviews</span>
+              </div>
+              <h4>{foundation.name}</h4>
+              <div className="dt-foundation-card-meta">
+                <span>{foundation.shades} shades</span>
+                <span>{foundation.price}</span>
+                <span>{foundation.source}</span>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+
       <div className="dt-edit-grid">
         {entries.slice(0, 8).map(([catId, tiers], i) => {
           const p = tiers[tier];
@@ -442,7 +586,10 @@ function Edit({ s, seasonId }) {
                 <div className="dt-prod-shade"><em>in</em> {p.shade}</div>
                 <div className="dt-prod-foot">
                   <span className="dt-prod-price">{p.price}</span>
-                  <button
+                  <a
+                    href={shopUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="dt-prod-shop"
                     onClick={() => {
                       track.shopClick({
@@ -456,7 +603,7 @@ function Edit({ s, seasonId }) {
                     }}
                   >
                     Shop <span>↗</span>
-                  </button>
+                  </a>
                 </div>
               </div>
             </article>
