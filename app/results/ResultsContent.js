@@ -96,6 +96,49 @@ const FOUNDATION_CARDS = [
   },
 ];
 
+const CONCEALER_CARDS = [
+  {
+    name: "NARS Radiant Creamy Concealer",
+    rating: "4.3",
+    reviews: "15,000+",
+    shades: "33",
+    price: "$17-$36",
+    source: "Sephora",
+  },
+  {
+    name: "Kosas Revealer Creamy Concealer",
+    rating: "4.0",
+    reviews: "6,600+",
+    shades: "42",
+    price: "$16-$32",
+    source: "Sephora",
+  },
+  {
+    name: "Tarte Shape Tape Full Coverage",
+    rating: "4.2",
+    reviews: "668",
+    shades: "48",
+    price: "$15-$32",
+    source: "Sephora",
+  },
+  {
+    name: "IT Cosmetics Bye Bye Under Eye",
+    rating: "4.1",
+    reviews: "1,300+",
+    shades: "26",
+    price: "$14-$30",
+    source: "Sephora",
+  },
+  {
+    name: "IT Cosmetics Do It All Radiant",
+    rating: "4.4",
+    reviews: "2,400+",
+    shades: "26",
+    price: "$30",
+    source: "Sephora",
+  },
+];
+
 function Nav({ seasonId, onChange }) {
   return (
     <nav className="dt-nav">
@@ -441,21 +484,15 @@ function Basics({ seasonId }) {
   );
 }
 
-const SHAPE_BY_CAT = {
-  foundation: "shape-bottle",
-  concealer: "shape-bottle thin",
-  blush: "shape-compact",
-  bronzer: "shape-compact",
-  eye: "shape-palette",
-  "lip-liner": "shape-pencil",
-  lips: "shape-bullet",
-  nails: "shape-bottle short",
-};
-
 function Edit({ s, seasonId }) {
   const products = useMemo(() => productsFor(seasonId), [seasonId]);
   const [tier, setTier] = useState("best-value");
-  const entries = Object.entries(products);
+  const selectedProducts = useMemo(() => (
+    Object.entries(products)
+      .map(([catId, tiers]) => ({ catId, product: tiers[tier] }))
+      .filter(({ product }) => Boolean(product))
+      .slice(0, 8)
+  ), [products, tier]);
   const shopUrl = getShopUrl(s.name);
   const undertoneGuidance = UNDERTONE_GUIDANCE[s.name];
 
@@ -486,9 +523,11 @@ function Edit({ s, seasonId }) {
           <div className="dt-tier-pills">
             {TIERS.map((t) => (
               <button
+                type="button"
                 key={t.id}
                 className={`dt-tier-pill${tier === t.id ? " active" : ""}`}
                 onClick={() => setTier(t.id)}
+                aria-pressed={tier === t.id}
               >
                 {t.name}
               </button>
@@ -504,44 +543,6 @@ function Edit({ s, seasonId }) {
           {undertoneGuidance && (
             <p className="dt-foundation-guidance">{undertoneGuidance}</p>
           )}
-          <div className="dt-foundation-actions">
-            <a
-              href={FOUNDATION_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="dt-btn dt-btn-primary"
-              onClick={() => {
-                track.shopClick({
-                  season: s.name,
-                  category: "foundation",
-                  tier: "collection",
-                  brand: "ShopMy",
-                  productName: "Best Foundations",
-                  price: "varies",
-                });
-              }}
-            >
-              Shop Foundations <span>↗</span>
-            </a>
-            <a
-              href={CONCEALER_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="dt-btn dt-btn-ghost"
-              onClick={() => {
-                track.shopClick({
-                  season: s.name,
-                  category: "concealer",
-                  tier: "collection",
-                  brand: "ShopMy",
-                  productName: "Best Concealers",
-                  price: "varies",
-                });
-              }}
-            >
-              Shop Concealers <span>↗</span>
-            </a>
-          </div>
         </div>
 
         <div className="dt-foundation-grid">
@@ -560,20 +561,83 @@ function Edit({ s, seasonId }) {
             </article>
           ))}
         </div>
+
+        <div className="dt-concealer-copy">
+          <div className="dt-foundation-k">Concealer Preview</div>
+          <h3 className="dt-foundation-title">Find your undertone match.</h3>
+          {undertoneGuidance && (
+            <p className="dt-foundation-guidance">{undertoneGuidance}</p>
+          )}
+        </div>
+
+        <div className="dt-foundation-grid dt-concealer-grid">
+          {CONCEALER_CARDS.map((concealer) => (
+            <article key={concealer.name} className="dt-foundation-card">
+              <div className="dt-foundation-card-head">
+                <span>{concealer.rating} stars</span>
+                <span>{concealer.reviews} reviews</span>
+              </div>
+              <h4>{concealer.name}</h4>
+              <div className="dt-foundation-card-meta">
+                <span>{concealer.shades} shades</span>
+                <span>{concealer.price}</span>
+                <span>{concealer.source}</span>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <div className="dt-foundation-actions">
+          <a
+            href={FOUNDATION_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="dt-btn dt-btn-primary"
+            onClick={() => {
+              track.shopClick({
+                season: s.name,
+                category: "foundation",
+                tier: "collection",
+                brand: "ShopMy",
+                productName: "Best Foundations",
+                price: "varies",
+              });
+            }}
+          >
+            Shop Foundations <span>↗</span>
+          </a>
+          <a
+            href={CONCEALER_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="dt-btn dt-btn-ghost"
+            onClick={() => {
+              track.shopClick({
+                season: s.name,
+                category: "concealer",
+                tier: "collection",
+                brand: "ShopMy",
+                productName: "Best Concealers",
+                price: "varies",
+              });
+            }}
+          >
+            Shop Concealers <span>↗</span>
+          </a>
+        </div>
       </div>
 
       <div className="dt-edit-grid">
-        {entries.slice(0, 8).map(([catId, tiers], i) => {
-          const p = tiers[tier];
-          if (!p) return null;
-          const shape = SHAPE_BY_CAT[catId] || "shape-compact";
+        {selectedProducts.map(({ catId, product: p }, i) => {
           return (
-            <article key={catId} className="dt-prod" style={{ "--swatch": p.swatch }}>
+            <article
+              key={`${catId}-${tier}`}
+              className="dt-prod"
+              style={{ "--swatch": p.swatch, "--season-accent": s.accent || "#f5f0eb" }}
+            >
               <div className="dt-prod-shot">
                 <div className="dt-prod-num">{String(i + 1).padStart(2, "0")}</div>
-                <div className="dt-prod-product">
-                  <div className={shape} style={{ background: p.swatch }} />
-                </div>
+                <div className="dt-prod-band" aria-hidden="true" />
                 <div className="dt-prod-swatch" style={{ background: p.swatch }} />
                 <div className="dt-prod-match">
                   <div className="dt-match-dot" /> Match
