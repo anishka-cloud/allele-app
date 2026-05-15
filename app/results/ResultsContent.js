@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -956,16 +956,37 @@ function Footer() {
   );
 }
 
-export default function ResultsContent() {
+// Thin param reader — the only piece that calls useSearchParams (which suspends).
+// Keeping it isolated means the rest of the tree hydrates immediately.
+function ParamReader() {
   const sp = useSearchParams();
+  return <ResultsInner seasonParam={sp.get("season")} />;
+}
+
+export default function ResultsContent() {
+  return (
+    <Suspense
+      fallback={
+        <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--cream, #FFFBF7)" }}>
+          <div style={{ fontFamily: "var(--font-display, 'Lora'), Georgia, serif", fontSize: "1.2rem", color: "var(--text-muted, #8b8278)" }}>
+            Loading your results...
+          </div>
+        </div>
+      }
+    >
+      <ParamReader />
+    </Suspense>
+  );
+}
+
+function ResultsInner({ seasonParam }) {
   const router = useRouter();
 
   const initialId = useMemo(() => {
-    const raw = sp.get("season");
-    if (!raw) return "true-autumn";
-    const id = seasonIdFromName(raw);
+    if (!seasonParam) return "true-autumn";
+    const id = seasonIdFromName(seasonParam);
     return SEASONS[id] ? id : "true-autumn";
-  }, [sp]);
+  }, [seasonParam]);
 
   const [seasonId, setSeasonId] = useState(initialId);
 

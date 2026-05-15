@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import ResultsContent from "./ResultsContent";
 
 export const dynamic = "force-dynamic";
@@ -38,17 +37,7 @@ export async function generateMetadata({ searchParams }) {
 }
 
 export default function ResultsPage() {
-  return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen flex items-center justify-center" style={{ background: "var(--bg-primary)" }}>
-          <div className="animate-pulse-soft" style={{ fontFamily: "var(--font-display, 'Lora'), 'GT Sectra', Georgia, serif", fontSize: "1.2rem", color: "var(--text-muted)" }}>
-            Loading your results...
-          </div>
-        </div>
-      }
-    >
-      <ResultsContent />
-    </Suspense>
-  );
+  // Suspense is handled inside ResultsContent (wrapping just the useSearchParams reader).
+  // This keeps the outer page clean and ensures the main component tree hydrates immediately.
+  return <ResultsContent />;
 }
