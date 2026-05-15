@@ -102,7 +102,7 @@ const CONCEALER_CARDS = [
     rating: "4.3",
     reviews: "15,000+",
     shades: "33",
-    price: "$17-$36",
+    price: "$17–$36",
     source: "Sephora",
   },
   {
@@ -110,7 +110,7 @@ const CONCEALER_CARDS = [
     rating: "4.0",
     reviews: "6,600+",
     shades: "42",
-    price: "$16-$32",
+    price: "$16–$32",
     source: "Sephora",
   },
   {
@@ -118,7 +118,7 @@ const CONCEALER_CARDS = [
     rating: "4.2",
     reviews: "668",
     shades: "48",
-    price: "$15-$32",
+    price: "$15–$32",
     source: "Sephora",
   },
   {
@@ -126,7 +126,7 @@ const CONCEALER_CARDS = [
     rating: "4.1",
     reviews: "1,300+",
     shades: "26",
-    price: "$14-$30",
+    price: "$14–$30",
     source: "Sephora",
   },
   {
@@ -563,7 +563,7 @@ function Edit({ s, seasonId }) {
         </div>
 
         <div className="dt-concealer-copy">
-          <div className="dt-foundation-k">Concealer Preview</div>
+          <div className="dt-foundation-k">Concealer</div>
           <h3 className="dt-foundation-title">Find your undertone match.</h3>
           {undertoneGuidance && (
             <p className="dt-foundation-guidance">{undertoneGuidance}</p>
