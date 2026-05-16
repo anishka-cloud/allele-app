@@ -21,6 +21,15 @@ import "./results.css";
 const SEASON_IDS = Object.keys(SEASONS);
 const FOUNDATION_URL = "https://shopmy.us/shop/collections/4652210";
 const CONCEALER_URL = "https://shopmy.us/shop/collections/4653190";
+const SOFT_AUTUMN_SHOP_URL = "https://shopmy.us/shop/collections/4680251";
+
+const UNDERTONE_COLORS = {
+  warm: "#B5500B",
+  "warm-neutral": "#C4A265",
+  neutral: "#9B7F5C",
+  "cool-neutral": "#8DA9C4",
+  cool: "#6F7FA8",
+};
 
 const UNDERTONE_GUIDANCE = {
   "Clear Spring": "Look for warm, peach-golden shades (W or NW). Gold jewelry suits you - not silver. Avoid pink or cool bases.",
@@ -38,106 +47,407 @@ const UNDERTONE_GUIDANCE = {
 };
 
 const FOUNDATION_CARDS = [
+  // TODO: Populate season-scoped card fields for the other 11 seasons before full rollout.
   {
-    name: "Fenty Beauty Pro Filt'r Soft Matte",
+    season_name: "Soft Autumn",
+    brand: "FENTY BEAUTY",
+    name: "Pro Filt'r Soft Matte Longwear Foundation",
     rating: "4.0",
     reviews: "17,400+",
     shades: "51",
     price: "$40",
     source: "Sephora",
+    undertone: "warm",
+    finish: "matte",
+    affiliate_url: SOFT_AUTUMN_SHOP_URL,
+    retailer_country: "US",
+    swatch_hex: "#C49A6C",
+    shade_name: "240 Sand Medium",
+    why_text: "Because you're a Soft Autumn - warm, muted, gentle - this reads warm-neutral with golden undertone, your exact lane.",
+    formula_note: "Oxidizes slightly on oily skin - pick one shade lighter if you sit between.",
+    image_url: null,
+    is_hero: true,
   },
   {
-    name: "Armani Luminous Silk",
+    season_name: "Soft Autumn",
+    brand: "ARMANI BEAUTY",
+    name: "Luminous Silk Foundation",
     rating: "4.4",
     reviews: "2,800+",
     shades: "46",
     price: "$48-$69",
     source: "Sephora",
+    undertone: "warm-neutral",
+    finish: "natural",
+    affiliate_url: SOFT_AUTUMN_SHOP_URL,
+    retailer_country: "US",
+    swatch_hex: "#CCAA88",
+    shade_name: "6.5",
+    why_text: "Soft Autumn needs warmth without glare; this warm-neutral shade keeps the skin soft instead of bright or peach-heavy.",
+    formula_note: "Luminous finish - powder the center if you prefer a quieter satin set.",
+    image_url: null,
+    is_hero: false,
   },
   {
-    name: "Charlotte Tilbury Airbrush Flawless",
+    season_name: "Soft Autumn",
+    brand: "CHARLOTTE TILBURY",
+    name: "Airbrush Flawless Foundation",
     rating: "4.3",
     reviews: "768",
     shades: "36",
     price: "$52",
     source: "Sephora",
+    undertone: "warm",
+    finish: "matte",
+    affiliate_url: SOFT_AUTUMN_SHOP_URL,
+    retailer_country: "US",
+    swatch_hex: "#B9855E",
+    shade_name: "6 Warm",
+    why_text: "The warm base supports Soft Autumn's muted golden cast without pulling pink or icy.",
+    formula_note: "Full coverage - start with half a pump so the finish stays skinlike.",
+    image_url: null,
+    is_hero: false,
   },
   {
-    name: "MAC Studio Fix Fluid SPF 15",
+    season_name: "Soft Autumn",
+    brand: "MAC",
+    name: "Studio Fix Fluid SPF 15",
     rating: "4.3",
     reviews: "501",
     shades: "67",
     price: "$39",
     source: "Sephora / MAC",
+    undertone: "warm-neutral",
+    finish: "matte",
+    affiliate_url: SOFT_AUTUMN_SHOP_URL,
+    retailer_country: "US",
+    swatch_hex: "#C0926D",
+    shade_name: "NC30",
+    why_text: "A warm-neutral NC shade keeps Soft Autumn skin earthy and balanced, not rosy.",
+    formula_note: "Sets quickly - blend in sections for the smoothest edge.",
+    image_url: null,
+    is_hero: false,
   },
   {
-    name: "L'Oreal True Match",
+    season_name: "Soft Autumn",
+    brand: "L'OREAL",
+    name: "True Match Super-Blendable Foundation",
     rating: "4.3",
     reviews: "5,482",
     shades: "~45",
     price: "~$10",
-    source: "Target",
+    source: "Ulta",
+    undertone: "warm",
+    finish: "natural",
+    affiliate_url: SOFT_AUTUMN_SHOP_URL,
+    retailer_country: "US",
+    swatch_hex: "#CCAA88",
+    shade_name: "W4.5 Fresh Beige",
+    why_text: "The W family gives Soft Autumn the quiet golden warmth that disappears into muted coloring.",
+    formula_note: null,
+    image_url: null,
+    is_hero: false,
   },
   {
-    name: "Maybelline Fit Me Matte + Poreless",
+    season_name: "Soft Autumn",
+    brand: "MAYBELLINE",
+    name: "Fit Me Matte + Poreless Foundation",
     rating: "4.4",
     reviews: "6,273",
     shades: "~40",
     price: "~$10",
-    source: "Target",
+    source: "Ulta",
+    undertone: "warm",
+    finish: "matte",
+    affiliate_url: SOFT_AUTUMN_SHOP_URL,
+    retailer_country: "US",
+    swatch_hex: "#C28F67",
+    shade_name: "220 Natural Beige",
+    why_text: "This sits in Soft Autumn's warm beige lane, with enough softness to avoid a bright yellow cast.",
+    formula_note: "Can dry down deeper - test in daylight before committing.",
+    image_url: null,
+    is_hero: false,
   },
   {
-    name: "Too Faced Born This Way",
+    season_name: "Soft Autumn",
+    brand: "TOO FACED",
+    name: "Born This Way Foundation",
     rating: "4.3",
     reviews: "20,000+",
     shades: "45+",
     price: "$47",
     source: "Sephora / Ulta",
+    undertone: "warm-neutral",
+    finish: "natural",
+    affiliate_url: SOFT_AUTUMN_SHOP_URL,
+    retailer_country: "US",
+    swatch_hex: "#C79B74",
+    shade_name: "Warm Nude",
+    why_text: "Warm-neutral depth keeps Soft Autumn's face cohesive with terracotta, olive, and camel.",
+    formula_note: null,
+    image_url: null,
+    is_hero: false,
   },
 ];
 
 const CONCEALER_CARDS = [
+  // TODO: Populate season-scoped card fields for the other 11 seasons before full rollout.
   {
+    season_name: "Soft Autumn",
+    brand: "NARS",
     name: "NARS Radiant Creamy Concealer",
     rating: "4.3",
     reviews: "15,000+",
     shades: "33",
     price: "$17–$36",
     source: "Sephora",
+    undertone: "warm",
+    finish: "radiant",
+    affiliate_url: SOFT_AUTUMN_SHOP_URL,
+    retailer_country: "US",
+    swatch_hex: "#DABB9A",
+    shade_name: "Caramel",
+    why_text: "For Soft Autumn, Caramel gives warm golden correction without the pink cast that can make muted skin look tired.",
+    formula_note: "Radiant finish - set lightly under the eye if you crease.",
+    image_url: null,
+    is_hero: true,
   },
   {
+    season_name: "Soft Autumn",
+    brand: "KOSAS",
     name: "Kosas Revealer Creamy Concealer",
     rating: "4.0",
     reviews: "6,600+",
     shades: "42",
     price: "$16–$32",
     source: "Sephora",
+    undertone: "warm",
+    finish: "radiant",
+    affiliate_url: SOFT_AUTUMN_SHOP_URL,
+    retailer_country: "US",
+    swatch_hex: "#D7B08B",
+    shade_name: "Tone 6 W",
+    why_text: "The warm undertone keeps Soft Autumn's eye area brightened in an earthy way, not icy.",
+    formula_note: "Very creamy - use a thin layer first.",
+    image_url: null,
+    is_hero: false,
   },
   {
+    season_name: "Soft Autumn",
+    brand: "TARTE",
     name: "Tarte Shape Tape Full Coverage",
     rating: "4.2",
     reviews: "668",
     shades: "48",
     price: "$15–$32",
     source: "Sephora",
+    undertone: "warm-neutral",
+    finish: "matte",
+    affiliate_url: SOFT_AUTUMN_SHOP_URL,
+    retailer_country: "US",
+    swatch_hex: "#D2A57D",
+    shade_name: "35N Medium",
+    why_text: "A warm-neutral medium shade supports Soft Autumn's muted warmth without turning orange.",
+    formula_note: "High coverage - dot, wait, then blend with a small brush.",
+    image_url: null,
+    is_hero: false,
   },
   {
+    season_name: "Soft Autumn",
+    brand: "IT COSMETICS",
     name: "IT Cosmetics Bye Bye Under Eye",
     rating: "4.1",
     reviews: "1,300+",
     shades: "26",
     price: "$14–$30",
     source: "Sephora",
+    undertone: "warm",
+    finish: "natural",
+    affiliate_url: SOFT_AUTUMN_SHOP_URL,
+    retailer_country: "US",
+    swatch_hex: "#D0A176",
+    shade_name: "24.5 Medium Beige",
+    why_text: "Soft Autumn reads best when concealer warms gently into the face instead of sitting pale and pink.",
+    formula_note: "Thick texture - warm it between fingers before applying.",
+    image_url: null,
+    is_hero: false,
   },
   {
+    season_name: "Soft Autumn",
+    brand: "IT COSMETICS",
     name: "IT Cosmetics Do It All Radiant",
     rating: "4.4",
     reviews: "2,400+",
     shades: "26",
     price: "$30",
     source: "Sephora",
+    undertone: "warm-neutral",
+    finish: "radiant",
+    affiliate_url: SOFT_AUTUMN_SHOP_URL,
+    retailer_country: "US",
+    swatch_hex: "#D8B08D",
+    shade_name: "Medium Warm",
+    why_text: "The warm-neutral cast gives Soft Autumn soft lift without breaking into bright peach.",
+    formula_note: null,
+    image_url: null,
+    is_hero: false,
   },
 ];
+
+function hexToRgb(hex) {
+  if (!hex || !/^#[0-9A-F]{6}$/i.test(hex)) return null;
+  const value = hex.replace("#", "");
+  return {
+    r: parseInt(value.slice(0, 2), 16),
+    g: parseInt(value.slice(2, 4), 16),
+    b: parseInt(value.slice(4, 6), 16),
+  };
+}
+
+function luminance(hex) {
+  const rgb = hexToRgb(hex);
+  if (!rgb) return 1;
+  return (0.2126 * rgb.r + 0.7152 * rgb.g + 0.0722 * rgb.b) / 255;
+}
+
+function swatchFor(card) {
+  if (card.swatch_hex) return card.swatch_hex;
+  if (process.env.NODE_ENV === "development") {
+    console.warn("[Allele] Missing swatch_hex; falling back to undertone color.", card);
+  }
+  return UNDERTONE_COLORS[card.undertone] || UNDERTONE_COLORS.neutral;
+}
+
+function whyWithUndertoneColor(text, undertone) {
+  if (!text) return null;
+  const phrase = undertone || text.match(/\b(warm-neutral|cool-neutral|warm|cool|neutral)\b/i)?.[0];
+  if (!phrase) return text;
+  const escapedPhrase = phrase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const match = text.match(new RegExp(`\\b${escapedPhrase}\\b`, "i"));
+  if (!match || typeof match.index !== "number") return text;
+  const color = UNDERTONE_COLORS[phrase.toLowerCase()] || UNDERTONE_COLORS.neutral;
+  const index = match.index;
+  const before = text.slice(0, index);
+  const highlighted = text.slice(index, index + match[0].length);
+  const after = text.slice(index + match[0].length);
+  return (
+    <>
+      {before}
+      <span className="dt-card-undertone" style={{ color }}>{highlighted}</span>
+      {after}
+    </>
+  );
+}
+
+function productCardsForSeason(cards, seasonName, category) {
+  const scoped = cards.filter((card) => card.season_name === seasonName);
+  const valid = scoped.filter((card) => card.retailer_country === "US");
+  if (process.env.NODE_ENV === "development") {
+    const dropped = scoped.filter((card) => card.retailer_country !== "US");
+    if (dropped.length) {
+      console.warn(`[Allele] Dropped non-US ${category} cards.`, dropped);
+    }
+  }
+  return valid;
+}
+
+function ProductMatchCard({ card, category, variant = "alternate" }) {
+  const isHero = variant === "hero";
+  const swatch = swatchFor(card);
+  const shadeTextColor = luminance(swatch) > 0.6 ? "var(--ink)" : "var(--cream)";
+  const meta = [
+    card.is_hero ? "Best match" : null,
+    card.undertone,
+    card.shade_name ? card.shade_name.split(" ").slice(-1)[0] : null,
+    card.finish,
+  ].filter(Boolean).join(" · ");
+  const shopLabel = `Shop at ${card.source.split("/")[0].trim()}`;
+
+  return (
+    <article className={`dt-foundation-card ${isHero ? "dt-foundation-card-hero" : "dt-foundation-card-alt"}`}>
+      <div className="dt-foundation-card-strip">
+        <span>{meta}</span>
+        <span aria-hidden="true">★</span>
+      </div>
+      <div className="dt-foundation-card-visual">
+        <div
+          className="dt-foundation-swatch"
+          style={{ background: swatch, color: shadeTextColor }}
+        >
+          <span>{card.shade_name || "Shade pending"}</span>
+        </div>
+        <div
+          className="dt-foundation-photo"
+          role={card.image_url ? "img" : undefined}
+          aria-label={card.image_url ? `${card.brand} ${card.name}` : `${card.brand} ${card.name} product photo coming`}
+          style={card.image_url ? { backgroundImage: `url(${card.image_url})` } : undefined}
+        >
+          {!card.image_url && (
+            <span>Photo coming</span>
+          )}
+        </div>
+      </div>
+      <div className="dt-foundation-card-body">
+        <div className="dt-foundation-brand">{card.brand}</div>
+        <h4>{card.name}</h4>
+        {card.why_text && (
+          <p className="dt-foundation-why">{whyWithUndertoneColor(card.why_text, card.undertone)}</p>
+        )}
+        {card.formula_note && (
+          <p className="dt-foundation-formula">{card.formula_note}</p>
+        )}
+        <div className="dt-foundation-card-foot">
+          <span className="dt-foundation-price">{card.price}</span>
+          <a
+            href={card.affiliate_url}
+            target="_blank"
+            rel="sponsored noopener noreferrer"
+            className="dt-foundation-shop"
+            onClick={() => {
+              track.shopClick({
+                season: card.season_name,
+                category,
+                tier: card.is_hero ? "best-match" : "alternate",
+                brand: card.brand,
+                productName: card.name,
+                price: card.price,
+              });
+            }}
+          >
+            {shopLabel} <span>→</span>
+          </a>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function ProductMatchSection({ title, eyebrow, guidance, cards, category }) {
+  const hero = cards.find((card) => card.is_hero) || cards[0];
+  const alternates = cards.filter((card) => card !== hero);
+
+  if (!hero) return null;
+
+  return (
+    <div className="dt-foundation-product-section">
+      <div className="dt-foundation-copy">
+        <div className="dt-foundation-k">{eyebrow}</div>
+        <h3 className="dt-foundation-title">{title}</h3>
+        {guidance && (
+          <p className="dt-foundation-guidance">{guidance}</p>
+        )}
+      </div>
+      <ProductMatchCard card={hero} category={category} variant="hero" />
+      {alternates.length > 0 && (
+        <div className="dt-foundation-grid" aria-label={`${eyebrow} alternates`}>
+          {alternates.map((card) => (
+            <ProductMatchCard key={`${card.brand}-${card.name}-${card.shade_name}`} card={card} category={category} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 function Nav({ seasonId, onChange }) {
   return (
@@ -495,6 +805,14 @@ function Edit({ s, seasonId }) {
   ), [products, tier]);
   const shopUrl = getShopUrl(s.name);
   const undertoneGuidance = UNDERTONE_GUIDANCE[s.name];
+  const foundationCards = useMemo(
+    () => productCardsForSeason(FOUNDATION_CARDS, s.name, "foundation"),
+    [s.name]
+  );
+  const concealerCards = useMemo(
+    () => productCardsForSeason(CONCEALER_CARDS, s.name, "concealer"),
+    [s.name]
+  );
 
   return (
     <section id="edit" className="dt-edit" style={{ "--accent": s.accent }}>
@@ -537,55 +855,21 @@ function Edit({ s, seasonId }) {
       </div>
 
       <div className="dt-foundation">
-        <div className="dt-foundation-copy">
-          <div className="dt-foundation-k">Foundation &amp; Concealer</div>
-          <h3 className="dt-foundation-title">Match undertone first.</h3>
-          {undertoneGuidance && (
-            <p className="dt-foundation-guidance">{undertoneGuidance}</p>
-          )}
-        </div>
+        <ProductMatchSection
+          eyebrow="Foundation"
+          title="Match undertone first."
+          guidance={undertoneGuidance}
+          cards={foundationCards}
+          category="foundation"
+        />
 
-        <div className="dt-foundation-grid">
-          {FOUNDATION_CARDS.map((foundation) => (
-            <article key={foundation.name} className="dt-foundation-card">
-              <div className="dt-foundation-card-head">
-                <span>{foundation.rating} stars</span>
-                <span>{foundation.reviews} reviews</span>
-              </div>
-              <h4>{foundation.name}</h4>
-              <div className="dt-foundation-card-meta">
-                <span>{foundation.shades} shades</span>
-                <span>{foundation.price}</span>
-                <span>{foundation.source}</span>
-              </div>
-            </article>
-          ))}
-        </div>
-
-        <div className="dt-concealer-copy">
-          <div className="dt-foundation-k">Concealer</div>
-          <h3 className="dt-foundation-title">Find your undertone match.</h3>
-          {undertoneGuidance && (
-            <p className="dt-foundation-guidance">{undertoneGuidance}</p>
-          )}
-        </div>
-
-        <div className="dt-foundation-grid dt-concealer-grid">
-          {CONCEALER_CARDS.map((concealer) => (
-            <article key={concealer.name} className="dt-foundation-card">
-              <div className="dt-foundation-card-head">
-                <span>{concealer.rating} stars</span>
-                <span>{concealer.reviews} reviews</span>
-              </div>
-              <h4>{concealer.name}</h4>
-              <div className="dt-foundation-card-meta">
-                <span>{concealer.shades} shades</span>
-                <span>{concealer.price}</span>
-                <span>{concealer.source}</span>
-              </div>
-            </article>
-          ))}
-        </div>
+        <ProductMatchSection
+          eyebrow="Concealer"
+          title="Find your undertone match."
+          guidance={undertoneGuidance}
+          cards={concealerCards}
+          category="concealer"
+        />
 
         <div className="dt-foundation-actions">
           <a
