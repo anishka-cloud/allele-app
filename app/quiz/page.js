@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { SEASONS } from "@/lib/handoffSeasons";
@@ -315,6 +315,10 @@ export default function QuizPage() {
     setAnswers(answers.slice(0, -1));
   };
 
+  const [showGate, setShowGate] = useState(false);
+  const [gateEmail, setGateEmail] = useState("");
+  const [gateStatus, setGateStatus] = useState("idle"); // idle | loading | success | error
+
   const goToResult = () => {
     if (!lead) return;
     completedRef.current = true;
@@ -326,10 +330,137 @@ export default function QuizPage() {
       value: SEASONS[lead.id]?.depth,
       chroma: SEASONS[lead.id]?.chroma,
     });
+    setShowGate(true);
+  };
+
+  const navigateToResults = useCallback(() => {
+    if (!lead) return;
+    const seasonName = SEASONS[lead.id]?.name || "True Autumn";
     router.push(`/results?season=${encodeURIComponent(seasonName)}`);
+  }, [lead, router]);
+
+  const handleGateSubmit = async (e) => {
+    e.preventDefault();
+    if (!gateEmail || gateStatus === "loading") return;
+    setGateStatus("loading");
+    const seasonName = SEASONS[lead.id]?.name || "True Autumn";
+    const s = SEASONS[lead.id];
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: gateEmail,
+          season: seasonName,
+          undertone: s?.undertone || "",
+          chroma: s?.chroma || "",
+          depth: s?.depth || "",
+        }),
+      });
+      if (!res.ok) {
+        setGateStatus("error");
+        return;
+      }
+      track.emailSubmitted(seasonName);
+      setGateStatus("success");
+      setTimeout(() => navigateToResults(), 1200);
+    } catch {
+      setGateStatus("error");
+    }
+  };
+
+  const handleGateSkip = () => {
+    navigateToResults();
   };
 
   if (!q && !complete) return null;
+
+  if (showGate && lead) {
+    const s = SEASONS[lead.id];
+    return (
+      <main className="qz-shell">
+        <Nav />
+        <div className="qz-gate">
+          <div className="qz-gate-inner">
+            <div className="qz-gate-content">
+              <div className="qz-q-meta">
+                <span className="qz-q-num">Almost there</span>
+                <span className="qz-q-hair" />
+                <span className="qz-q-sub-meta">One last thing</span>
+              </div>
+              <h2 className="qz-gate-headline">
+                Save your<br /><em>{lead.name}</em> results.
+              </h2>
+              <p className="qz-gate-body">
+                We&rsquo;ll send the full dossier to your inbox &mdash; every shade with hex codes, your 24-product edit, wardrobe anchors, and seasonal shopping tips you can pull up in the dressing room.
+              </p>
+
+              <form className="qz-gate-form" onSubmit={handleGateSubmit}>
+                {gateStatus === "success" ? (
+                  <div className="qz-gate-success">
+                    <span className="qz-gate-success-icon">✓</span>
+                    <span>Saved. Taking you to your results&hellip;</span>
+                  </div>
+                ) : (
+                  <>
+                    <div className="qz-gate-input-row">
+                      <input
+                        type="email"
+                        required
+                        placeholder="you@example.com"
+                        value={gateEmail}
+                        onChange={(e) => setGateEmail(e.target.value)}
+                        className="qz-gate-input"
+                        disabled={gateStatus === "loading"}
+                        autoFocus
+                      />
+                      <button
+                        type="submit"
+                        className="qz-complete-cta"
+                        disabled={gateStatus === "loading"}
+                      >
+                        {gateStatus === "loading" ? "Saving…" : "Save & reveal"} <span>→</span>
+                      </button>
+                    </div>
+                    {gateStatus === "error" && (
+                      <div className="qz-gate-error">
+                        Something went wrong. Try again or skip below.
+                      </div>
+                    )}
+                    <div className="qz-gate-fine">
+                      Free · No spam · Unsubscribe anytime
+                    </div>
+                  </>
+                )}
+              </form>
+
+              {gateStatus !== "success" && (
+                <button className="qz-gate-skip" onClick={handleGateSkip}>
+                  Skip for now — just show my results
+                </button>
+              )}
+            </div>
+
+            <div className="qz-gate-preview">
+              <div className="qz-gate-card" style={{ "--surface": s?.surface || "#F8F2E9", "--accent": s?.accent || "#B5500B" }}>
+                <div className="qz-gate-card-eyebrow">· {s?.family} ·</div>
+                <div className="qz-gate-card-name">{s?.name}</div>
+                <div className="qz-gate-card-tag">{s?.tagline}</div>
+                <div className="qz-gate-card-palette">
+                  {(s?.palette || []).slice(0, 8).map((c, i) => (
+                    <div key={i} style={{ background: c }} />
+                  ))}
+                </div>
+                <div className="qz-gate-card-lock">
+                  <span>Your full results are ready</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="qz-shell">
