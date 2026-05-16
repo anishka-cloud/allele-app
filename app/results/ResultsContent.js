@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -21,6 +21,12 @@ import "./results.css";
 const SEASON_IDS = Object.keys(SEASONS);
 const FOUNDATION_URL = "https://shopmy.us/shop/collections/4652210";
 const CONCEALER_URL = "https://shopmy.us/shop/collections/4653190";
+const UNDERTONE_COLORS = {
+  warm: "#C4873A",
+  cool: "#9BAEC4",
+  neutral: "#B8A99A",
+  "warm-neutral": "#C4A87A",
+};
 
 const UNDERTONE_GUIDANCE = {
   "Clear Spring": "Look for warm, peach-golden shades (W or NW). Gold jewelry suits you - not silver. Avoid pink or cool bases.",
@@ -45,6 +51,8 @@ const FOUNDATION_CARDS = [
     shades: "51",
     price: "$40",
     source: "Sephora",
+    undertone: "neutral",
+    finish: "matte",
   },
   {
     name: "Armani Luminous Silk",
@@ -53,6 +61,8 @@ const FOUNDATION_CARDS = [
     shades: "46",
     price: "$48-$69",
     source: "Sephora",
+    undertone: "neutral",
+    finish: "luminous",
   },
   {
     name: "Charlotte Tilbury Airbrush Flawless",
@@ -61,6 +71,8 @@ const FOUNDATION_CARDS = [
     shades: "36",
     price: "$52",
     source: "Sephora",
+    undertone: "warm-neutral",
+    finish: "satin",
   },
   {
     name: "MAC Studio Fix Fluid SPF 15",
@@ -69,6 +81,8 @@ const FOUNDATION_CARDS = [
     shades: "67",
     price: "$39",
     source: "Sephora / MAC",
+    undertone: "neutral",
+    finish: "matte",
   },
   {
     name: "L'Oreal True Match",
@@ -77,6 +91,8 @@ const FOUNDATION_CARDS = [
     shades: "~45",
     price: "~$10",
     source: "Target",
+    undertone: "neutral",
+    finish: "natural",
   },
   {
     name: "Maybelline Fit Me Matte + Poreless",
@@ -85,6 +101,8 @@ const FOUNDATION_CARDS = [
     shades: "~40",
     price: "~$10",
     source: "Target",
+    undertone: "neutral",
+    finish: "matte",
   },
   {
     name: "Too Faced Born This Way",
@@ -93,6 +111,8 @@ const FOUNDATION_CARDS = [
     shades: "45+",
     price: "$47",
     source: "Sephora / Ulta",
+    undertone: "warm-neutral",
+    finish: "natural",
   },
 ];
 
@@ -104,6 +124,8 @@ const CONCEALER_CARDS = [
     shades: "33",
     price: "$17–$36",
     source: "Sephora",
+    undertone: "neutral",
+    finish: "luminous",
   },
   {
     name: "Kosas Revealer Creamy Concealer",
@@ -112,6 +134,8 @@ const CONCEALER_CARDS = [
     shades: "42",
     price: "$16–$32",
     source: "Sephora",
+    undertone: "warm-neutral",
+    finish: "natural",
   },
   {
     name: "Tarte Shape Tape Full Coverage",
@@ -120,6 +144,8 @@ const CONCEALER_CARDS = [
     shades: "48",
     price: "$15–$32",
     source: "Sephora",
+    undertone: "neutral",
+    finish: "full-coverage",
   },
   {
     name: "IT Cosmetics Bye Bye Under Eye",
@@ -128,6 +154,8 @@ const CONCEALER_CARDS = [
     shades: "26",
     price: "$14–$30",
     source: "Sephora",
+    undertone: "warm-neutral",
+    finish: "full-coverage",
   },
   {
     name: "IT Cosmetics Do It All Radiant",
@@ -136,6 +164,8 @@ const CONCEALER_CARDS = [
     shades: "26",
     price: "$30",
     source: "Sephora",
+    undertone: "neutral",
+    finish: "satin",
   },
 ];
 
@@ -551,8 +581,14 @@ function Edit({ s, seasonId }) {
               <div className="dt-foundation-card-head">
                 <span>{foundation.rating} stars</span>
                 <span>{foundation.reviews} reviews</span>
+                <span
+                  className="dt-foundation-undertone-dot"
+                  title={`${foundation.undertone} undertone`}
+                  style={{ background: UNDERTONE_COLORS[foundation.undertone] }}
+                />
               </div>
               <h4>{foundation.name}</h4>
+              <div className="dt-foundation-finish">{foundation.finish}</div>
               <div className="dt-foundation-card-meta">
                 <span>{foundation.shades} shades</span>
                 <span>{foundation.price}</span>
@@ -576,8 +612,14 @@ function Edit({ s, seasonId }) {
               <div className="dt-foundation-card-head">
                 <span>{concealer.rating} stars</span>
                 <span>{concealer.reviews} reviews</span>
+                <span
+                  className="dt-foundation-undertone-dot"
+                  title={`${concealer.undertone} undertone`}
+                  style={{ background: UNDERTONE_COLORS[concealer.undertone] }}
+                />
               </div>
               <h4>{concealer.name}</h4>
+              <div className="dt-foundation-finish">{concealer.finish}</div>
               <div className="dt-foundation-card-meta">
                 <span>{concealer.shades} shades</span>
                 <span>{concealer.price}</span>
@@ -914,16 +956,37 @@ function Footer() {
   );
 }
 
-export default function ResultsContent() {
+// Thin param reader — the only piece that calls useSearchParams (which suspends).
+// Keeping it isolated means the rest of the tree hydrates immediately.
+function ParamReader() {
   const sp = useSearchParams();
+  return <ResultsInner seasonParam={sp.get("season")} />;
+}
+
+export default function ResultsContent() {
+  return (
+    <Suspense
+      fallback={
+        <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--cream, #FFFBF7)" }}>
+          <div style={{ fontFamily: "var(--font-display, 'Lora'), Georgia, serif", fontSize: "1.2rem", color: "var(--text-muted, #8b8278)" }}>
+            Loading your results...
+          </div>
+        </div>
+      }
+    >
+      <ParamReader />
+    </Suspense>
+  );
+}
+
+function ResultsInner({ seasonParam }) {
   const router = useRouter();
 
   const initialId = useMemo(() => {
-    const raw = sp.get("season");
-    if (!raw) return "true-autumn";
-    const id = seasonIdFromName(raw);
+    if (!seasonParam) return "true-autumn";
+    const id = seasonIdFromName(seasonParam);
     return SEASONS[id] ? id : "true-autumn";
-  }, [sp]);
+  }, [seasonParam]);
 
   const [seasonId, setSeasonId] = useState(initialId);
 
