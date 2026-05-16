@@ -1,6 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* config options here */
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "static.shopmy.us" },
+      { protocol: "https", hostname: "www.adorebeauty.com.au" },
+    ],
+  },
 };
 
 export default nextConfig;
