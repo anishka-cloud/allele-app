@@ -26,6 +26,179 @@ const UNDERTONE_COLORS = {
   cool: "#9BAEC4",
   neutral: "#B8A99A",
   "warm-neutral": "#C4A87A",
+  olive: "#A89968",
+};
+
+const FOUNDATION_HEROES = {
+  "True Autumn": {
+    compositionNumber: "01",
+    figNumber: "01",
+    brand: "Fenty Beauty",
+    name: "Pro Filt'r Soft Matte Longwear Foundation",
+    shadeNumber: "280",
+    shadeName: "Sand",
+    shadeFamily: "Sand Medium · Warm",
+    swatchHex: "#C19476",
+    shadeLadder: [
+      { hex: "#E5C5A4", code: "130", label: "Light" },
+      { hex: "#D7AA86", code: "220", label: "Light-Med" },
+      { hex: "#C19476", code: "280", label: "Medium", representative: true },
+      { hex: "#A6764F", code: "340", label: "Med-Deep" },
+      { hex: "#80553A", code: "410", label: "Deep" },
+    ],
+    productImageUrl: "https://static.shopmy.us/pins/zoom-50723484-1775229890533-UK200060793_FENTY.jpg",
+    shopUrl: "https://www.awin1.com/awclick.php?mid=59805&id=740219&clickref=user-267437-pin-50723484-puser-null-src-web&ued=https%3A%2F%2Fwww.spacenk.com%2Fuk%2Fmakeup%2Fcomplexion%2Ffoundation%2Ffenty-beauty-pro-filtr-soft-matte-longwear-foundation-UK200060793.html",
+    price: "$40",
+    source: "Space NK",
+    undertone: "warm",
+    depth: "medium-light",
+    finish: "matte",
+    palettePosition: 3,
+    reasoningText: "Because you're a True Autumn — warm, muted, deep — this reads warm-neutral with golden undertone. Your exact lane.",
+    formulaNote: "Oxidizes slightly on oily skin — pick one shade lighter if you sit between.",
+  },
+};
+
+const FOUNDATION_ALTERNATES = {
+  "True Autumn": [
+    {
+      compositionNumber: "02",
+      brand: "Armani Beauty",
+      name: "Luminous Silk Foundation",
+      shadeNumber: "8",
+      shadeName: "Warm Beige",
+      swatchHex: "#C4926E",
+      productImageUrl: "https://static.shopmy.us/pins/zoom-50723843-1775230054750-317-77011643-LUMSILKFDT_8_M",
+      shopUrl: "https://prf.hn/click/camref:1011lpZYj/pubref:user-267437-pin-50723843-puser-null-src-web/destination:https%3A%2F%2Fwww.selfridges.com%2FGB%2Fen%2Fcat%2Fgiorgio-armani-luminous-silk-foundation-30ml_317-77011643-LUMSILKFDT%2F",
+      price: "$69",
+      source: "Selfridges",
+      undertone: "warm",
+      depth: "medium",
+      finish: "luminous",
+      palettePosition: 3,
+      reasoningText: "Same warm lane in a luminous finish — pick this if your skin runs dry.",
+    },
+    {
+      compositionNumber: "03",
+      brand: "Charlotte Tilbury",
+      name: "Airbrush Flawless Foundation",
+      shadeNumber: "8",
+      shadeName: "Warm",
+      swatchHex: "#C4926E",
+      productImageUrl: "https://static.shopmy.us/pins/zoom-50723621-1775229963399-CTIL-WU42_V1.jpg",
+      shopUrl: "http://www.anrdoezrs.net/click-100149615-13237228?sid=user-267437-pin-50723621-puser-null-src-web&url=https%3A%2F%2Fwww.revolve.com%2Fcharlotte-tilbury-airbrush-flawless-foundation-in-15-warm%2Fdp%2FCTIL-WU42%2F",
+      price: "$52",
+      source: "Revolve",
+      undertone: "warm",
+      depth: "medium",
+      finish: "satin",
+      palettePosition: 3,
+      reasoningText: "Satin finish — between matte and luminous. Long-wear with a soft natural glow.",
+    },
+    {
+      compositionNumber: "04",
+      brand: "Maybelline",
+      name: "Fit Me Matte + Poreless Foundation",
+      shadeNumber: "235",
+      shadeName: "Pure Beige",
+      swatchHex: "#BC8E70",
+      productImageUrl: "https://static.shopmy.us/pins/zoom-50723760-1775230020998-10213975",
+      shopUrl: "https://www.awin1.com/awclick.php?mid=2041&id=740219&clickref=user-267437-pin-50723760-puser-null-src-web&ued=https%3A%2F%2Fwww.boots.com%2Fmaybelline-fit-me-matte-and-poreless-foundation-10213975",
+      price: "$10",
+      source: "Boots",
+      undertone: "warm",
+      depth: "medium",
+      finish: "matte",
+      palettePosition: 3,
+      reasoningText: "Budget pick — same warm-medium lane and same matte finish, drugstore price.",
+    },
+  ],
+};
+
+const CONCEALER_HEROES = {
+  "True Autumn": {
+    compositionNumber: "01",
+    figNumber: "01",
+    brand: "NARS",
+    name: "Radiant Creamy Concealer",
+    shadeNumber: "Caramel",
+    shadeName: "Caramel",
+    shadeFamily: "Caramel · Warm",
+    swatchHex: "#B98660",
+    shadeLadder: [
+      { hex: "#E5C5A4", code: "Vanilla", label: "Light" },
+      { hex: "#D6A382", code: "Custard", label: "Light-Med" },
+      { hex: "#B98660", code: "Caramel", label: "Medium", representative: true },
+      { hex: "#9F6C45", code: "Cafe", label: "Med-Deep" },
+      { hex: "#6D4828", code: "Walnut", label: "Deep" },
+    ],
+    productImageUrl: "https://static.shopmy.us/pins/zoom-50735955-1775234168181-variant_images-size-CafeconLecheL26-607845012252-1.jpg",
+    shopUrl: "https://click.linksynergy.com/deeplink?id=8yaPBDQV8ls&mid=43420&u1=user-267437-pin-50735955-puser-null-src-web&murl=https%3A%2F%2Fbluemercury.com%2Fproducts%2Fnars-radiant-creamy-concealer",
+    price: "$32",
+    source: "Bluemercury",
+    undertone: "warm",
+    depth: "medium",
+    finish: "luminous",
+    palettePosition: 3,
+    reasoningText: "One shade brighter than your foundation — ideal for under-eye correction without going chalky on warm, deep skin.",
+    formulaNote: "Stays luminous; doesn't crease on dry under-eyes. Apply sparingly — pigment is dense.",
+  },
+};
+
+const CONCEALER_ALTERNATES = {
+  "True Autumn": [
+    {
+      compositionNumber: "02",
+      brand: "Charlotte Tilbury",
+      name: "Beautiful Skin Radiant Concealer",
+      shadeNumber: "8.5",
+      shadeName: "Tan Warm",
+      swatchHex: "#B98661",
+      productImageUrl: "https://static.shopmy.us/pins/zoom-50736340-1775234297283-0400017342559_2",
+      shopUrl: "https://click.linksynergy.com/deeplink?id=8yaPBDQV8ls&mid=13816&u1=user-267437-pin-50736340-puser-null-src-web&murl=https%3A%2F%2Fwww.saksfifthavenue.com%2Fproduct%2FCharlotte-Tilbury-Beautiful-Skin-Concealer-0400017342559.html",
+      price: "$36",
+      source: "Saks",
+      undertone: "warm",
+      depth: "medium",
+      finish: "radiant",
+      palettePosition: 3,
+      reasoningText: "Sheerer coverage with a radiant finish — pick for daytime, lighter wear.",
+    },
+    {
+      compositionNumber: "03",
+      brand: "Maybelline",
+      name: "Instant Age Rewind Eraser Concealer",
+      shadeNumber: "130",
+      shadeName: "Honey",
+      swatchHex: "#BD8C68",
+      productImageUrl: "https://www.adorebeauty.com.au/pim_media/000/427/067/maybelline_instant_age_rewind_eye_eraser.png?1673848341",
+      shopUrl: "https://prf.hn/click/camref:1100ljmam/pubref:user-267437-pin-50736602-puser-null-src-web/destination:https%3A%2F%2Fwww.adorebeauty.com.au%2Fp%2Fmaybelline%2Fmaybelline-instant-age-rewind-eye-eraser.html",
+      price: "$10",
+      source: "Adore Beauty",
+      undertone: "warm",
+      depth: "medium",
+      finish: "satin",
+      palettePosition: 3,
+      reasoningText: "Drugstore option for daily under-eye — easy to find, easy to layer.",
+    },
+    {
+      compositionNumber: "04",
+      brand: "e.l.f. Cosmetics",
+      name: "16HR Camo Concealer",
+      shadeNumber: "Med-Warm",
+      shadeName: "Medium Warm",
+      swatchHex: "#BA8862",
+      productImageUrl: "https://static.shopmy.us/pins/zoom-50736912-1775234491904-10337721",
+      shopUrl: "https://www.awin1.com/awclick.php?mid=2041&id=740219&clickref=user-267437-pin-50736912-puser-null-src-web&ued=https%3A%2F%2Fwww.boots.com%2Felf-16hr-camo-concealer-10337721",
+      price: "$7",
+      source: "Boots",
+      undertone: "warm",
+      depth: "medium",
+      finish: "matte",
+      palettePosition: 3,
+      reasoningText: "Budget full-coverage pick — long-wear matte at $7.",
+    },
+  ],
 };
 
 const UNDERTONE_GUIDANCE = {
@@ -514,6 +687,218 @@ function Basics({ seasonId }) {
   );
 }
 
+function swatchIsDark(hex) {
+  const h = hex.replace("#", "");
+  const r = parseInt(h.slice(0, 2), 16);
+  const g = parseInt(h.slice(2, 4), 16);
+  const b = parseInt(h.slice(4, 6), 16);
+  return (0.299 * r + 0.587 * g + 0.114 * b) / 255 < 0.55;
+}
+
+function PaletteStrip({ season, position, compact }) {
+  const palette = season.palette || [];
+  const labels = season.paletteLabels || [];
+  return (
+    <div className={`dt-palette-strip${compact ? " dt-palette-strip-compact" : ""}`}>
+      {!compact && (
+        <div className="dt-palette-strip-head">
+          <span className="dt-palette-strip-label">Your {season.name} palette</span>
+          {position && (
+            <span className="dt-palette-strip-pos">Match · Pos. {String(position).padStart(2, "0")}</span>
+          )}
+        </div>
+      )}
+      <div className="dt-palette-strip-band" role="img" aria-label={`${season.name} palette band`}>
+        {palette.map((hex, i) => (
+          <span
+            key={hex + i}
+            className={`dt-palette-cell${position === i + 1 ? " dt-palette-cell-match" : ""}`}
+            style={{ background: hex }}
+            title={labels[i] || hex}
+          />
+        ))}
+      </div>
+      {compact && position && (
+        <span className="dt-palette-strip-pos-compact">Pos. {String(position).padStart(2, "0")}</span>
+      )}
+    </div>
+  );
+}
+
+function HeroProductCard({ category, hero, season, sourceUrl, onShopClick }) {
+  const dark = swatchIsDark(hero.swatchHex);
+  const metaLine = `BEST MATCH · ${hero.undertone} · ${hero.depth} · ${hero.finish}`;
+
+  return (
+    <article className="dt-spec-hero" data-category={category}>
+      <div className="dt-spec-edge" aria-hidden="true" />
+
+      <header className="dt-spec-head">
+        <span className="dt-spec-comp">Composition no. {hero.compositionNumber}</span>
+      </header>
+
+      <div className="dt-spec-body">
+        <div className="dt-spec-left">
+          <div
+            className={`dt-spec-swatch${dark ? " dt-spec-swatch-dark" : ""}`}
+            style={{ "--swatch": hero.swatchHex }}
+          >
+            <div className="dt-spec-swatch-meta">
+              <span className="dt-spec-swatch-label">Shade</span>
+              <span className="dt-spec-swatch-hex">{hero.swatchHex.toUpperCase()}</span>
+            </div>
+            <div className="dt-spec-shade-number">{hero.shadeNumber}</div>
+            <div className="dt-spec-shade-family">{hero.shadeFamily}</div>
+          </div>
+
+          {hero.shadeLadder && hero.shadeLadder.length > 0 && (
+            <div className="dt-spec-ladder">
+              <div className="dt-spec-ladder-head">
+                <span className="dt-spec-ladder-label">Shade range for {season.name}</span>
+                <span className="dt-spec-ladder-arrow">Light → Deep</span>
+              </div>
+              <div className="dt-spec-ladder-band">
+                {hero.shadeLadder.map((rung, i) => (
+                  <div
+                    key={rung.code + i}
+                    className={`dt-spec-ladder-cell${rung.representative ? " dt-spec-ladder-cell-rep" : ""}`}
+                    title={`${rung.code} · ${rung.label}`}
+                  >
+                    <span className="dt-spec-ladder-swatch" style={{ background: rung.hex }} />
+                    <span className="dt-spec-ladder-code">{rung.code}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <figure className="dt-spec-figure">
+            <div className="dt-spec-photo">
+              {hero.productImageUrl ? (
+                <img src={hero.productImageUrl} alt={`${hero.brand} ${hero.name}`} loading="lazy" />
+              ) : (
+                <div className="dt-spec-photo-fallback">
+                  <span>{hero.brand}</span>
+                  <span>{hero.name}</span>
+                </div>
+              )}
+            </div>
+            <figcaption className="dt-spec-figcaption">Fig. {hero.figNumber}</figcaption>
+          </figure>
+
+          <PaletteStrip season={season} position={hero.palettePosition} />
+        </div>
+
+        <div className="dt-spec-right">
+          <div className="dt-spec-meta">{metaLine}</div>
+
+          <div className="dt-spec-product">
+            <div className="dt-spec-brand">{hero.brand}</div>
+            <h4 className="dt-spec-name">{hero.name}</h4>
+            <div className="dt-spec-shade-sub"><em>Shade {hero.shadeNumber}</em> · {hero.shadeFamily}</div>
+          </div>
+
+          <p className="dt-spec-reasoning">{hero.reasoningText}</p>
+
+          {hero.formulaNote && (
+            <aside className="dt-spec-lab">
+              <span className="dt-spec-lab-label">From the lab</span>
+              <p className="dt-spec-lab-body">{hero.formulaNote}</p>
+            </aside>
+          )}
+
+          <div className="dt-spec-foot">
+            <span className="dt-spec-retail">
+              <span className="dt-spec-retail-k">Retail</span> {hero.price}
+            </span>
+            <a
+              href={hero.shopUrl || sourceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="dt-spec-cta"
+              onClick={() =>
+                onShopClick({
+                  season: season.name,
+                  category,
+                  tier: "hero",
+                  brand: hero.brand,
+                  productName: hero.name,
+                  price: hero.price,
+                })
+              }
+            >
+              Shop at {hero.source} <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function AlternateCard({ category, item, season, onShopClick }) {
+  const dark = swatchIsDark(item.swatchHex);
+  return (
+    <article className="dt-spec-alt" data-category={category}>
+      <header className="dt-spec-alt-head">
+        <span className="dt-spec-comp">Composition no. {item.compositionNumber}</span>
+      </header>
+
+      <div className="dt-spec-alt-body">
+        <div
+          className={`dt-spec-alt-swatch${dark ? " dt-spec-swatch-dark" : ""}`}
+          style={{ "--swatch": item.swatchHex }}
+        >
+          <span className="dt-spec-swatch-label">Shade</span>
+          <div className="dt-spec-alt-shade-name">{item.shadeName}</div>
+          <span className="dt-spec-swatch-hex">{item.swatchHex.toUpperCase()}</span>
+        </div>
+
+        <div className="dt-spec-alt-photo">
+          {item.productImageUrl ? (
+            <img src={item.productImageUrl} alt={`${item.brand} ${item.name}`} loading="lazy" />
+          ) : (
+            <div className="dt-spec-photo-fallback">
+              <span>{item.brand}</span>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <PaletteStrip season={season} position={item.palettePosition} compact />
+
+      <div className="dt-spec-alt-meta">
+        {item.undertone} · {item.depth} · {item.finish}
+      </div>
+      <div className="dt-spec-alt-brand">{item.brand}</div>
+      <h5 className="dt-spec-alt-name">{item.name}</h5>
+      <p className="dt-spec-alt-reasoning">{item.reasoningText}</p>
+
+      <div className="dt-spec-alt-foot">
+        <span className="dt-spec-alt-price">{item.price}</span>
+        <a
+          href={item.shopUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="dt-spec-alt-cta"
+          onClick={() =>
+            onShopClick({
+              season: season.name,
+              category,
+              tier: "alternate",
+              brand: item.brand,
+              productName: item.name,
+              price: item.price,
+            })
+          }
+        >
+          Shop at {item.source} <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </article>
+  );
+}
+
 function Edit({ s, seasonId }) {
   const products = useMemo(() => productsFor(seasonId), [seasonId]);
   const [tier, setTier] = useState("best-value");
@@ -525,6 +910,10 @@ function Edit({ s, seasonId }) {
   ), [products, tier]);
   const shopUrl = getShopUrl(s.name);
   const undertoneGuidance = UNDERTONE_GUIDANCE[s.name];
+  const foundationHero = FOUNDATION_HEROES[s.name];
+  const foundationAlternates = FOUNDATION_ALTERNATES[s.name] || [];
+  const concealerHero = CONCEALER_HEROES[s.name];
+  const concealerAlternates = CONCEALER_ALTERNATES[s.name] || [];
 
   return (
     <section id="edit" className="dt-edit" style={{ "--accent": s.accent }}>
@@ -566,68 +955,155 @@ function Edit({ s, seasonId }) {
         </div>
       </div>
 
-      <div className="dt-foundation">
-        <div className="dt-foundation-copy">
-          <div className="dt-foundation-k">Foundation &amp; Concealer</div>
-          <h3 className="dt-foundation-title">Match undertone first.</h3>
-          {undertoneGuidance && (
-            <p className="dt-foundation-guidance">{undertoneGuidance}</p>
+      {foundationHero ? (
+        <section className="dt-spec-section">
+          <header className="dt-spec-section-head">
+            <span className="dt-spec-section-num">The Base</span>
+            <h3 className="dt-spec-section-title">Foundation &amp; Concealer</h3>
+            <p className="dt-spec-section-intro">
+              Your base palette. One match from our analysis — verified against your {s.name} coordinates — and three alternates if you prefer a different finish or coverage.
+            </p>
+          </header>
+
+          <HeroProductCard
+            category="foundation"
+            hero={foundationHero}
+            season={s}
+            sourceUrl={FOUNDATION_URL}
+            onShopClick={track.shopClick}
+          />
+
+          {foundationAlternates.length > 0 && (
+            <div className="dt-spec-alternates">
+              <div className="dt-spec-alternates-head">
+                <em className="dt-spec-alternates-label">Or consider these alternates.</em>
+                <span className="dt-spec-alternates-count">{String(foundationAlternates.length).padStart(2, "0")} entries</span>
+              </div>
+              <div className="dt-spec-alternates-grid">
+                {foundationAlternates.map((alt) => (
+                  <AlternateCard
+                    key={alt.compositionNumber}
+                    category="foundation"
+                    item={alt}
+                    season={s}
+                    onShopClick={track.shopClick}
+                  />
+                ))}
+              </div>
+            </div>
           )}
-        </div>
 
-        <div className="dt-foundation-grid">
-          {FOUNDATION_CARDS.map((foundation) => (
-            <article key={foundation.name} className="dt-foundation-card">
-              <div className="dt-foundation-card-head">
-                <span>{foundation.rating} stars</span>
-                <span>{foundation.reviews} reviews</span>
-                <span
-                  className="dt-foundation-undertone-dot"
-                  title={`${foundation.undertone} undertone`}
-                  style={{ background: UNDERTONE_COLORS[foundation.undertone] }}
-                />
-              </div>
-              <h4>{foundation.name}</h4>
-              <div className="dt-foundation-finish">{foundation.finish}</div>
-              <div className="dt-foundation-card-meta">
-                <span>{foundation.shades} shades</span>
-                <span>{foundation.price}</span>
-                <span>{foundation.source}</span>
-              </div>
-            </article>
-          ))}
-        </div>
+          {concealerHero && (
+            <>
+              <header className="dt-spec-subhead">
+                <span className="dt-spec-section-num">The Cover</span>
+                <h3 className="dt-spec-section-title">Concealer</h3>
+              </header>
 
-        <div className="dt-concealer-copy">
-          <div className="dt-foundation-k">Concealer</div>
-          <h3 className="dt-foundation-title">Find your undertone match.</h3>
-          {undertoneGuidance && (
-            <p className="dt-foundation-guidance">{undertoneGuidance}</p>
+              <HeroProductCard
+                category="concealer"
+                hero={concealerHero}
+                season={s}
+                sourceUrl={CONCEALER_URL}
+                onShopClick={track.shopClick}
+              />
+
+              {concealerAlternates.length > 0 && (
+                <div className="dt-spec-alternates">
+                  <div className="dt-spec-alternates-head">
+                    <em className="dt-spec-alternates-label">Or consider these alternates.</em>
+                    <span className="dt-spec-alternates-count">{String(concealerAlternates.length).padStart(2, "0")} entries</span>
+                  </div>
+                  <div className="dt-spec-alternates-grid">
+                    {concealerAlternates.map((alt) => (
+                      <AlternateCard
+                        key={alt.compositionNumber}
+                        category="concealer"
+                        item={alt}
+                        season={s}
+                        onShopClick={track.shopClick}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+            </>
           )}
-        </div>
 
-        <div className="dt-foundation-grid dt-concealer-grid">
-          {CONCEALER_CARDS.map((concealer) => (
-            <article key={concealer.name} className="dt-foundation-card">
-              <div className="dt-foundation-card-head">
-                <span>{concealer.rating} stars</span>
-                <span>{concealer.reviews} reviews</span>
-                <span
-                  className="dt-foundation-undertone-dot"
-                  title={`${concealer.undertone} undertone`}
-                  style={{ background: UNDERTONE_COLORS[concealer.undertone] }}
-                />
-              </div>
-              <h4>{concealer.name}</h4>
-              <div className="dt-foundation-finish">{concealer.finish}</div>
-              <div className="dt-foundation-card-meta">
-                <span>{concealer.shades} shades</span>
-                <span>{concealer.price}</span>
-                <span>{concealer.source}</span>
-              </div>
-            </article>
-          ))}
-        </div>
+          <div className="dt-spec-browse-all">
+            <a
+              href={FOUNDATION_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => track.shopClick({ season: s.name, category: "foundation", tier: "browse-all", brand: "ShopMy", productName: "Browse all foundations", price: "varies" })}
+            >
+              Browse all foundations &amp; concealers <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </section>
+      ) : (
+        <div className="dt-foundation">
+          <div className="dt-foundation-copy">
+            <div className="dt-foundation-k">Foundation &amp; Concealer</div>
+            <h3 className="dt-foundation-title">Match undertone first.</h3>
+            {undertoneGuidance && (
+              <p className="dt-foundation-guidance">{undertoneGuidance}</p>
+            )}
+          </div>
+
+          <div className="dt-foundation-grid">
+            {FOUNDATION_CARDS.map((foundation) => (
+              <article key={foundation.name} className="dt-foundation-card">
+                <div className="dt-foundation-card-head">
+                  <span>{foundation.rating} stars</span>
+                  <span>{foundation.reviews} reviews</span>
+                  <span
+                    className="dt-foundation-undertone-dot"
+                    title={`${foundation.undertone} undertone`}
+                    style={{ background: UNDERTONE_COLORS[foundation.undertone] }}
+                  />
+                </div>
+                <h4>{foundation.name}</h4>
+                <div className="dt-foundation-finish">{foundation.finish}</div>
+                <div className="dt-foundation-card-meta">
+                  <span>{foundation.shades} shades</span>
+                  <span>{foundation.price}</span>
+                  <span>{foundation.source}</span>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <div className="dt-concealer-copy">
+            <div className="dt-foundation-k">Concealer</div>
+            <h3 className="dt-foundation-title">Find your undertone match.</h3>
+            {undertoneGuidance && (
+              <p className="dt-foundation-guidance">{undertoneGuidance}</p>
+            )}
+          </div>
+
+          <div className="dt-foundation-grid dt-concealer-grid">
+            {CONCEALER_CARDS.map((concealer) => (
+              <article key={concealer.name} className="dt-foundation-card">
+                <div className="dt-foundation-card-head">
+                  <span>{concealer.rating} stars</span>
+                  <span>{concealer.reviews} reviews</span>
+                  <span
+                    className="dt-foundation-undertone-dot"
+                    title={`${concealer.undertone} undertone`}
+                    style={{ background: UNDERTONE_COLORS[concealer.undertone] }}
+                  />
+                </div>
+                <h4>{concealer.name}</h4>
+                <div className="dt-foundation-finish">{concealer.finish}</div>
+                <div className="dt-foundation-card-meta">
+                  <span>{concealer.shades} shades</span>
+                  <span>{concealer.price}</span>
+                  <span>{concealer.source}</span>
+                </div>
+              </article>
+            ))}
+          </div>
 
         <div className="dt-foundation-actions">
           <a
@@ -667,7 +1143,8 @@ function Edit({ s, seasonId }) {
             Shop Concealers <span>↗</span>
           </a>
         </div>
-      </div>
+        </div>
+      )}
 
       <div className="dt-edit-grid">
         {selectedProducts.map(({ catId, product: p }, i) => {
