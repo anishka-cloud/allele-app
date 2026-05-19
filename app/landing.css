@@ -1126,15 +1126,25 @@ body:has(.landing) { background: var(--cream); }
   .l-hero { padding: 28px 16px 24px; }
   .l-hero-eyebrow { flex-wrap: wrap; gap: 8px 10px; font-size: 9.5px; }
   .l-swatch-row { gap: 6px; }
-  .l-hero-headline { font-size: clamp(38px, 11vw, 54px); line-height: 0.98; letter-spacing: -0.02em; }
-  .l-hero-headline br { display: none; }
-  .l-hero-sub { font-size: 15.5px; line-height: 1.55; }
+  .l-hero-headline {
+    font-size: clamp(34px, 10vw, 42px);
+    line-height: 1.24;
+    letter-spacing: 0;
+    word-spacing: 0.08em;
+    max-width: 13ch;
+    margin-bottom: 28px;
+  }
+  .l-hero-headline em {
+    display: block;
+    margin-right: 0;
+  }
+  .l-hero-sub { font-size: 15.5px; line-height: 1.75; }
   .l-hero-cta-row { flex-direction: column; align-items: stretch; gap: 12px; }
   .l-cta-primary { width: 100%; justify-content: center; padding: 16px 18px; }
   .l-cta-meta { text-align: center; font-size: 10.5px; }
-  .l-hero-meta { grid-template-columns: repeat(2, 1fr); gap: 14px 18px; margin-top: 28px; }
+  .l-hero-meta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 18px; margin-top: 28px; }
   .l-hero-meta-item strong { font-size: 26px; }
-  .l-hero-meta-item span { font-size: 9.5px; }
+  .l-hero-meta-item span { font-size: 9.5px; line-height: 1.35; overflow-wrap: anywhere; }
   .l-hero-card { padding: 22px 18px; margin-top: 8px; }
   .l-hero-card-name { font-size: 26px; line-height: 1.05; }
   .l-hero-card-tag { font-size: 11px; }
