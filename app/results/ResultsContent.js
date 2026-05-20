@@ -15,7 +15,7 @@ import {
   seasonIdFromName,
 } from "@/lib/handoffSeasons";
 import { track } from "@/lib/analytics";
-import { getShopUrl, withUTM } from "@/lib/shopLinks";
+import { getShopUrl, withUTM, safeShopUrl, isRogueAffiliate } from "@/lib/shopLinks";
 import "./results.css";
 
 const SEASON_IDS = Object.keys(SEASONS);
@@ -2055,12 +2055,15 @@ function HeroProductCard({ category, hero, season, sourceUrl, onShopClick }) {
               <span className="dt-spec-retail-k">Retail</span> {hero.price}
             </span>
             <a
-              href={withUTM(hero.shopUrl || sourceUrl, {
-                season: season.name,
-                category,
-                tier: "hero",
-                source: "results",
-              })}
+              href={withUTM(
+                isRogueAffiliate(hero.shopUrl) ? sourceUrl : (hero.shopUrl || sourceUrl),
+                {
+                  season: season.name,
+                  category,
+                  tier: "hero",
+                  source: "results",
+                }
+              )}
               target="_blank"
               rel="sponsored noopener noreferrer"
               className="dt-spec-cta"
@@ -2075,7 +2078,7 @@ function HeroProductCard({ category, hero, season, sourceUrl, onShopClick }) {
                 })
               }
             >
-              Shop at {hero.source} <span aria-hidden="true">→</span>
+              Shop at {isRogueAffiliate(hero.shopUrl) ? "ShopMy" : hero.source} <span aria-hidden="true">→</span>
             </a>
           </div>
         </div>
@@ -2125,7 +2128,7 @@ function AlternateCard({ category, item, season, onShopClick }) {
       <div className="dt-spec-alt-foot">
         <span className="dt-spec-alt-price">{item.price}</span>
         <a
-          href={withUTM(item.shopUrl, {
+          href={withUTM(safeShopUrl(item.shopUrl, season.name), {
             season: season.name,
             category,
             tier: "alternate",
@@ -2145,7 +2148,7 @@ function AlternateCard({ category, item, season, onShopClick }) {
             })
           }
         >
-          Shop at {item.source} <span aria-hidden="true">→</span>
+          Shop at {isRogueAffiliate(item.shopUrl) ? "ShopMy" : item.source} <span aria-hidden="true">→</span>
         </a>
       </div>
     </article>
