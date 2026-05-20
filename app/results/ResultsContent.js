@@ -15,7 +15,7 @@ import {
   seasonIdFromName,
 } from "@/lib/handoffSeasons";
 import { track } from "@/lib/analytics";
-import { getShopUrl } from "@/lib/shopLinks";
+import { getShopUrl, withUTM } from "@/lib/shopLinks";
 import "./results.css";
 
 const SEASON_IDS = Object.keys(SEASONS);
@@ -2055,9 +2055,14 @@ function HeroProductCard({ category, hero, season, sourceUrl, onShopClick }) {
               <span className="dt-spec-retail-k">Retail</span> {hero.price}
             </span>
             <a
-              href={hero.shopUrl || sourceUrl}
+              href={withUTM(hero.shopUrl || sourceUrl, {
+                season: season.name,
+                category,
+                tier: "hero",
+                source: "results",
+              })}
               target="_blank"
-              rel="noopener noreferrer"
+              rel="sponsored noopener noreferrer"
               className="dt-spec-cta"
               onClick={() =>
                 onShopClick({
@@ -2120,9 +2125,14 @@ function AlternateCard({ category, item, season, onShopClick }) {
       <div className="dt-spec-alt-foot">
         <span className="dt-spec-alt-price">{item.price}</span>
         <a
-          href={item.shopUrl}
+          href={withUTM(item.shopUrl, {
+            season: season.name,
+            category,
+            tier: "alternate",
+            source: "results",
+          })}
           target="_blank"
-          rel="noopener noreferrer"
+          rel="sponsored noopener noreferrer"
           className="dt-spec-alt-cta"
           onClick={() =>
             onShopClick({
@@ -2413,9 +2423,14 @@ function Edit({ s, seasonId }) {
                 <div className="dt-prod-foot">
                   <span className="dt-prod-price">{p.price}</span>
                   <a
-                    href={shopUrl}
+                    href={withUTM(shopUrl, {
+                      season: s.name,
+                      category: catId,
+                      tier,
+                      source: "results",
+                    })}
                     target="_blank"
-                    rel="noopener noreferrer"
+                    rel="sponsored noopener noreferrer"
                     className="dt-prod-shop"
                     onClick={() => {
                       track.shopClick({
@@ -2428,7 +2443,7 @@ function Edit({ s, seasonId }) {
                       });
                     }}
                   >
-                    Shop <span>↗</span>
+                    Shop the season <span aria-hidden="true">→</span>
                   </a>
                 </div>
               </div>
