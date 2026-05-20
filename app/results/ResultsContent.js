@@ -2120,27 +2120,6 @@ function buildSpecTierDeck(hero, alternates) {
   return { selectedByTier, alternatesByTier };
 }
 
-function TierPicker({ tier, onTierChange }) {
-  return (
-    <div className="dt-tier-picker">
-      <span className="dt-tier-label">Choose your spend</span>
-      <div className="dt-tier-pills">
-        {TIERS.map((t) => (
-          <button
-            type="button"
-            key={t.id}
-            className={`dt-tier-pill${tier === t.id ? " active" : ""}`}
-            onClick={() => onTierChange(t.id)}
-            aria-pressed={tier === t.id}
-          >
-            {t.name}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 function Edit({ s, seasonId }) {
   const products = useMemo(() => productsFor(seasonId), [seasonId]);
   const [tier, setTier] = useState("best-value");
@@ -2182,7 +2161,7 @@ function Edit({ s, seasonId }) {
       <div className="dt-edit-intro">
         <div>
           <p className="dt-edit-body">
-            Hand-matched by undertone, depth, and chroma. Not just &ldquo;warm&rdquo; or &ldquo;cool.&rdquo;
+            These are curated to your exact coloring. Each product is hand-matched by undertone, depth, and chroma. Not just &ldquo;warm&rdquo; or &ldquo;cool.&rdquo;
           </p>
           {s.shadeGuidance && (
             <p className="dt-shade-guidance">{s.shadeGuidance}</p>
@@ -2191,19 +2170,32 @@ function Edit({ s, seasonId }) {
             Links are affiliate. We earn a small commission. Costs you nothing, keeps Allele free.
           </div>
         </div>
+        <div className="dt-tier-picker">
+          <span className="dt-tier-label">Tier</span>
+          <div className="dt-tier-pills">
+            {TIERS.map((t) => (
+              <button
+                type="button"
+                key={t.id}
+                className={`dt-tier-pill${tier === t.id ? " active" : ""}`}
+                onClick={() => setTier(t.id)}
+                aria-pressed={tier === t.id}
+              >
+                {t.name}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
       {selectedFoundationHero ? (
         <section className="dt-spec-section">
           <header className="dt-spec-section-head">
-            <div className="dt-spec-section-copy">
-              <span className="dt-spec-section-num">The Base</span>
-              <h3 className="dt-spec-section-title">Foundation &amp; Concealer</h3>
-              <p className="dt-spec-section-intro">
-                Your match changes by spend tier. Tap a tier to swap the product, price, and shop link.
-              </p>
-            </div>
-            <TierPicker tier={tier} onTierChange={setTier} />
+            <span className="dt-spec-section-num">The Base</span>
+            <h3 className="dt-spec-section-title">Foundation &amp; Concealer</h3>
+            <p className="dt-spec-section-intro">
+              Your base palette. One match from our analysis — verified against your {s.name} coordinates — and three alternates if you prefer a different finish or coverage.
+            </p>
           </header>
 
           <HeroProductCard
