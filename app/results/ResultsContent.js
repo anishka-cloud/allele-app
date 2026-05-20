@@ -2074,6 +2074,52 @@ function AlternateCard({ category, item, season, onShopClick }) {
   );
 }
 
+function priceNumber(price) {
+  const value = String(price || "").match(/\d+(?:\.\d+)?/);
+  return value ? Number(value[0]) : null;
+}
+
+function tierForSpecItem(item, fallbackTier = "best-value") {
+  const copy = `${item.reasoningText || ""} ${item.price || ""}`.toLowerCase();
+  if (copy.includes("budget") || copy.includes("drugstore")) return "budget";
+  if (copy.includes("splurge")) return "splurge";
+
+  const price = priceNumber(item.price);
+  if (price !== null) {
+    if (price <= 15) return "budget";
+    if (price >= 36) return "splurge";
+    return "best-value";
+  }
+
+  return fallbackTier;
+}
+
+function buildSpecTierDeck(hero, alternates) {
+  if (!hero) return { selectedByTier: {}, alternatesByTier: {} };
+
+  const deck = [
+    { ...hero, tier: "best-value" },
+    ...alternates.map((item) => ({
+      ...item,
+      figNumber: item.figNumber || item.compositionNumber,
+      shadeFamily: item.shadeFamily || `${item.shadeName} · ${item.undertone}`,
+      shadeLadder: item.shadeLadder || [],
+      tier: tierForSpecItem(item),
+    })),
+  ];
+
+  const selectedByTier = {};
+  const alternatesByTier = {};
+
+  for (const { id } of TIERS) {
+    const selected = deck.find((item) => item.tier === id) || deck[0];
+    selectedByTier[id] = selected;
+    alternatesByTier[id] = deck.filter((item) => item !== selected);
+  }
+
+  return { selectedByTier, alternatesByTier };
+}
+
 function Edit({ s, seasonId }) {
   const products = useMemo(() => productsFor(seasonId), [seasonId]);
   const [tier, setTier] = useState("best-value");
@@ -2089,6 +2135,18 @@ function Edit({ s, seasonId }) {
   const foundationAlternates = FOUNDATION_ALTERNATES[s.name] || [];
   const concealerHero = CONCEALER_HEROES[s.name];
   const concealerAlternates = CONCEALER_ALTERNATES[s.name] || [];
+  const foundationSpec = useMemo(
+    () => buildSpecTierDeck(foundationHero, foundationAlternates),
+    [foundationHero, foundationAlternates]
+  );
+  const concealerSpec = useMemo(
+    () => buildSpecTierDeck(concealerHero, concealerAlternates),
+    [concealerHero, concealerAlternates]
+  );
+  const selectedFoundationHero = foundationSpec.selectedByTier[tier] || foundationHero;
+  const selectedFoundationAlternates = foundationSpec.alternatesByTier[tier] || foundationAlternates;
+  const selectedConcealerHero = concealerSpec.selectedByTier[tier] || concealerHero;
+  const selectedConcealerAlternates = concealerSpec.alternatesByTier[tier] || concealerAlternates;
 
   return (
     <section id="edit" className="dt-edit" style={{ "--accent": s.accent }}>
@@ -2130,7 +2188,7 @@ function Edit({ s, seasonId }) {
         </div>
       </div>
 
-      {foundationHero ? (
+      {selectedFoundationHero ? (
         <section className="dt-spec-section">
           <header className="dt-spec-section-head">
             <span className="dt-spec-section-num">The Base</span>
@@ -2142,22 +2200,22 @@ function Edit({ s, seasonId }) {
 
           <HeroProductCard
             category="foundation"
-            hero={foundationHero}
+            hero={selectedFoundationHero}
             season={s}
             sourceUrl={FOUNDATION_URL}
             onShopClick={track.shopClick}
           />
 
-          {foundationAlternates.length > 0 && (
+          {selectedFoundationAlternates.length > 0 && (
             <div className="dt-spec-alternates">
               <div className="dt-spec-alternates-head">
                 <em className="dt-spec-alternates-label">Or consider these alternates.</em>
-                <span className="dt-spec-alternates-count">{String(foundationAlternates.length).padStart(2, "0")} entries</span>
+                <span className="dt-spec-alternates-count">{String(selectedFoundationAlternates.length).padStart(2, "0")} entries</span>
               </div>
               <div className="dt-spec-alternates-grid">
-                {foundationAlternates.map((alt) => (
+                {selectedFoundationAlternates.map((alt) => (
                   <AlternateCard
-                    key={alt.compositionNumber}
+                    key={`${alt.tier || "alt"}-${alt.compositionNumber}-${alt.brand}`}
                     category="foundation"
                     item={alt}
                     season={s}
@@ -2168,7 +2226,7 @@ function Edit({ s, seasonId }) {
             </div>
           )}
 
-          {concealerHero && (
+          {selectedConcealerHero && (
             <>
               <header className="dt-spec-subhead">
                 <span className="dt-spec-section-num">The Cover</span>
@@ -2177,22 +2235,22 @@ function Edit({ s, seasonId }) {
 
               <HeroProductCard
                 category="concealer"
-                hero={concealerHero}
+                hero={selectedConcealerHero}
                 season={s}
                 sourceUrl={CONCEALER_URL}
                 onShopClick={track.shopClick}
               />
 
-              {concealerAlternates.length > 0 && (
+              {selectedConcealerAlternates.length > 0 && (
                 <div className="dt-spec-alternates">
                   <div className="dt-spec-alternates-head">
                     <em className="dt-spec-alternates-label">Or consider these alternates.</em>
-                    <span className="dt-spec-alternates-count">{String(concealerAlternates.length).padStart(2, "0")} entries</span>
+                    <span className="dt-spec-alternates-count">{String(selectedConcealerAlternates.length).padStart(2, "0")} entries</span>
                   </div>
                   <div className="dt-spec-alternates-grid">
-                    {concealerAlternates.map((alt) => (
+                    {selectedConcealerAlternates.map((alt) => (
                       <AlternateCard
-                        key={alt.compositionNumber}
+                        key={`${alt.tier || "alt"}-${alt.compositionNumber}-${alt.brand}`}
                         category="concealer"
                         item={alt}
                         season={s}
