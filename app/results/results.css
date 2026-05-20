@@ -710,6 +710,7 @@ body:has(.dt-results) { background: var(--cream); }
    ============================================================ */
 .dt-edit {
   background: var(--cream);
+  scroll-margin-top: 84px;
 }
 .dt-edit-intro {
   max-width: var(--content-max);
@@ -1751,22 +1752,19 @@ body:has(.dt-results) { background: var(--cream); }
 
 .dt-spec-section {
   max-width: var(--content-max);
-  margin: 0 auto 44px;
-  padding: 32px 28px 30px;
+  margin: 0 auto 36px;
+  padding: 24px 24px 26px;
   background: var(--cream-2);
   border: 1px solid var(--rule-soft);
   border-radius: 10px;
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 16px;
 }
 
 .dt-spec-section-head {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 20px;
-  align-items: end;
-  padding-bottom: 16px;
+  display: block;
+  padding-bottom: 14px;
   border-bottom: 1px solid var(--rule-soft);
 }
 
@@ -1798,18 +1796,79 @@ body:has(.dt-results) { background: var(--cream); }
 .dt-spec-section-intro {
   font-family: var(--serif);
   font-size: 15px;
-  line-height: 1.45;
+  line-height: 1.35;
   color: var(--ink-80);
   margin: 0;
   max-width: 50ch;
   text-wrap: pretty;
 }
 
+.dt-spec-tier-rail {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.dt-spec-tier-card {
+  position: relative;
+  min-height: 74px;
+  padding: 12px 14px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 5px 10px;
+  align-items: end;
+  text-align: left;
+  background: color-mix(in oklab, var(--cream) 72%, var(--cream-2));
+  border: 1px solid var(--rule-soft);
+  border-radius: 6px;
+  color: var(--ink-60);
+  transition: border-color 150ms ease, background 150ms ease, color 150ms ease;
+}
+
+.dt-spec-tier-card:hover,
+.dt-spec-tier-card:focus-visible {
+  border-color: var(--gold-soft);
+  color: var(--ink);
+  outline: none;
+}
+
+.dt-spec-tier-card.active {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--cream);
+}
+
+.dt-spec-tier-name {
+  grid-column: 1 / -1;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.72;
+}
+
+.dt-spec-tier-product {
+  min-width: 0;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dt-spec-tier-price {
+  font-family: var(--display);
+  font-size: 22px;
+  line-height: 1;
+}
+
 .dt-spec-subhead {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  padding-top: 8px;
+  padding-top: 4px;
   border-top: 1px dashed var(--rule-soft);
 }
 
@@ -1823,7 +1882,7 @@ body:has(.dt-results) { background: var(--cream); }
   background: var(--cream);
   border: 1px solid var(--rule-soft);
   border-radius: 8px;
-  padding: 20px 24px 22px 28px;
+  padding: 18px 22px 20px 26px;
   display: grid;
   grid-template-rows: auto 1fr;
   gap: 14px;
@@ -1847,7 +1906,7 @@ body:has(.dt-results) { background: var(--cream); }
 .dt-spec-body {
   display: grid;
   grid-template-columns: minmax(280px, 0.95fr) minmax(0, 1.05fr);
-  gap: 22px;
+  gap: 18px;
 }
 
 /* ----- Left column: swatch + figure + palette ----- */
@@ -1868,7 +1927,7 @@ body:has(.dt-results) { background: var(--cream); }
       rgba(0, 0, 0, 0.08) 100%);
   border-radius: 4px;
   padding: 16px 18px 18px;
-  min-height: 180px;
+  min-height: 158px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -1931,7 +1990,7 @@ body:has(.dt-results) { background: var(--cream); }
 .dt-spec-photo {
   background: var(--cream-2);
   border-radius: 4px;
-  min-height: 112px;
+  min-height: 96px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1941,7 +2000,7 @@ body:has(.dt-results) { background: var(--cream); }
 
 .dt-spec-photo img {
   max-width: 100%;
-  max-height: 128px;
+  max-height: 112px;
   object-fit: contain;
 }
 
@@ -2102,7 +2161,7 @@ body:has(.dt-results) { background: var(--cream); }
   display: flex;
   flex-direction: column;
   gap: 6px;
-  margin: 6px 0 0;
+  margin: 2px 0 0;
 }
 
 .dt-spec-lab-label {
@@ -2177,7 +2236,7 @@ body:has(.dt-results) { background: var(--cream); }
 .dt-spec-alternates {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
 .dt-spec-alternates-head {
@@ -2185,7 +2244,7 @@ body:has(.dt-results) { background: var(--cream); }
   align-items: baseline;
   justify-content: space-between;
   gap: 16px;
-  padding-bottom: 10px;
+  padding-bottom: 8px;
   border-bottom: 1px solid var(--rule-soft);
 }
 
@@ -2217,10 +2276,10 @@ body:has(.dt-results) { background: var(--cream); }
   background: var(--cream);
   border: 1px solid var(--rule-soft);
   border-radius: 6px;
-  padding: 14px 16px 16px;
+  padding: 12px 14px 14px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   transition: border-color 150ms ease;
 }
 
@@ -2310,8 +2369,8 @@ body:has(.dt-results) { background: var(--cream); }
 .dt-spec-alt-reasoning {
   font-family: var(--serif);
   font-style: italic;
-  font-size: 13.5px;
-  line-height: 1.5;
+  font-size: 13px;
+  line-height: 1.4;
   color: var(--ink-80);
   margin: 2px 0 0;
 }
@@ -2389,39 +2448,44 @@ body:has(.dt-results) { background: var(--cream); }
 
 @media (max-width: 640px) {
   .dt-spec-section {
-    padding: 18px 14px 18px;
-    gap: 18px;
-    margin-bottom: 34px;
+    padding: 14px 12px 16px;
+    gap: 12px;
+    margin-bottom: 28px;
   }
   .dt-spec-section-head {
-    grid-template-columns: 1fr;
-    gap: 14px;
-    padding-bottom: 14px;
+    padding-bottom: 10px;
   }
-  .dt-spec-section-title { font-size: 31px; }
+  .dt-spec-section-title { font-size: 29px; }
   .dt-spec-section-intro { font-size: 13.5px; line-height: 1.35; }
-  .dt-spec-section .dt-tier-picker {
+  .dt-spec-tier-rail {
     position: sticky;
     top: 0;
     z-index: 5;
-    align-items: stretch;
+    grid-template-columns: 1fr;
+    gap: 6px;
     background: color-mix(in oklab, var(--cream-2) 92%, transparent);
-    padding: 6px 0 4px;
+    padding: 4px 0;
     backdrop-filter: blur(8px);
   }
-  .dt-tier-pills {
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  .dt-spec-tier-card {
+    min-height: 48px;
+    padding: 8px 10px;
+    grid-template-columns: 82px minmax(0, 1fr) auto;
+    align-items: center;
   }
-  .dt-tier-pill {
-    min-height: 38px;
-    padding: 8px 7px;
-    font-size: 11px;
-    white-space: nowrap;
+  .dt-spec-tier-name {
+    grid-column: auto;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+  }
+  .dt-spec-tier-product {
+    font-size: 12.5px;
+  }
+  .dt-spec-tier-price {
+    font-size: 18px;
   }
   .dt-spec-hero {
-    padding: 14px 14px 16px 16px;
+    padding: 12px 12px 14px 14px;
     gap: 10px;
   }
   .dt-spec-head { padding-bottom: 10px; }

@@ -2120,23 +2120,27 @@ function buildSpecTierDeck(hero, alternates) {
   return { selectedByTier, alternatesByTier };
 }
 
-function TierPicker({ tier, onTierChange }) {
+function SpecTierRail({ tier, onTierChange, spec, label }) {
   return (
-    <div className="dt-tier-picker">
-      <span className="dt-tier-label">Choose your spend</span>
-      <div className="dt-tier-pills">
-        {TIERS.map((t) => (
+    <div className="dt-spec-tier-rail" aria-label={`${label} price tiers`}>
+      {TIERS.map((t) => {
+        const item = spec.selectedByTier[t.id];
+        const active = tier === t.id;
+
+        return (
           <button
             type="button"
             key={t.id}
-            className={`dt-tier-pill${tier === t.id ? " active" : ""}`}
+            className={`dt-spec-tier-card${active ? " active" : ""}`}
             onClick={() => onTierChange(t.id)}
-            aria-pressed={tier === t.id}
+            aria-pressed={active}
           >
-            {t.name}
+            <span className="dt-spec-tier-name">{t.name}</span>
+            <span className="dt-spec-tier-product">{item?.brand || "Coming soon"}</span>
+            <span className="dt-spec-tier-price">{item?.price || "—"}</span>
           </button>
-        ))}
-      </div>
+        );
+      })}
     </div>
   );
 }
@@ -2200,11 +2204,17 @@ function Edit({ s, seasonId }) {
               <span className="dt-spec-section-num">The Base</span>
               <h3 className="dt-spec-section-title">Foundation &amp; Concealer</h3>
               <p className="dt-spec-section-intro">
-                Your match changes by spend tier. Tap a tier to swap the product, price, and shop link.
+                Pick a spend tier. The product, price, and shop link update here.
               </p>
             </div>
-            <TierPicker tier={tier} onTierChange={setTier} />
           </header>
+
+          <SpecTierRail
+            tier={tier}
+            onTierChange={setTier}
+            spec={foundationSpec}
+            label="Foundation"
+          />
 
           <HeroProductCard
             category="foundation"
@@ -2217,8 +2227,8 @@ function Edit({ s, seasonId }) {
           {selectedFoundationAlternates.length > 0 && (
             <div className="dt-spec-alternates">
               <div className="dt-spec-alternates-head">
-                <em className="dt-spec-alternates-label">Or consider these alternates.</em>
-                <span className="dt-spec-alternates-count">{String(selectedFoundationAlternates.length).padStart(2, "0")} entries</span>
+                <em className="dt-spec-alternates-label">Other foundation tiers</em>
+                <span className="dt-spec-alternates-count">{String(selectedFoundationAlternates.length).padStart(2, "0")} links</span>
               </div>
               <div className="dt-spec-alternates-grid">
                 {selectedFoundationAlternates.map((alt) => (
@@ -2241,6 +2251,13 @@ function Edit({ s, seasonId }) {
                 <h3 className="dt-spec-section-title">Concealer</h3>
               </header>
 
+              <SpecTierRail
+                tier={tier}
+                onTierChange={setTier}
+                spec={concealerSpec}
+                label="Concealer"
+              />
+
               <HeroProductCard
                 category="concealer"
                 hero={selectedConcealerHero}
@@ -2252,8 +2269,8 @@ function Edit({ s, seasonId }) {
               {selectedConcealerAlternates.length > 0 && (
                 <div className="dt-spec-alternates">
                   <div className="dt-spec-alternates-head">
-                    <em className="dt-spec-alternates-label">Or consider these alternates.</em>
-                    <span className="dt-spec-alternates-count">{String(selectedConcealerAlternates.length).padStart(2, "0")} entries</span>
+                    <em className="dt-spec-alternates-label">Other concealer tiers</em>
+                    <span className="dt-spec-alternates-count">{String(selectedConcealerAlternates.length).padStart(2, "0")} links</span>
                   </div>
                   <div className="dt-spec-alternates-grid">
                     {selectedConcealerAlternates.map((alt) => (
@@ -2278,7 +2295,7 @@ function Edit({ s, seasonId }) {
               rel="noopener noreferrer"
               onClick={() => track.shopClick({ season: s.name, category: "foundation", tier: "browse-all", brand: "ShopMy", productName: "Browse all foundations", price: "varies" })}
             >
-              Browse all foundations &amp; concealers <span aria-hidden="true">→</span>
+              Browse all 24 product links <span aria-hidden="true">→</span>
             </a>
           </div>
         </section>
