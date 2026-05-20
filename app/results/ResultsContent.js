@@ -2481,7 +2481,7 @@ function Collect({ s }) {
           <div className="dt-section-num">04</div>
           <h2 className="dt-collect-title">The <em>dossier</em></h2>
           <p className="dt-collect-body">
-            We&rsquo;ll send the long-form letter: every shade with names and hexes, your wardrobe anchors, the 24-product edit, and tips you can save for the dressing room.
+            We&rsquo;ll send the long-form letter: every shade with names and hexes, your wardrobe anchors, the 24-product edit, and tips you can save for the dressing room. You&rsquo;ll also get restock alerts when your matches return to Sephora, and first access to Vibe DNA before public launch.
           </p>
         </div>
         <form className="dt-collect-form" onSubmit={submit}>
