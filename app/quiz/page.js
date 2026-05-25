@@ -255,8 +255,15 @@ export default function QuizPage() {
     if (startedRef.current) return;
     startedRef.current = true;
     startTimeRef.current = Date.now();
-    const params = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
-    track.quizStarted(params?.get("source") || "homepage");
+    
+    const hasTracked = typeof sessionStorage !== "undefined" && sessionStorage.getItem("allele_quiz_started");
+    if (!hasTracked) {
+      const params = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
+      track.quizStarted(params?.get("source") || "direct");
+      if (typeof sessionStorage !== "undefined") {
+        sessionStorage.setItem("allele_quiz_started", "true");
+      }
+    }
 
     const handleBeforeUnload = () => {
       if (completedRef.current) return;
@@ -336,8 +343,19 @@ export default function QuizPage() {
   const navigateToResults = useCallback(() => {
     if (!lead) return;
     const seasonName = SEASONS[lead.id]?.name || "True Autumn";
-    router.push(`/results?season=${encodeURIComponent(seasonName)}`);
-  }, [lead, router]);
+    
+    // Extract skin depth answer from step index 2 (Question 3)
+    const depthAnswer = answers.find(a => a.step === 2)?.key;
+    if (depthAnswer && typeof sessionStorage !== "undefined") {
+      sessionStorage.setItem("allele_user_depth", depthAnswer);
+    }
+    
+    const query = depthAnswer
+      ? `?season=${encodeURIComponent(seasonName)}&depth=${encodeURIComponent(depthAnswer)}`
+      : `?season=${encodeURIComponent(seasonName)}`;
+      
+    router.push(`/results${query}`);
+  }, [lead, router, answers]);
 
   const handleGateSubmit = async (e) => {
     e.preventDefault();

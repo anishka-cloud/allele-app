@@ -1166,6 +1166,7 @@ body:has(.landing) { background: var(--cream); }
   .l-specimen-card { padding: 22px 18px; }
   .l-specimen-card-name { font-size: 22px; }
 
+
   /* Axes / method / showcase / science blocks */
   .l-axis-title { font-size: 22px; }
   .l-method-step { padding: 22px 18px; }
@@ -1178,3 +1179,293 @@ body:has(.landing) { background: var(--cream); }
   .l-footer-inner { grid-template-columns: 1fr; gap: 22px; }
   .l-footer-legal { flex-direction: column; gap: 10px; }
 }
+
+/* ============ Mirror Tests ============ */
+.l-mirror-tests {
+  background: var(--cream);
+  padding: 110px var(--gutter) 120px;
+  border-top: 1px solid var(--rule-soft);
+  border-bottom: 1px solid var(--rule-soft);
+}
+.l-mirror-container {
+  max-width: var(--container);
+  margin: 0 auto;
+}
+.l-mirror-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 48px;
+  flex-wrap: wrap;
+}
+.l-mirror-tab-btn {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-40);
+  padding: 12px 24px;
+  border: 1px solid var(--rule-soft);
+  border-radius: 999px;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  background: transparent;
+}
+.l-mirror-tab-btn:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+}
+.l-mirror-tab-btn.active {
+  color: var(--cream);
+  background: var(--ink);
+  border-color: var(--ink);
+}
+.l-mirror-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+  background: var(--cream-2);
+  border: 1px solid var(--rule-soft);
+  border-radius: 20px;
+  padding: 56px 48px;
+  min-height: 480px;
+  animation: fadeIn 0.4s ease-out;
+}
+.l-mirror-content {
+  display: flex;
+  flex-direction: column;
+}
+.l-mirror-content-eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+.l-mirror-content h3 {
+  font-family: var(--display);
+  font-weight: 300;
+  font-size: 38px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 20px;
+}
+.l-mirror-content h3 em {
+  font-style: italic;
+  color: var(--rust);
+}
+.l-mirror-instruction {
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink-80);
+  margin-bottom: 32px;
+}
+.l-mirror-verdict-box {
+  background: var(--cream);
+  border-left: 2px solid var(--gold);
+  padding: 20px 24px;
+  border-radius: 0 8px 8px 0;
+}
+.l-mirror-verdict-title {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-40);
+  margin-bottom: 8px;
+}
+.l-mirror-verdict-text {
+  font-family: var(--serif);
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--ink-80);
+}
+.l-mirror-verdict-text em {
+  font-weight: 600;
+  font-style: italic;
+  color: var(--ink);
+}
+
+/* Interactive Visual Side */
+.l-mirror-visual-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+.l-mirror-swatch-split {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 12px;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid var(--rule-soft);
+  box-shadow: 0 10px 30px -15px rgba(26, 22, 19, 0.15);
+}
+.l-mirror-swatch-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  transition: transform 0.3s ease;
+  position: relative;
+  text-align: center;
+}
+.l-mirror-swatch-panel.dark-text {
+  color: var(--ink);
+}
+.l-mirror-swatch-panel.light-text {
+  color: var(--cream);
+}
+.l-mirror-swatch-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.l-mirror-swatch-desc {
+  font-family: var(--serif);
+  font-size: 14px;
+  font-style: italic;
+  margin-top: 6px;
+  opacity: 0.85;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 980px) {
+  .l-mirror-card {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding: 32px 24px;
+    min-height: auto;
+  }
+  .l-mirror-tests {
+    padding: 64px 24px;
+  }
+}
+@media (max-width: 640px) {
+  .l-mirror-tests {
+    padding: 48px 16px;
+  }
+  .l-mirror-card {
+    padding: 24px 16px;
+  }
+  .l-mirror-content h3 {
+    font-size: 28px;
+  }
+  .l-mirror-tab-btn {
+    padding: 8px 16px;
+    font-size: 9.5px;
+  }
+
+  /* Horizontal Swiper for specimens on mobile */
+  .l-family-row {
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--rule-soft);
+    margin-bottom: 24px;
+  }
+  .l-family-specimens {
+    display: flex !important;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 16px;
+    padding: 4px 16px 20px !important;
+    margin: 0 -16px; /* Bleed to screen edges */
+    scroll-padding: 16px;
+    scrollbar-width: none; /* Hide firefox scrollbar */
+  }
+  .l-family-specimens::-webkit-scrollbar {
+    display: none; /* Hide chrome/safari scrollbar */
+  }
+  .l-specimen-card {
+    flex: 0 0 80vw; /* Take up 80% of viewport width */
+    scroll-snap-align: start;
+    margin-top: 0 !important;
+  }
+}
+
+/* Desktop default: l-mobile-theory-accordion is not an accordion */
+@media (min-width: 641px) {
+  details.l-mobile-theory-accordion {
+    display: block !important;
+  }
+  .l-mobile-theory-summary {
+    display: none !important;
+  }
+  details.l-mobile-theory-accordion:not([open]) > .l-mobile-theory-content {
+    display: block !important;
+  }
+}
+
+/* Mobile Theory Accordion (≤640px) */
+@media (max-width: 640px) {
+  details.l-mobile-theory-accordion {
+    display: block;
+    margin: 32px 0 16px;
+    border: 1px solid rgba(196, 162, 101, 0.28);
+    border-radius: 12px;
+    background: #FFFBF7;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(196, 162, 101, 0.05);
+  }
+  .l-mobile-theory-summary {
+    padding: 18px 20px;
+    cursor: pointer;
+    font-family: var(--font-inter, system-ui, sans-serif);
+    font-weight: 500;
+    font-size: 13.5px;
+    color: var(--ink);
+    list-style: none; /* Hide default arrow */
+    display: block;
+    outline: none;
+    background: rgba(196, 162, 101, 0.04);
+    user-select: none;
+    border: none;
+  }
+  .l-mobile-theory-summary::-webkit-details-marker {
+    display: none; /* Hide default safari arrow */
+  }
+  .l-mobile-theory-summary-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    font-family: var(--font-inter, system-ui, sans-serif);
+    letter-spacing: 0.02em;
+  }
+  .l-mobile-theory-icon {
+    font-size: 18px;
+    color: var(--gold, #C4A265);
+    transition: transform 0.2s ease;
+    font-weight: 300;
+  }
+  details.l-mobile-theory-accordion[open] .l-mobile-theory-icon {
+    transform: rotate(45deg);
+  }
+  .l-mobile-theory-content {
+    padding: 0;
+    border-top: 1px solid rgba(196, 162, 101, 0.18);
+  }
+  /* Decrease internal padding of collapsed sections on mobile to feel tighter */
+  .l-mobile-theory-content .l-axes,
+  .l-mobile-theory-content .l-mirror-tests,
+  .l-mobile-theory-content .l-science {
+    padding: 32px 16px !important;
+  }
+  .l-mobile-theory-content .l-mirror-card {
+    padding: 24px 16px !important;
+  }
+}
+
+

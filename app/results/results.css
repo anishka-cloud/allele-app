@@ -134,7 +134,7 @@ body:has(.dt-results) { background: var(--cream); }
    ============================================================ */
 .dt-hero {
   padding-top: 72px;
-  padding-bottom: 120px;
+  padding-bottom: 32px;
   background: var(--cream);
   position: relative;
 }
@@ -770,6 +770,11 @@ body:has(.dt-results) { background: var(--cream); }
   background: var(--ink);
   color: var(--cream);
 }
+.dt-tier-pill-value:not(.active),
+.dt-tier-pill-best-value:not(.active) {
+  border: 1px solid rgba(196, 162, 101, 0.4) !important;
+  box-shadow: 0 0 10px rgba(196, 162, 101, 0.08);
+}
 
 .dt-foundation {
   max-width: var(--content-max);
@@ -963,13 +968,14 @@ body:has(.dt-results) { background: var(--cream); }
   align-items: center;
   gap: 5px;
   font-family: var(--mono);
-  font-size: 9px;
+  font-size: 8.5px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--ink);
-  background: rgba(255, 251, 247, 0.92);
-  padding: 4px 9px;
+  color: #a38249;
+  background: var(--cream);
+  padding: 4.5px 10px;
   border-radius: 999px;
+  border: 1px solid rgba(196, 162, 101, 0.32);
 }
 .dt-match-dot {
   width: 6px;
@@ -1556,7 +1562,7 @@ body:has(.dt-results) { background: var(--cream); }
   .dt-results section.dt-hero { padding: 56px 16px 48px; }
   .dt-hero-grid { grid-template-columns: 1fr; gap: 36px; }
   .dt-hero-eyebrow { flex-wrap: wrap; gap: 6px 10px; font-size: 9.5px; }
-  .dt-hero-name { font-size: 56px; line-height: 0.95; letter-spacing: -0.025em; }
+  .dt-hero-name { font-size: clamp(38px, 11vw, 56px); line-height: 1.05; letter-spacing: -0.025em; }
   .dt-hero-name br { display: block; }
   .dt-hero-whisper { font-size: 17px; line-height: 1.45; }
   .dt-hero-attrs {
@@ -1607,7 +1613,12 @@ body:has(.dt-results) { background: var(--cream); }
   .dt-foundation-grid { grid-template-columns: 1fr; }
   .dt-foundation-card { min-height: 132px; }
   .dt-edit-grid { grid-template-columns: 1fr; gap: 18px; }
-  .dt-tier-picker { align-items: flex-start; }
+  .dt-prod-foot { flex-direction: column; align-items: stretch; gap: 12px; }
+  .dt-prod-price { text-align: left; }
+  .dt-prod-shop { width: 100%; justify-content: center; padding: 12px 14px; font-size: 11px; min-height: 44px; }
+  .dt-tier-picker { align-items: flex-start; width: 100%; }
+  .dt-tier-pills { width: 100%; justify-content: space-between; }
+  .dt-tier-pill { padding: 12px 14px; min-height: 44px; flex: 1; text-align: center; }
 
   /* Collect */
   .dt-results section.dt-collect { padding: 56px 16px; }
@@ -1730,7 +1741,7 @@ body:has(.dt-results) { background: var(--cream); }
 
 .dt-spec-section {
   max-width: var(--content-max);
-  margin: 0 auto 64px;
+  margin: 64px auto 64px;
   padding: 40px 32px 36px;
   background: var(--cream-2);
   border: 1px solid var(--rule-soft);
@@ -2060,11 +2071,15 @@ body:has(.dt-results) { background: var(--cream); }
 
 .dt-spec-reasoning {
   font-family: var(--sans);
-  font-size: 14.5px;
+  font-size: 14px;
   line-height: 1.6;
   color: var(--ink-80);
-  margin: 6px 0 0;
+  margin: 16px 0 0;
   text-wrap: pretty;
+  border: 1px dashed rgba(196, 162, 101, 0.3);
+  padding: 14px;
+  border-radius: 6px;
+  background: rgba(255, 251, 247, 0.65);
 }
 
 .dt-spec-lab {
@@ -2363,7 +2378,25 @@ body:has(.dt-results) { background: var(--cream); }
   .dt-spec-section { padding: 28px 20px 24px; }
   .dt-spec-hero { padding: 18px 22px 18px 24px; }
   .dt-spec-shade-number { font-size: 64px; }
-  .dt-spec-alternates-grid { grid-template-columns: 1fr; }
+  .dt-spec-alternates-grid {
+    display: flex !important;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 16px;
+    padding-bottom: 12px;
+    margin: 0 -20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    scrollbar-width: none;
+  }
+  .dt-spec-alternates-grid::-webkit-scrollbar {
+    display: none;
+  }
+  .dt-spec-alt {
+    flex: 0 0 78vw;
+    scroll-snap-align: start;
+    margin-top: 0 !important;
+  }
   .dt-spec-foot { flex-direction: column; align-items: stretch; gap: 12px; }
   .dt-spec-cta { justify-content: center; }
 }
@@ -2441,3 +2474,383 @@ body:has(.dt-results) { background: var(--cream); }
   .dt-spec-ladder-swatch { height: 22px; }
   .dt-spec-ladder-code { font-size: 9px; letter-spacing: 0.1em; }
 }
+
+/* ============================================================
+   Science Accordion & Sticky Shop Bar (UX Upgrades)
+   ============================================================ */
+.dt-science-accordion {
+  max-width: var(--content-max);
+  margin: 48px auto;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.dt-science-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 32px var(--edge);
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--font-display, 'Lora'), Georgia, serif;
+  font-size: 26px;
+  font-style: italic;
+  font-weight: 300;
+  color: var(--ink);
+  transition: background 0.2s;
+}
+.dt-science-summary::-webkit-details-marker {
+  display: none;
+}
+.dt-science-summary:hover {
+  background: var(--cream-2);
+}
+.dt-science-icon {
+  font-family: var(--sans);
+  font-size: 24px;
+  font-weight: 300;
+  color: var(--gold);
+  transition: transform 0.3s;
+}
+.dt-science-accordion[open] .dt-science-icon {
+  transform: rotate(45deg);
+}
+.dt-science-content {
+  padding-bottom: 64px;
+  animation: slideDown 0.4s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Sticky Shop Bar */
+.dt-sticky-shop-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 251, 247, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--rule);
+  padding: 16px var(--edge);
+  z-index: 1000;
+  box-shadow: 0 -10px 40px -15px rgba(26, 22, 19, 0.15);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  animation: slideUp 0.5s ease-out;
+}
+.dt-sticky-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.dt-sticky-title {
+  font-family: var(--font-display, 'Lora'), Georgia, serif;
+  font-style: italic;
+  font-size: 20px;
+  color: var(--ink);
+}
+.dt-sticky-title em {
+  font-style: normal;
+  font-weight: 600;
+  color: var(--accent);
+}
+.dt-sticky-desc {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-40);
+  display: block;
+}
+.dt-sticky-cta {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 12px 24px;
+  background: var(--ink);
+  color: var(--cream);
+  border-radius: 999px;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.dt-sticky-cta:hover {
+  background: #000;
+  transform: translateY(-1px);
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@media (max-width: 980px) {
+  .dt-sticky-shop-bar {
+    padding: 14px 24px;
+  }
+}
+@media (max-width: 640px) {
+  .dt-sticky-shop-bar {
+    flex-direction: column;
+    gap: 12px;
+    padding: 14px 16px 20px;
+    text-align: center;
+  }
+  .dt-sticky-left {
+    flex-direction: column;
+    gap: 4px;
+  }
+  .dt-sticky-title {
+    font-size: 17px;
+  }
+  .dt-sticky-cta {
+    width: 100%;
+    justify-content: center;
+    padding: 12px 18px;
+    font-size: 12px;
+  }
+}
+
+/* ============================================================
+   CRO Boosters & Visual Audit Refinements (2026-05-25)
+   ============================================================ */
+/* Model Portrait & Specimen side-by-side on desktop */
+.dt-hero-right {
+  display: flex;
+  flex-direction: row;
+  gap: 28px;
+  align-items: stretch;
+  justify-content: center;
+  width: 100%;
+}
+
+.dt-hero-model-container {
+  position: relative;
+  width: 100%;
+  max-width: min(440px, 100%);
+  aspect-ratio: 3 / 4;
+  background: var(--surface, var(--cream-2));
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow:
+    0 1px 2px rgba(26, 22, 19, 0.04),
+    0 30px 60px -30px rgba(26, 22, 19, 0.2);
+  display: flex;
+  flex-direction: column;
+}
+.dt-hero-models-split {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+}
+.dt-hero-model-frame {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  height: 100%;
+}
+.dt-hero-model-frame:not(:last-child) {
+  border-right: 1px solid var(--rule);
+}
+.dt-hero-model {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  flex: 1;
+  padding-bottom: 22px;
+}
+.dt-hero-model-sublabel {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: rgba(255, 251, 247, 0.95);
+  backdrop-filter: blur(4px);
+  border-top: 1px solid var(--rule);
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-60);
+  padding: 5px;
+  text-align: center;
+  z-index: 2;
+}
+.dt-hero-model-caption {
+  padding: 12px;
+  border-top: 1px solid var(--rule);
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-60);
+  background: var(--surface, var(--cream));
+  text-align: center;
+  z-index: 3;
+}
+
+/* Whole-Card Clickability & Hover Lift */
+a.dt-prod {
+  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+              box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+              border-color 0.25s ease;
+  border: 1px solid var(--rule);
+}
+a.dt-prod:hover {
+  transform: translateY(-5px);
+  border-color: var(--accent, var(--rust));
+  box-shadow: 
+    0 10px 20px rgba(26, 22, 19, 0.05),
+    0 20px 40px -15px rgba(26, 22, 19, 0.18);
+}
+a.dt-prod:hover .dt-prod-shop {
+  background: var(--ink);
+  color: var(--cream);
+}
+a.dt-prod:hover .dt-prod-shop span {
+  transform: translate(2px, -2px);
+}
+
+/* Pulsating Stock Indicator */
+.dt-prod-stock {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #3A8A4A;
+  margin-top: 10px;
+}
+.dt-stock-pulse {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #3A8A4A;
+  position: relative;
+  display: inline-block;
+}
+.dt-stock-pulse::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  background: #3A8A4A;
+  animation: dt-pulse 2s infinite;
+}
+@keyframes dt-pulse {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(3); opacity: 0; }
+}
+
+/* Personalized Match Rationale Tag */
+.dt-prod-match-reason {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--ink-60);
+  margin: 8px 0 0 0;
+  min-height: 2.8em;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Copy Shade Helper Tooltip */
+.dt-prod-shade {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.dt-shade-name-text {
+  border-bottom: 1px dashed var(--ink-40);
+  transition: border-color 0.2s;
+}
+.dt-prod-shade:hover .dt-shade-name-text {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+.dt-copy-tooltip {
+  font-family: var(--mono);
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background: var(--ink);
+  color: var(--cream);
+  padding: 3px 6px;
+  border-radius: 3px;
+  opacity: 0;
+  transform: translateY(3px);
+  transition: opacity 0.2s, transform 0.2s;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.dt-prod-shade:hover .dt-copy-tooltip {
+  opacity: 0.85;
+  transform: translateY(0);
+}
+.dt-copy-tooltip.copied {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  background: #3A8A4A;
+}
+
+/* Sizing Up Tier Picker for Mobile (44px target) */
+@media (max-width: 640px) {
+  .dt-tier-pills {
+    width: 100%;
+    justify-content: stretch;
+  }
+  .dt-tier-pill {
+    flex: 1;
+    min-height: 44px;
+    padding: 10px 6px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 999px;
+  }
+}
+
+/* Responsive Viewport Grid Layout for Hero & Cards */
+@media (max-width: 1200px) {
+  .dt-hero-right {
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+  }
+  .dt-hero-model-container, 
+  .dt-specimen {
+    max-width: 480px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dt-hero-attrs {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 16px !important;
+  }
+  .dt-hero-name {
+    font-size: clamp(34px, 12vw, 48px) !important;
+    line-height: 1.0 !important;
+  }
+}
+
+.dt-results section.dt-edit {
+  padding-top: 48px;
+}
+

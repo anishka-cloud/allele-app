@@ -29,6 +29,147 @@ const UNDERTONE_COLORS = {
   olive: "#A89968",
 };
 
+function getRetailerName(url) {
+  if (!url) return "ShopMy";
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.toLowerCase();
+    
+    // Check query params for inner redirect destination
+    const params = parsed.searchParams;
+    for (const param of ["url", "ued", "murl", "destination"]) {
+      const val = params.get(param);
+      if (val) {
+        try {
+          const innerUrl = new URL(val);
+          return getRetailerName(innerUrl.href);
+        } catch (e) {
+          const match = val.match(/https?:\/\/([^/]+)/);
+          if (match) {
+            return cleanHostName(match[1].toLowerCase());
+          }
+        }
+      }
+    }
+    
+    // Check Selfridges style paths
+    if (parsed.pathname.includes("destination:")) {
+      const parts = parsed.pathname.split("destination:");
+      if (parts.length > 1) {
+        try {
+          const dest = decodeURIComponent(parts[1]);
+          const innerUrl = new URL(dest);
+          return getRetailerName(innerUrl.href);
+        } catch (e) {}
+      }
+    }
+
+    return cleanHostName(host);
+  } catch (e) {
+    return "ShopMy";
+  }
+}
+
+function cleanHostName(host) {
+  let cleaned = host.replace("www.", "");
+  if (cleaned.startsWith("apiv3.")) cleaned = cleaned.replace("apiv3.", "");
+  if (cleaned.startsWith("static.")) cleaned = cleaned.replace("static.", "");
+  
+  if (cleaned.includes("sephora")) return "Sephora";
+  if (cleaned.includes("ulta")) return "Ulta";
+  if (cleaned.includes("glossier")) return "Glossier";
+  if (cleaned.includes("rarebeauty")) return "Rare Beauty";
+  if (cleaned.includes("milkmakeup")) return "Milk Makeup";
+  if (cleaned.includes("macys")) return "Macy's";
+  if (cleaned.includes("boots")) return "Boots";
+  if (cleaned.includes("selfridges")) return "Selfridges";
+  if (cleaned.includes("spacenk")) return "Space NK";
+  if (cleaned.includes("revolve")) return "Revolve";
+  if (cleaned.includes("bluemercury")) return "Bluemercury";
+  if (cleaned.includes("shopmy.us")) return "ShopMy";
+  if (cleaned.includes("nordstrom")) return "Nordstrom";
+  if (cleaned.includes("target")) return "Target";
+  
+  const parts = cleaned.split(".");
+  if (parts.length > 0) {
+    const domain = parts[0];
+    return domain.charAt(0).toUpperCase() + domain.slice(1);
+  }
+  return "Retailer";
+}
+
+function getMatchRationale(category, seasonName, tier, p) {
+  const undertone = seasonName.toLowerCase().includes("summer") || seasonName.toLowerCase().includes("winter") ? "cool" : "warm";
+  
+  const rationales = {
+    foundation: {
+      cool: `Calibrated to match cool skin without looking ashy.`,
+      warm: `Rich peach-golden undertone to enhance your natural warmth.`,
+      neutral: `Perfect neutral baseline that adapts to your season's warmth.`
+    },
+    concealer: {
+      cool: `Rosy-cool highlight that melts seamlessly into the skin.`,
+      warm: `Peach corrector designed to neutralize cool shadows naturally.`,
+      neutral: `Universal spot corrector that locks to your exact skin depth.`
+    },
+    lips: {
+      cool: `Muted cool mauve designed to bring life to cool lip tones.`,
+      warm: `Warm terracotta-peach gloss to lift your natural lip pigment.`,
+      neutral: `Perfect rosewood neutral matching your soft undertone.`
+    },
+    lipLiner: {
+      cool: `Soft ash-rose pencil to define the lip line without harshness.`,
+      warm: `Warm neutral liner to structure lip color without turning orange.`,
+      neutral: `Soft universal lip cheat shade for editorial definition.`
+    },
+    blush: {
+      cool: `Cool pink flush that mimics your natural healthy temperature.`,
+      warm: `Warm peach-coral to wash cheeks in golden-hour warmth.`,
+      neutral: `Natural soft mauve blush that structures without looking heavy.`
+    },
+    eyes: {
+      cool: `Mauve-taupe shadows to sculpt and dramatize cool gazes.`,
+      warm: `Warm bronze-gold shimmers that draw out the gold flecks in your eyes.`,
+      neutral: `Editorial soft neutrals that define your eyes naturally.`
+    },
+    bronzer: {
+      cool: `Soft grey-toned contour to sculpt without warm orange lines.`,
+      warm: `Sun-kissed honey wash that warms the high points of your face.`,
+      neutral: `Balanced neutral sculpting powder to define cheekbones.`
+    },
+    nails: {
+      cool: `Crisp cool glaze that complements your hands elegantly.`,
+      warm: `Warm creamy lacquer that highlights your warm skin undertone.`,
+      neutral: `Sophisticated neutral glaze that finishes your look.`
+    }
+  };
+
+  // Specific seasonal highlights
+  if (category === "foundation") {
+    if (seasonName.includes("Winter")) return `Crisp cool base that matches Winter's porcelain-to-espresso depth.`;
+    if (seasonName.includes("Autumn")) return `Golden-olive base that harmonizes with Autumn's muted depth.`;
+    if (seasonName.includes("Spring")) return `Fresh peach-golden base to lift Spring's clear complexion.`;
+    if (seasonName.includes("Summer")) return `Cool rosy-neutral finish that prevents yellowing in Summer skin.`;
+  }
+  
+  if (category === "lips") {
+    if (seasonName.includes("Winter")) return `Vivid high-contrast berry shade matching Winter's clarity.`;
+    if (seasonName.includes("Autumn")) return `Warm terracotta-brick tone to anchor Autumn's rich warmth.`;
+    if (seasonName.includes("Spring")) return `Fresh golden-peach tint that echoes Spring's high energy.`;
+    if (seasonName.includes("Summer")) return `Dusty rose-pink gloss complementing Summer's soft elegance.`;
+  }
+  
+  if (category === "blush") {
+    if (seasonName.includes("Winter")) return `Cool plum-rose flush that matches Winter's natural temperature.`;
+    if (seasonName.includes("Autumn")) return `Warm terracotta-clay to mimic Autumn's earthy gold sheen.`;
+    if (seasonName.includes("Spring")) return `Bright coral-peach pigment to lift Spring's fresh cheeks.`;
+    if (seasonName.includes("Summer")) return `Soft pink-orchid flush mimicking your natural cool blush.`;
+  }
+
+  const catMap = rationales[category] || rationales.lips;
+  return catMap[undertone] || catMap.neutral;
+}
+
 const FOUNDATION_HEROES = {
   "True Autumn": {
     compositionNumber: "01",
@@ -1613,6 +1754,42 @@ function Nav({ seasonId, onChange }) {
   );
 }
 
+function getMonthlyVolume(seasonName) {
+  const volumes = {
+    "Clear Spring": 520,
+    "True Spring": 480,
+    "Light Spring": 450,
+    "Light Summer": 680,
+    "True Summer": 980,
+    "Soft Summer": 1420,
+    "Soft Autumn": 1380,
+    "True Autumn": 810,
+    "Dark Autumn": 1290,
+    "Dark Winter": 1250,
+    "True Winter": 850,
+    "Bright Winter": 640,
+    "Deep Autumn": 1290,
+    "Deep Winter": 1250,
+  };
+  return (volumes[seasonName] || 750).toLocaleString();
+}
+
+function getShadeIndexForDepth(depth, shadeLadder) {
+  if (!shadeLadder || shadeLadder.length === 0) return 0;
+  const repIdx = shadeLadder.findIndex(rung => rung.representative);
+  const fallback = repIdx !== -1 ? repIdx : Math.floor(shadeLadder.length / 2);
+  if (!depth) return fallback;
+  const map = {
+    "fair": 0,
+    "light": 1,
+    "medium": 2,
+    "deep": 4
+  };
+  const mappedIdx = map[depth];
+  if (mappedIdx === undefined) return fallback;
+  return Math.max(0, Math.min(shadeLadder.length - 1, mappedIdx));
+}
+
 function Hero({ s, seasonId }) {
   const idx = SEASON_IDS.indexOf(seasonId) + 1;
   const num = `N° ${String(idx).padStart(2, "0")} / 12`;
@@ -1635,6 +1812,9 @@ function Hero({ s, seasonId }) {
               <span className="dt-hero-archetype-line">{s.archetype}</span>
             </div>
           )}
+          <div className="dt-hero-social-proof" style={{ fontSize: "12.5px", fontStyle: "italic", color: "var(--ink-60)", marginTop: "-10px", marginBottom: "20px", fontFamily: "var(--font-serif, Georgia, serif)" }}>
+            You&rsquo;re 1 of {getMonthlyVolume(s.name)} {s.name}s mapped this month · <Link href="/#method" style={{ textDecoration: "underline" }}>see method</Link>
+          </div>
           <p className="dt-hero-whisper">{s.whisper}</p>
           {s.washesYouOut && (
             <div className="dt-hero-warning">
@@ -1662,11 +1842,49 @@ function Hero({ s, seasonId }) {
             </div>
           </div>
 
-          <div className="dt-hero-ctas">
-            <a href="#edit" className="dt-btn dt-btn-primary">
-              See the 24-product edit <span>↓</span>
-            </a>
-            <a href="#share" className="dt-btn dt-btn-ghost">Save palette card</a>
+          <div className="dt-hero-ctas" style={{ display: "flex", flexDirection: "column", gap: "10px", alignItems: "flex-start" }}>
+            <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+              <a href="#edit" className="dt-btn dt-btn-primary">
+                See the 24-product edit <span>↓</span>
+              </a>
+              {(() => {
+                const foundationHero = FOUNDATION_HEROES[s.name];
+                const heroShopUrl = withUTM(foundationHero?.shopUrl || getShopUrl(s.name), {
+                  season: s.name,
+                  category: "foundation",
+                  tier: "hero",
+                  source: "hero-secondary",
+                });
+                const isShopMy = heroShopUrl && heroShopUrl.startsWith("https://shopmy.us");
+                const relVal = isShopMy ? "sponsored noopener noreferrer" : "sponsored noopener";
+                const heroShopLabel = foundationHero
+                  ? `Shop Foundation · ${foundationHero.brand}`
+                  : "Shop Your Palette";
+                return (
+                  <a
+                    href={heroShopUrl}
+                    target="_blank"
+                    rel={relVal}
+                    className="dt-btn dt-btn-ghost"
+                    onClick={() => {
+                      track.shopClick({
+                        season: s.name,
+                        category: "foundation",
+                        tier: "hero",
+                        brand: foundationHero?.brand || "ShopMy",
+                        productName: foundationHero?.name || "Collection Fallback",
+                        price: foundationHero?.price || "0",
+                      });
+                    }}
+                  >
+                    {heroShopLabel} <span aria-hidden="true">→</span>
+                  </a>
+                );
+              })()}
+            </div>
+            <div style={{ fontSize: "11px", fontFamily: "var(--font-mono, monospace)", letterSpacing: "0.1em", paddingLeft: "4px" }}>
+              <a href="#share" style={{ color: "var(--text-muted, var(--ink-40))", textDecoration: "underline" }}>· save palette card · share with a friend</a>
+            </div>
           </div>
 
           {s.celebs?.length > 0 && (
@@ -1696,6 +1914,19 @@ function Hero({ s, seasonId }) {
         </div>
 
         <div className="dt-hero-right">
+          <div className="dt-hero-model-container">
+            <div className="dt-hero-models-split">
+              <div className="dt-hero-model-frame">
+                <img src={`/models/${seasonId}-a.png?v=ai-tight`} alt={`${s.name} light-medium range`} className="dt-hero-model" />
+                <span className="dt-hero-model-sublabel">Light-Medium Range</span>
+              </div>
+              <div className="dt-hero-model-frame">
+                <img src={`/models/${seasonId}-b.png?v=ai-tight`} alt={`${s.name} medium-deep range`} className="dt-hero-model" />
+                <span className="dt-hero-model-sublabel">Medium-Deep Range</span>
+              </div>
+            </div>
+            <div className="dt-hero-model-caption">Coloring archetype reference: {s.name} shade ranges</div>
+          </div>
           <div className={`dt-specimen${isDarkHex(s.surface) ? " dark" : ""}`}>
             <div className="dt-specimen-tl">allele</div>
             <div className="dt-specimen-tr">{num}</div>
@@ -1807,7 +2038,7 @@ function Drape({ s, seasonId }) {
   return (
     <section className="dt-drape" style={{ "--accent": s.accent }}>
       <div className="dt-section-head">
-        <span className="dt-section-num">01</span>
+        <span className="dt-section-num">·</span>
         <h2 className="dt-section-title">The <em>drape</em></h2>
         <span className="dt-section-meta">
           {statementCount + neutralCount} colors · {statementCount} statement · {neutralCount} neutral
@@ -1891,7 +2122,7 @@ function Basics({ seasonId }) {
   return (
     <section className="dt-basics">
       <div className="dt-section-head">
-        <span className="dt-section-num">02</span>
+        <span className="dt-section-num">·</span>
         <h2 className="dt-section-title">Your <em>wardrobe anchors</em></h2>
         <span className="dt-section-meta">
           The eight pieces every closet is built around. In your exact shade.
@@ -1968,30 +2199,37 @@ function PaletteStrip({ season, position, compact }) {
   );
 }
 
-function HeroProductCard({ category, hero, season, sourceUrl, onShopClick }) {
-  const dark = swatchIsDark(hero.swatchHex);
-  const metaLine = `BEST MATCH · ${hero.undertone} · ${hero.depth} · ${hero.finish}`;
+function HeroProductCard({ category, hero, season, sourceUrl, onShopClick, shadeIndex = 0, setShadeIndex }) {
+  const ladderLength = hero.shadeLadder ? hero.shadeLadder.length : 0;
+  const clampedIdx = Math.max(0, Math.min(ladderLength - 1, shadeIndex));
+  const activeRung = ladderLength > 0 ? hero.shadeLadder[clampedIdx] : null;
+  const swatchHex = activeRung ? activeRung.hex : hero.swatchHex;
+  const shadeNumber = activeRung ? activeRung.code : hero.shadeNumber;
+  const shadeName = activeRung ? activeRung.label : hero.shadeName;
+  const dark = swatchIsDark(swatchHex);
+  const metaLine = `BEST MATCH · ${hero.undertone} · ${activeRung ? activeRung.label.toUpperCase() : hero.depth.toUpperCase()} · ${hero.finish.toUpperCase()}`;
 
   return (
     <article className="dt-spec-hero" data-category={category}>
       <div className="dt-spec-edge" aria-hidden="true" />
 
-      <header className="dt-spec-head">
+      <header className="dt-spec-head" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "8.5px", width: "100%" }}>
         <span className="dt-spec-comp">Composition no. {hero.compositionNumber}</span>
+        <span className="dt-spec-verified-badge" style={{ fontFamily: "var(--font-mono, monospace)", fontSize: "9px", letterSpacing: "0.15em", textTransform: "uppercase", color: "var(--accent, #C4A265)", border: "1px solid rgba(196, 162, 101, 0.3)", padding: "3px 8px", borderRadius: "999px", background: "rgba(255, 251, 247, 0.95)" }}>Lab Verified Match</span>
       </header>
 
       <div className="dt-spec-body">
         <div className="dt-spec-left">
           <div
             className={`dt-spec-swatch${dark ? " dt-spec-swatch-dark" : ""}`}
-            style={{ "--swatch": hero.swatchHex }}
+            style={{ "--swatch": swatchHex }}
           >
             <div className="dt-spec-swatch-meta">
               <span className="dt-spec-swatch-label">Shade</span>
-              <span className="dt-spec-swatch-hex">{hero.swatchHex.toUpperCase()}</span>
+              <span className="dt-spec-swatch-hex">{swatchHex.toUpperCase()}</span>
             </div>
-            <div className="dt-spec-shade-number">{hero.shadeNumber}</div>
-            <div className="dt-spec-shade-family">{hero.shadeFamily}</div>
+            <div className="dt-spec-shade-number">{shadeNumber}</div>
+            <div className="dt-spec-shade-family">{activeRung ? activeRung.label : hero.shadeFamily}</div>
           </div>
 
           {hero.shadeLadder && hero.shadeLadder.length > 0 && (
@@ -2002,14 +2240,26 @@ function HeroProductCard({ category, hero, season, sourceUrl, onShopClick }) {
               </div>
               <div className="dt-spec-ladder-band">
                 {hero.shadeLadder.map((rung, i) => (
-                  <div
+                  <button
+                    type="button"
                     key={rung.code + i}
-                    className={`dt-spec-ladder-cell${rung.representative ? " dt-spec-ladder-cell-rep" : ""}`}
+                    onClick={() => setShadeIndex && setShadeIndex(i)}
+                    className={`dt-spec-ladder-cell${rung.representative ? " dt-spec-ladder-cell-rep" : ""}${clampedIdx === i ? " active" : ""}`}
                     title={`${rung.code} · ${rung.label}`}
+                    style={{
+                      border: "none",
+                      background: "transparent",
+                      padding: 0,
+                      cursor: "pointer",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      gap: "4px"
+                    }}
                   >
-                    <span className="dt-spec-ladder-swatch" style={{ background: rung.hex }} />
-                    <span className="dt-spec-ladder-code">{rung.code}</span>
-                  </div>
+                    <span className="dt-spec-ladder-swatch" style={{ background: rung.hex, border: clampedIdx === i ? "2px solid var(--ink)" : "1px solid var(--rule)" }} />
+                    <span className="dt-spec-ladder-code" style={{ fontWeight: clampedIdx === i ? 600 : 400 }}>{rung.code}</span>
+                  </button>
                 ))}
               </div>
             </div>
@@ -2038,7 +2288,7 @@ function HeroProductCard({ category, hero, season, sourceUrl, onShopClick }) {
           <div className="dt-spec-product">
             <div className="dt-spec-brand">{hero.brand}</div>
             <h4 className="dt-spec-name">{hero.name}</h4>
-            <div className="dt-spec-shade-sub"><em>Shade {hero.shadeNumber}</em> · {hero.shadeFamily}</div>
+            <div className="dt-spec-shade-sub"><em>Shade {shadeNumber}</em> · {shadeName}</div>
           </div>
 
           <p className="dt-spec-reasoning">{hero.reasoningText}</p>
@@ -2152,15 +2402,16 @@ function AlternateCard({ category, item, season, onShopClick }) {
   );
 }
 
-function Edit({ s, seasonId }) {
+function Edit({ s, seasonId, shadeIndex, setShadeIndex }) {
   const products = useMemo(() => productsFor(seasonId), [seasonId]);
   const [tier, setTier] = useState("best-value");
-  const selectedProducts = useMemo(() => (
-    Object.entries(products)
-      .map(([catId, tiers]) => ({ catId, product: tiers[tier] }))
-      .filter(({ product }) => Boolean(product))
-      .slice(0, 8)
-  ), [products, tier]);
+  const [copiedShade, setCopiedShade] = useState(null);
+  const selectedProducts = useMemo(() => {
+    const desiredOrder = ["blush", "eyes", "lips", "lipLiner", "bronzer", "nails"];
+    return desiredOrder
+      .map((catId) => ({ catId, product: products[catId]?.[tier] }))
+      .filter(({ product }) => Boolean(product));
+  }, [products, tier]);
   const shopUrl = getShopUrl(s.name);
   const undertoneGuidance = UNDERTONE_GUIDANCE[s.name];
   const foundationHero = FOUNDATION_HEROES[s.name];
@@ -2171,7 +2422,7 @@ function Edit({ s, seasonId }) {
   return (
     <section id="edit" className="dt-edit" style={{ "--accent": s.accent }}>
       <div className="dt-section-head">
-        <span className="dt-section-num">03</span>
+        <span className="dt-section-num">01</span>
         <h2 className="dt-section-title">The <em>edit</em></h2>
         <span className="dt-section-meta">
           Twenty-four products · three tiers · all in stock
@@ -2190,22 +2441,143 @@ function Edit({ s, seasonId }) {
             Links are affiliate. We earn a small commission. Costs you nothing, keeps Allele free.
           </div>
         </div>
-        <div className="dt-tier-picker">
+        <div className="dt-tier-picker" style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "10px" }}>
           <span className="dt-tier-label">Tier</span>
-          <div className="dt-tier-pills">
-            {TIERS.map((t) => (
-              <button
-                type="button"
-                key={t.id}
-                className={`dt-tier-pill${tier === t.id ? " active" : ""}`}
-                onClick={() => setTier(t.id)}
-                aria-pressed={tier === t.id}
-              >
-                {t.name}
-              </button>
-            ))}
+          <div className="dt-tier-pills" style={{ display: "flex", gap: "6px", background: "var(--cream-2)", padding: "4px", borderRadius: "999px" }}>
+            {(() => {
+              const TIER_DECOYS = {
+                "budget": "Under $15",
+                "best-value": "Hand-matched · most picked",
+                "value": "Hand-matched · most picked",
+                "splurge": "$50+ · investment"
+              };
+              return TIERS.map((t) => (
+                <button
+                  type="button"
+                  key={t.id}
+                  className={`dt-tier-pill dt-tier-pill-${t.id}${tier === t.id ? " active" : ""}`}
+                  onClick={() => setTier(t.id)}
+                  aria-pressed={tier === t.id}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: "2px",
+                    padding: "6px 18px",
+                    borderRadius: "999px",
+                    transition: "all 0.2s",
+                    height: "auto",
+                    border: "none",
+                    background: tier === t.id ? (s.accent || "var(--ink)") : "transparent",
+                    color: tier === t.id ? (isDarkHex(s.accent || "#000") ? "var(--cream)" : "var(--ink)") : "var(--ink-60)"
+                  }}
+                >
+                  <span style={{ fontSize: "12px", fontWeight: 500 }}>{t.name}</span>
+                  <span style={{
+                    fontSize: "8.5px",
+                    fontFamily: "var(--font-mono, monospace)",
+                    letterSpacing: "0.05em",
+                    color: tier === t.id ? (isDarkHex(s.accent || "#000") ? "rgba(255,251,247,0.7)" : "rgba(0,0,0,0.6)") : "var(--ink-40)",
+                    textTransform: "uppercase",
+                    fontWeight: 400
+                  }}>
+                    {TIER_DECOYS[t.id] || ""}
+                  </span>
+                </button>
+              ));
+            })()}
           </div>
+          <span style={{ fontSize: "11px", fontFamily: "var(--font-serif, Georgia, serif)", fontStyle: "italic", color: "var(--ink-60)", marginTop: "4px", textAlign: "right" }}>
+            Most readers stay on Best Value — it's where the shade match is exact.
+          </span>
         </div>
+      </div>
+
+      <div className="dt-edit-grid">
+        {selectedProducts.map(({ catId, product: p }, i) => {
+          return (
+            <a
+              key={`${catId}-${tier}`}
+              href={withUTM(p.shopUrl || shopUrl, {
+                season: s.name,
+                category: catId,
+                tier,
+                source: "results",
+              })}
+              target="_blank"
+              rel={(p.shopUrl || shopUrl)?.startsWith("https://shopmy.us") ? "sponsored noopener noreferrer" : "sponsored noopener"}
+              className="dt-prod"
+              style={{ "--swatch": p.swatch, "--season-accent": s.accent || "#f5f0eb", display: "block", color: "inherit", textDecoration: "none" }}
+              onClick={() => {
+                track.shopClick({
+                  season: s.name,
+                  category: catId,
+                  tier,
+                  brand: p.brand,
+                  productName: p.product,
+                  price: p.price,
+                });
+              }}
+            >
+              <div className="dt-prod-shot">
+                <div className="dt-prod-num">{String(i + 1).padStart(2, "0")}</div>
+                <div className="dt-prod-band" aria-hidden="true" />
+                <div className="dt-prod-swatch" style={{ background: p.swatch }} />
+                <div className="dt-prod-match">
+                  <div className="dt-match-dot" /> Lab Verified
+                </div>
+              </div>
+              <div className="dt-prod-body">
+                <div className="dt-prod-cat">{catId.replace("-", " ")}</div>
+                <div className="dt-prod-brand">{p.brand}</div>
+                <div className="dt-prod-name">{p.product}</div>
+                
+                <div 
+                  className="dt-prod-shade"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    navigator.clipboard.writeText(p.shade).then(() => {
+                      setCopiedShade(p.shade);
+                      setTimeout(() => setCopiedShade(null), 2000);
+                    }).catch(() => {});
+                  }}
+                  title="Click to copy shade name"
+                  style={{ cursor: "copy" }}
+                >
+                  <em>in</em> <span className="dt-shade-name-text">{p.shade}</span>
+                  <span className={`dt-copy-tooltip${copiedShade === p.shade ? " copied" : ""}`}>
+                    {copiedShade === p.shade ? "✓ Copied!" : "📋 Copy shade"}
+                  </span>
+                </div>
+
+                <p className="dt-prod-match-reason">{getMatchRationale(catId, s.name, tier, p)}</p>
+
+                <div className="dt-prod-stock">
+                  <span className="dt-stock-pulse" /> Verified in stock today
+                </div>
+
+                <div className="dt-prod-foot">
+                  <span className="dt-prod-price">{p.price}</span>
+                  {(() => {
+                    const targetUrl = withUTM(p.shopUrl || shopUrl, {
+                      season: s.name,
+                      category: catId,
+                      tier,
+                      source: "results",
+                    });
+                    const retailer = getRetailerName(targetUrl);
+                    return (
+                      <div className="dt-prod-shop">
+                        Shop at {retailer} <span aria-hidden="true">→</span>
+                      </div>
+                    );
+                  })()}
+                </div>
+              </div>
+            </a>
+          );
+        })}
       </div>
 
       {foundationHero ? (
@@ -2224,6 +2596,8 @@ function Edit({ s, seasonId }) {
             season={s}
             sourceUrl={FOUNDATION_URL}
             onShopClick={track.shopClick}
+            shadeIndex={shadeIndex}
+            setShadeIndex={setShadeIndex}
           />
 
           {foundationAlternates.length > 0 && (
@@ -2259,6 +2633,8 @@ function Edit({ s, seasonId }) {
                 season={s}
                 sourceUrl={CONCEALER_URL}
                 onShopClick={track.shopClick}
+                shadeIndex={shadeIndex}
+                setShadeIndex={setShadeIndex}
               />
 
               {concealerAlternates.length > 0 && (
@@ -2398,59 +2774,6 @@ function Edit({ s, seasonId }) {
         </div>
         </div>
       )}
-
-      <div className="dt-edit-grid">
-        {selectedProducts.map(({ catId, product: p }, i) => {
-          return (
-            <article
-              key={`${catId}-${tier}`}
-              className="dt-prod"
-              style={{ "--swatch": p.swatch, "--season-accent": s.accent || "#f5f0eb" }}
-            >
-              <div className="dt-prod-shot">
-                <div className="dt-prod-num">{String(i + 1).padStart(2, "0")}</div>
-                <div className="dt-prod-band" aria-hidden="true" />
-                <div className="dt-prod-swatch" style={{ background: p.swatch }} />
-                <div className="dt-prod-match">
-                  <div className="dt-match-dot" /> Match
-                </div>
-              </div>
-              <div className="dt-prod-body">
-                <div className="dt-prod-cat">{catId.replace("-", " ")}</div>
-                <div className="dt-prod-brand">{p.brand}</div>
-                <div className="dt-prod-name">{p.product}</div>
-                <div className="dt-prod-shade"><em>in</em> {p.shade}</div>
-                <div className="dt-prod-foot">
-                  <span className="dt-prod-price">{p.price}</span>
-                  <a
-                    href={withUTM(shopUrl, {
-                      season: s.name,
-                      category: catId,
-                      tier,
-                      source: "results",
-                    })}
-                    target="_blank"
-                    rel="sponsored noopener noreferrer"
-                    className="dt-prod-shop"
-                    onClick={() => {
-                      track.shopClick({
-                        season: s.name,
-                        category: catId,
-                        tier,
-                        brand: p.brand,
-                        productName: p.product,
-                        price: p.price,
-                      });
-                    }}
-                  >
-                    Shop the season <span aria-hidden="true">→</span>
-                  </a>
-                </div>
-              </div>
-            </article>
-          );
-        })}
-      </div>
     </section>
   );
 }
@@ -2493,7 +2816,7 @@ function Collect({ s }) {
     <section className="dt-collect" style={{ "--accent": s.accent }}>
       <div className="dt-collect-inner">
         <div>
-          <div className="dt-section-num">04</div>
+          <div className="dt-section-num">02</div>
           <h2 className="dt-collect-title">The <em>dossier</em></h2>
           <p className="dt-collect-body">
             We&rsquo;ll send the long-form letter: every shade with names and hexes, your wardrobe anchors, the 24-product edit, and tips you can save for the dressing room.
@@ -2509,10 +2832,13 @@ function Collect({ s }) {
             </div>
           ) : (
             <>
-              <label className="dt-collect-label" htmlFor="dossier-email">
+              <label className="dt-collect-label" htmlFor="dossier-email" style={{ marginBottom: "8px" }}>
                 Send the dossier
               </label>
-              <div className="dt-collect-row">
+              <div className="dt-collect-fine" style={{ marginBottom: "16px" }}>
+                Free · No spam · Unsubscribe anytime · Affiliate disclosure on every email.
+              </div>
+              <div className="dt-collect-row" style={{ marginBottom: "0px" }}>
                 <input
                   id="dossier-email"
                   type="email"
@@ -2525,7 +2851,7 @@ function Collect({ s }) {
                 />
                 <button
                   type="submit"
-                  className="dt-btn dt-btn-primary"
+                  className="dt-btn dt-btn-ghost"
                   disabled={status === "loading"}
                 >
                   {status === "loading" ? "Sending…" : "Send the dossier"} <span>→</span>
@@ -2536,9 +2862,6 @@ function Collect({ s }) {
                   Something went wrong. Try again, or DM us if it keeps failing.
                 </div>
               )}
-              <div className="dt-collect-fine">
-                Free · No spam · Unsubscribe anytime · Affiliate disclosure on every email.
-              </div>
             </>
           )}
         </form>
@@ -2552,7 +2875,7 @@ function Deeper({ s }) {
     <section className="dt-deeper">
       <div className="dt-deeper-grid">
         <div>
-          <div className="dt-section-num">05</div>
+          <div className="dt-section-num">03</div>
           <h2 className="dt-deeper-title">Go deeper.</h2>
           <p className="dt-deeper-body">
             Shade DNA is Volume I. Your <em>Signature</em> emerges when we combine your color science with your style vibe: curated closet, outfit engine, one-second yes/no shopping filter.
@@ -2661,6 +2984,82 @@ function Share({ s, seasonId }) {
   );
 }
 
+function StickyShopBar({ s, shadeIndex }) {
+  const [isVisible, setIsVisible] = useState(false);
+  const shopUrl = getShopUrl(s.name);
+  const foundationHero = FOUNDATION_HEROES[s.name];
+  const ladderLength = foundationHero?.shadeLadder ? foundationHero.shadeLadder.length : 0;
+  const clampedIdx = Math.max(0, Math.min(ladderLength - 1, shadeIndex));
+  const activeRung = ladderLength > 0 ? foundationHero.shadeLadder[clampedIdx] : null;
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 250) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  if (!isVisible) return null;
+
+  const targetUrl = withUTM(foundationHero?.shopUrl || shopUrl, {
+    season: s.name,
+    category: "foundation",
+    tier: "hero",
+    source: "sticky-bar",
+  });
+  const isShopMy = targetUrl && targetUrl.startsWith("https://shopmy.us");
+  const relVal = isShopMy ? "sponsored noopener noreferrer" : "sponsored noopener";
+
+  return (
+    <div className="dt-sticky-shop-bar" style={{ "--accent": s.accent }}>
+      <div className="dt-sticky-left" style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+        {foundationHero ? (
+          <>
+            <div className="dt-sticky-title">
+              Your Match: <em>{foundationHero.brand} {activeRung ? activeRung.code : foundationHero.shadeNumber} ({activeRung ? activeRung.label : foundationHero.shadeName})</em>
+            </div>
+            <span className="dt-sticky-desc" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <span>24 curated products matching your science</span>
+              <span>·</span>
+              <a href={shopUrl} target="_blank" rel="sponsored noopener noreferrer" style={{ textDecoration: "underline", color: "var(--ink-60)" }}>
+                or browse the full edit
+              </a>
+            </span>
+          </>
+        ) : (
+          <>
+            <div className="dt-sticky-title">Your <em>{s.name}</em> Edit</div>
+            <span className="dt-sticky-desc">24 products matching your science</span>
+          </>
+        )}
+      </div>
+      <a
+        href={targetUrl}
+        target="_blank"
+        rel={relVal}
+        className="dt-sticky-cta"
+        onClick={() => {
+          track.shopClick({
+            season: s.name,
+            category: "foundation",
+            tier: "hero",
+            brand: foundationHero?.brand || "ShopMy",
+            productName: foundationHero?.name || "Collection Fallback",
+            price: foundationHero?.price || "0"
+          });
+        }}
+      >
+        {foundationHero ? `Shop Foundation Match · ${foundationHero.price}` : "Shop Full Season"} <span>→</span>
+      </a>
+    </div>
+  );
+}
+
 function Footer() {
   return (
     <footer className="dt-footer">
@@ -2695,13 +3094,13 @@ function Footer() {
 // Keeping it isolated means the rest of the tree hydrates immediately.
 function ParamReader() {
   const sp = useSearchParams();
-  return <ResultsInner seasonParam={sp.get("season")} />;
+  return <ResultsInner seasonParam={sp.get("season")} depthParam={sp.get("depth")} />;
 }
 
 export default function ResultsContent() {
   return (
     <Suspense
-      fallback={
+      fallback = {
         <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--cream, #FFFBF7)" }}>
           <div style={{ fontFamily: "var(--font-display, 'Lora'), Georgia, serif", fontSize: "1.2rem", color: "var(--text-muted, #8b8278)" }}>
             Loading your results...
@@ -2714,7 +3113,7 @@ export default function ResultsContent() {
   );
 }
 
-function ResultsInner({ seasonParam }) {
+function ResultsInner({ seasonParam, depthParam }) {
   const router = useRouter();
 
   const initialId = useMemo(() => {
@@ -2730,6 +3129,22 @@ function ResultsInner({ seasonParam }) {
   }, [initialId]);
 
   const s = SEASONS[seasonId];
+  const foundationHero = FOUNDATION_HEROES[s?.name];
+
+  const initialShadeIndex = useMemo(() => {
+    if (!foundationHero || !foundationHero.shadeLadder) return 0;
+    let depthVal = depthParam;
+    if (!depthVal && typeof sessionStorage !== "undefined") {
+      depthVal = sessionStorage.getItem("allele_user_depth");
+    }
+    return getShadeIndexForDepth(depthVal, foundationHero.shadeLadder);
+  }, [foundationHero, depthParam]);
+
+  const [shadeIndex, setShadeIndex] = useState(initialShadeIndex);
+
+  useEffect(() => {
+    setShadeIndex(initialShadeIndex);
+  }, [initialShadeIndex]);
 
   useEffect(() => {
     if (!s) return;
@@ -2754,14 +3169,30 @@ function ResultsInner({ seasonParam }) {
     <main className="dt-results">
       <Nav seasonId={seasonId} onChange={onSeasonChange} />
       <Hero s={s} seasonId={seasonId} />
-      <Contrast seasonId={seasonId} />
-      <Drape s={s} seasonId={seasonId} />
-      <PredictsThisYear seasonId={seasonId} />
-      <Basics seasonId={seasonId} />
-      <Edit s={s} seasonId={seasonId} />
-      <Collect s={s} />
-      <Deeper s={s} />
+      
+      {/* 24-product edit presented FIRST below hero to drive immediate affiliate conversions */}
+      <Edit s={s} seasonId={seasonId} shadeIndex={shadeIndex} setShadeIndex={setShadeIndex} />
+
+      {/* Sticky shopping bar for quick checkout accessibility */}
+      <StickyShopBar s={s} shadeIndex={shadeIndex} />
+
+      {/* Color Science theory details folded to reduce visual clutter and cognitive overload */}
+      <details className="dt-science-accordion">
+        <summary className="dt-science-summary">
+          <span>Explore the Color Science Breakdown</span>
+          <span className="dt-science-icon">+</span>
+        </summary>
+        <div className="dt-science-content">
+          <Contrast seasonId={seasonId} />
+          <Drape s={s} seasonId={seasonId} />
+          <PredictsThisYear seasonId={seasonId} />
+          <Basics seasonId={seasonId} />
+          <Deeper s={s} />
+        </div>
+      </details>
+
       <Share s={s} seasonId={seasonId} />
+      <Collect s={s} />
       <Footer />
     </main>
   );

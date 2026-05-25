@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { track } from "@/lib/analytics";
 import "./landing.css";
 
 const SEASONS = [
@@ -30,8 +31,54 @@ const SEASONS = [
 const ALL_SEASONS = SEASONS.flatMap((f) => f.items);
 const HERO_INDICES = [7, 4, 0, 11]; // True Autumn, True Summer, Clear Spring, Bright Winter
 
+const MIRROR_TESTS = {
+  undertone: {
+    eyebrow: "Axis One · Undertone",
+    title: "The Plain White <em>Tee Trap</em>",
+    instruction: "Hold a pure, optical white shirt up to your chin in natural daylight, then hold an oatmeal or warm cream shirt. Watch how your skin responds to each canvas.",
+    verdict: "If pure white makes your skin look radiant and clear, you lean <em>Rosewater (Cool)</em>. If pure white washes you out and makes you look tired, but warm cream makes your skin look plump and golden, you lean <em>Honey (Warm)</em>.",
+    leftBg: "#FFFFFF",
+    leftLabel: "Rosewater (Cool)",
+    leftDesc: "Radiant in pure white",
+    leftClass: "dark-text",
+    rightBg: "#F4EBD8",
+    rightLabel: "Honey (Warm)",
+    rightDesc: "Glows in warm cream",
+    rightClass: "dark-text"
+  },
+  chroma: {
+    eyebrow: "Axis Three · Chroma",
+    title: "The Lipstick <em>Cling Test</em>",
+    instruction: "Swipe a bright, pure neon-pink or red lipstick on one side of your lips, and a soft, dusty rosewood or terracotta on the other. Look at which shade looks like a part of you.",
+    verdict: "If the soft, dusty shade looks natural, expensive, and harmonized, you lean <em>Watercolor (Muted)</em>. If the soft shade makes you look grey/sick, but the vivid neon makes your eyes pop and your skin glow, you lean <em>Neon (Bright)</em>.",
+    leftBg: "#E91E63",
+    leftLabel: "Neon (Bright)",
+    leftDesc: "Carries high-intensity pop",
+    leftClass: "light-text",
+    rightBg: "#B88E8D",
+    rightLabel: "Watercolor (Muted)",
+    rightDesc: "Harmonizes in soft smoky tones",
+    rightClass: "light-text"
+  },
+  depth: {
+    eyebrow: "Axis Two · Depth",
+    title: "The Black <em>Turtleneck Test</em>",
+    instruction: "Put on a heavy, stark black top or turtleneck and stand in front of a mirror under natural light. Focus on your jawline and chin shadow.",
+    verdict: "If your face stands out crisply and the black frames you without drawing focus away, you are <em>Charcoal-coded (Deep)</em>. If the black washes you out, 'eats' your jawline, or creates deep shadows under your chin, you lean <em>Chalk-coded (Light)</em>.",
+    leftBg: "#EAEAEA",
+    leftLabel: "Chalk-Coded (Light)",
+    leftDesc: "Airy, soft, light-depth frames",
+    leftClass: "dark-text",
+    rightBg: "#121212",
+    rightLabel: "Charcoal-Coded (Deep)",
+    rightDesc: "Anchored by rich, dark shadow",
+    rightClass: "light-text"
+  }
+};
+
 export default function Home() {
   const [heroIdx, setHeroIdx] = useState(0);
+  const [activeTest, setActiveTest] = useState("undertone");
   useEffect(() => {
     const id = setInterval(() => {
       setHeroIdx((i) => (i + 1) % HERO_INDICES.length);
@@ -54,7 +101,12 @@ export default function Home() {
             <a href="#showcase">Results</a>
             <a href="#science">Philosophy</a>
           </div>
-          <Link className="l-nav-cta" href="/quiz">Begin the analysis →</Link>
+          <Link className="l-nav-cta" href="/quiz?source=homepage_nav" onClick={() => {
+            track.quizStarted("homepage_nav");
+            if (typeof sessionStorage !== "undefined") {
+              sessionStorage.setItem("allele_quiz_started", "true");
+            }
+          }}>Begin the analysis →</Link>
         </div>
       </nav>
 
@@ -84,7 +136,12 @@ export default function Home() {
               Twelve questions. One archetype. A palette matched to your skin, your eyes, and the <em>light you live in</em>. Free to take. Free to retake. Yours forever.
             </p>
             <div className="l-hero-cta-row">
-              <Link className="l-cta-primary" href="/quiz">
+              <Link className="l-cta-primary" href="/quiz?source=homepage_hero" onClick={() => {
+                track.quizStarted("homepage_hero");
+                if (typeof sessionStorage !== "undefined") {
+                  sessionStorage.setItem("allele_quiz_started", "true");
+                }
+              }}>
                 <span>Begin the analysis</span>
                 <span className="arrow">→</span>
               </Link>
@@ -193,105 +250,219 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </section>
 
-      {/* ============ Axes ============ */}
-      <section className="l-axes" id="axes">
-        <div className="l-axes-inner">
-          <div className="l-section-head" style={{ borderColor: "var(--ink)" }}>
-            <div className="l-section-head-num">§ 03</div>
-            <h2 className="l-section-head-title">Three axes. <em>One you.</em></h2>
-            <div className="l-section-head-meta">Why twelve seasons, not four</div>
-          </div>
-
-          <div className="l-axes-intro">
-            <p>The twelve-season method isn&rsquo;t aesthetic. It&rsquo;s a coordinate system. Three measurable properties of human coloring (<em>undertone</em>, <em>depth</em>, and <em>chroma</em>), and where you land on each one tells us which palette belongs to you.</p>
-            <p className="l-axes-intro-callout">A trained colorist with a stack of physical drapes will find the same answer. We just don&rsquo;t charge $500 to do it.</p>
-          </div>
-
-          <div className="l-axes-grid">
-            <div className="l-axis">
-              <div className="l-axis-num">§ I</div>
-              <div className="l-axis-label">Axis One</div>
-              <h3 className="l-axis-title">Undertone.</h3>
-              <p className="l-axis-def">The temperature beneath your skin. Warm leans yellow-gold-peach. Cool leans pink-rose-blue. Most people are not 50/50. They have a real bias, even when they swear they don&rsquo;t.</p>
-              <div className="l-axis-vis">
-                <div className="l-axis-bar">
-                  <div className="l-axis-bar-fill" style={{ background: "linear-gradient(90deg, #F2D5A8 0%, #F4EBD8 50%, #E8D5DC 100%)" }}></div>
-                  <div className="l-axis-bar-marker" style={{ left: "22%" }}></div>
-                </div>
-                <div className="l-axis-bar-labels">
-                  <span>Warm</span><span>Neutral</span><span>Cool</span>
-                </div>
-              </div>
-              <div className="l-axis-tells">
-                <div className="l-axis-tell"><span className="l-axis-tell-key">Tell</span> Veins inside the wrist read green (warm) or blue-purple (cool).</div>
-                <div className="l-axis-tell"><span className="l-axis-tell-key">Tell</span> Gold jewelry warms your face; silver flatters; one wins.</div>
-              </div>
+        <details className="l-mobile-theory-accordion">
+          <summary className="l-mobile-theory-summary">
+            <div className="l-mobile-theory-summary-inner">
+              <span>Explore the Color Science &amp; Mirror Tests</span>
+              <span className="l-mobile-theory-icon">+</span>
             </div>
+          </summary>
+          <div className="l-mobile-theory-content">
+            {/* ============ Axes ============ */}
+            <section className="l-axes" id="axes">
+              <div className="l-axes-inner">
+                <div className="l-section-head" style={{ borderColor: "var(--ink)" }}>
+                  <div className="l-section-head-num">§ 03</div>
+                  <h2 className="l-section-head-title">Three axes. <em>One you.</em></h2>
+                  <div className="l-section-head-meta">Why twelve seasons, not four</div>
+                </div>
 
-            <div className="l-axis">
-              <div className="l-axis-num">§ II</div>
-              <div className="l-axis-label">Axis Two</div>
-              <h3 className="l-axis-title">Depth.</h3>
-              <p className="l-axis-def">The light value of your overall coloring: skin, hair, and eyes averaged together. Light depth blooms next to pastels and washes against black. Dark depth holds its own beside true black and gets erased by pale.</p>
-              <div className="l-axis-vis">
-                <div className="l-axis-stack">
-                  <div className="l-axis-stack-row" style={{ background: "#F4EBD8" }}><span>Light</span></div>
-                  <div className="l-axis-stack-row" style={{ background: "#C8A77A" }}><span>Medium</span></div>
-                  <div className="l-axis-stack-row" style={{ background: "#6B4A2D" }}><span>Deep</span></div>
-                  <div className="l-axis-stack-row" style={{ background: "#2A1A0F" }}><span>Dark</span></div>
+                <div className="l-axes-intro">
+                  <p>The twelve-season method isn&rsquo;t aesthetic. It&rsquo;s a coordinate system. Three measurable properties of human coloring (<em>undertone</em>, <em>depth</em>, and <em>chroma</em>), and where you land on each one tells us which palette belongs to you.</p>
+                  <p className="l-axes-intro-callout">A trained colorist with a stack of physical drapes will find the same answer. We just don&rsquo;t charge $500 to do it.</p>
                 </div>
-              </div>
-              <div className="l-axis-tells">
-                <div className="l-axis-tell"><span className="l-axis-tell-key">Tell</span> A black turtleneck either frames your face or eats it.</div>
-                <div className="l-axis-tell"><span className="l-axis-tell-key">Tell</span> Your hair, eye, and skin contrast: close together, or stark?</div>
-              </div>
-            </div>
 
-            <div className="l-axis l-axis-feature">
-              <div className="l-axis-num">§ III</div>
-              <div className="l-axis-label">Axis Three · The hidden one</div>
-              <h3 className="l-axis-title">Chroma.</h3>
-              <p className="l-axis-def">The intensity of pigment your face can carry without being overwhelmed. <em>Bright chroma</em> faces hold true reds and emeralds. <em>Muted chroma</em> faces glow in dusty mauves and sages, and look strange in saturated color, no matter how flattering the undertone.</p>
-              <div className="l-axis-vis">
-                <div className="l-axis-chroma-row">
-                  <div className="l-axis-chroma-cell" style={{ background: "#DC143C" }}></div>
-                  <div className="l-axis-chroma-cell" style={{ background: "#C2415A" }}></div>
-                  <div className="l-axis-chroma-cell" style={{ background: "#A65968" }}></div>
-                  <div className="l-axis-chroma-cell" style={{ background: "#8B6770" }}></div>
+                <div className="l-axes-grid">
+                  <div className="l-axis">
+                    <div className="l-axis-num">§ I</div>
+                    <div className="l-axis-label">Axis One</div>
+                    <h3 className="l-axis-title">Undertone.</h3>
+                    <p className="l-axis-def">The temperature beneath your skin. Warm leans yellow-gold-peach. Cool leans pink-rose-blue. Most people are not 50/50. They have a real bias, even when they swear they don&rsquo;t.</p>
+                    <div className="l-axis-vis">
+                      <div className="l-axis-bar">
+                        <div className="l-axis-bar-fill" style={{ background: "linear-gradient(90deg, #F2D5A8 0%, #F4EBD8 50%, #E8D5DC 100%)" }}></div>
+                        <div className="l-axis-bar-marker" style={{ left: "22%" }}></div>
+                      </div>
+                      <div className="l-axis-bar-labels">
+                        <span>Warm</span><span>Neutral</span><span>Cool</span>
+                      </div>
+                    </div>
+                    <div className="l-axis-tells">
+                      <div className="l-axis-tell"><span className="l-axis-tell-key">Tell</span> Veins inside the wrist read green (warm) or blue-purple (cool).</div>
+                      <div className="l-axis-tell"><span className="l-axis-tell-key">Tell</span> Gold jewelry warms your face; silver flatters; one wins.</div>
+                    </div>
+                  </div>
+
+                  <div className="l-axis">
+                    <div className="l-axis-num">§ II</div>
+                    <div className="l-axis-label">Axis Two</div>
+                    <h3 className="l-axis-title">Depth.</h3>
+                    <p className="l-axis-def">The light value of your overall coloring: skin, hair, and eyes averaged together. Light depth blooms next to pastels and washes against black. Dark depth holds its own beside true black and gets erased by pale.</p>
+                    <div className="l-axis-vis">
+                      <div className="l-axis-stack">
+                        <div className="l-axis-stack-row" style={{ background: "#F4EBD8" }}><span>Light</span></div>
+                        <div className="l-axis-stack-row" style={{ background: "#C8A77A" }}><span>Medium</span></div>
+                        <div className="l-axis-stack-row" style={{ background: "#6B4A2D" }}><span>Deep</span></div>
+                        <div className="l-axis-stack-row" style={{ background: "#2A1A0F" }}><span>Dark</span></div>
+                      </div>
+                    </div>
+                    <div className="l-axis-tells">
+                      <div className="l-axis-tell"><span className="l-axis-tell-key">Tell</span> A black turtleneck either frames your face or eats it.</div>
+                      <div className="l-axis-tell"><span className="l-axis-tell-key">Tell</span> Your hair, eye, and skin contrast: close together, or stark?</div>
+                    </div>
+                  </div>
+
+                  <div className="l-axis l-axis-feature">
+                    <div className="l-axis-num">§ III</div>
+                    <div className="l-axis-label">Axis Three · The hidden one</div>
+                    <h3 className="l-axis-title">Chroma.</h3>
+                    <p className="l-axis-def">The intensity of pigment your face can carry without being overwhelmed. <em>Bright chroma</em> faces hold true reds and emeralds. <em>Muted chroma</em> faces glow in dusty mauves and sages, and look strange in saturated color, no matter how flattering the undertone.</p>
+                    <div className="l-axis-vis">
+                      <div className="l-axis-chroma-row">
+                        <div className="l-axis-chroma-cell" style={{ background: "#DC143C" }}></div>
+                        <div className="l-axis-chroma-cell" style={{ background: "#C2415A" }}></div>
+                        <div className="l-axis-chroma-cell" style={{ background: "#A65968" }}></div>
+                        <div className="l-axis-chroma-cell" style={{ background: "#8B6770" }}></div>
+                      </div>
+                      <div className="l-axis-chroma-row">
+                        <div className="l-axis-chroma-cell" style={{ background: "#1F7A3D" }}></div>
+                        <div className="l-axis-chroma-cell" style={{ background: "#4A8859" }}></div>
+                        <div className="l-axis-chroma-cell" style={{ background: "#6B8E6E" }}></div>
+                        <div className="l-axis-chroma-cell" style={{ background: "#7A8C7D" }}></div>
+                      </div>
+                      <div className="l-axis-chroma-labels">
+                        <span>Bright</span>
+                        <span className="l-axis-chroma-arrow">→</span>
+                        <span>Muted</span>
+                      </div>
+                    </div>
+                    <div className="l-axis-tells">
+                      <div className="l-axis-tell"><span className="l-axis-tell-key">Tell</span> A pure-red lipstick: striking on you, or somehow garish?</div>
+                      <div className="l-axis-tell"><span className="l-axis-tell-key">Tell</span> The &ldquo;you look great today&rdquo; colors are usually right at your chroma.</div>
+                    </div>
+                    <div className="l-axis-feature-note">Most online tests skip this axis. It&rsquo;s why they get you wrong.</div>
+                  </div>
                 </div>
-                <div className="l-axis-chroma-row">
-                  <div className="l-axis-chroma-cell" style={{ background: "#1F7A3D" }}></div>
-                  <div className="l-axis-chroma-cell" style={{ background: "#4A8859" }}></div>
-                  <div className="l-axis-chroma-cell" style={{ background: "#6B8E6E" }}></div>
-                  <div className="l-axis-chroma-cell" style={{ background: "#7A8C7D" }}></div>
-                </div>
-                <div className="l-axis-chroma-labels">
-                  <span>Bright</span>
-                  <span className="l-axis-chroma-arrow">→</span>
-                  <span>Muted</span>
+
+                <div className="l-axes-foot">
+                  <div className="l-axes-foot-rule"></div>
+                  <p className="l-axes-foot-line">Three axes × four positions = <em>twelve seasons</em>. Not four. Not sixteen. The number that fits human coloring without forcing it.</p>
                 </div>
               </div>
-              <div className="l-axis-tells">
-                <div className="l-axis-tell"><span className="l-axis-tell-key">Tell</span> A pure-red lipstick: striking on you, or somehow garish?</div>
-                <div className="l-axis-tell"><span className="l-axis-tell-key">Tell</span> The &ldquo;you look great today&rdquo; colors are usually right at your chroma.</div>
+            </section>
+
+            {/* ============ Mirror Tests ============ */}
+            <section className="l-mirror-tests" id="mirrortests">
+              <div className="l-mirror-container">
+                <div className="l-section-head">
+                  <div className="l-section-head-num">§ 04</div>
+                  <h2 className="l-section-head-title">Mirror tests. <em>Quick validation.</em></h2>
+                  <div className="l-section-head-meta">Three offline validation protocols you can perform right now</div>
+                </div>
+
+                <div className="l-mirror-tabs">
+                  <button
+                    type="button"
+                    className={`l-mirror-tab-btn${activeTest === "undertone" ? " active" : ""}`}
+                    onClick={() => setActiveTest("undertone")}
+                  >
+                    Plain White Tee (Undertone)
+                  </button>
+                  <button
+                    type="button"
+                    className={`l-mirror-tab-btn${activeTest === "chroma" ? " active" : ""}`}
+                    onClick={() => setActiveTest("chroma")}
+                  >
+                    Lipstick Cling (Chroma)
+                  </button>
+                  <button
+                    type="button"
+                    className={`l-mirror-tab-btn${activeTest === "depth" ? " active" : ""}`}
+                    onClick={() => setActiveTest("depth")}
+                  >
+                    Black Turtleneck (Depth)
+                  </button>
+                </div>
+
+                <div className="l-mirror-card" key={activeTest}>
+                  <div className="l-mirror-content">
+                    <div className="l-mirror-content-eyebrow">{MIRROR_TESTS[activeTest].eyebrow}</div>
+                    <h3 dangerouslySetInnerHTML={{ __html: MIRROR_TESTS[activeTest].title }}></h3>
+                    <p className="l-mirror-instruction">{MIRROR_TESTS[activeTest].instruction}</p>
+                    
+                    <div className="l-mirror-verdict-box">
+                      <div className="l-mirror-verdict-title">The Verdict</div>
+                      <p className="l-mirror-verdict-text" dangerouslySetInnerHTML={{ __html: MIRROR_TESTS[activeTest].verdict }}></p>
+                    </div>
+                  </div>
+
+                  <div className="l-mirror-visual-side">
+                    <div className="l-mirror-swatch-split">
+                      <div
+                        className={`l-mirror-swatch-panel ${MIRROR_TESTS[activeTest].leftClass}`}
+                        style={{ backgroundColor: MIRROR_TESTS[activeTest].leftBg }}
+                      >
+                        <span className="l-mirror-swatch-label">{MIRROR_TESTS[activeTest].leftLabel}</span>
+                        <span className="l-mirror-swatch-desc">{MIRROR_TESTS[activeTest].leftDesc}</span>
+                      </div>
+                      <div
+                        className={`l-mirror-swatch-panel ${MIRROR_TESTS[activeTest].rightClass}`}
+                        style={{ backgroundColor: MIRROR_TESTS[activeTest].rightBg }}
+                      >
+                        <span className="l-mirror-swatch-label">{MIRROR_TESTS[activeTest].rightLabel}</span>
+                        <span className="l-mirror-swatch-desc">{MIRROR_TESTS[activeTest].rightDesc}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="l-axis-feature-note">Most online tests skip this axis. It&rsquo;s why they get you wrong.</div>
-            </div>
+            </section>
+
+            {/* ============ Science / Philosophy ============ */}
+            <section className="l-science" id="science">
+              <div className="l-science-inner">
+                <div>
+                  <h2>A field guide to <em>yourself</em>.</h2>
+                  <div className="l-science-body">
+                    <p>You are reading Shade DNA, Volume I in an open series. This volume maps the physics of your coloring into one of twelve seasons. The next volumes (Vibe, Signature, Carry-On, and the ones still in the lab) use different lenses on the same person.</p>
+                    <p>Shade DNA began with a question: <em>why do some colors make you, and others un-make you?</em> The answer is not taste or trend. It is coloring: the interference pattern of your skin, eyes, and hair against light. Physics. Yours. This is where we start.</p>
+                    <p>Twelve families. Three variants each. <em>One of them is yours.</em></p>
+                  </div>
+                </div>
+
+                <div className="l-science-pillars">
+                  <div className="l-science-pillar">
+                    <div className="l-science-pillar-num">§ I</div>
+                    <div className="l-science-pillar-title">Classical.</div>
+                    <div className="l-science-pillar-body">Rooted in the twelve-season method used by color consultants since the 1980s.</div>
+                  </div>
+                  <div className="l-science-pillar">
+                    <div className="l-science-pillar-num">§ II</div>
+                    <div className="l-science-pillar-title">Curated.</div>
+                    <div className="l-science-pillar-body">Ninety-six shades hand-matched to each archetype by our beauty editors.</div>
+                  </div>
+                  <div className="l-science-pillar">
+                    <div className="l-science-pillar-num">§ III</div>
+                    <div className="l-science-pillar-title">Candid.</div>
+                    <div className="l-science-pillar-body">No subscriptions. No house brand. Affiliate links disclosed on every card.</div>
+                  </div>
+                  <div className="l-science-pillar">
+                    <div className="l-science-pillar-num">§ IV</div>
+                    <div className="l-science-pillar-title">Considered.</div>
+                    <div className="l-science-pillar-body">Your archetype is yours forever. Re-take it; change your mind. The palette stays.</div>
+                  </div>
+                </div>
+              </div>
+            </section>
           </div>
-
-          <div className="l-axes-foot">
-            <div className="l-axes-foot-rule"></div>
-            <p className="l-axes-foot-line">Three axes × four positions = <em>twelve seasons</em>. Not four. Not sixteen. The number that fits human coloring without forcing it.</p>
-          </div>
-        </div>
+        </details>
       </section>
 
       {/* ============ Showcase ============ */}
       <section className="l-showcase" id="showcase">
         <div className="l-section-head">
-          <div className="l-section-head-num">§ 04</div>
+          <div className="l-section-head-num">§ 05</div>
           <h2 className="l-section-head-title">What you receive.</h2>
           <div className="l-section-head-meta">A living document · Yours forever</div>
         </div>
@@ -370,7 +541,7 @@ export default function Home() {
       {/* ============ Voices / Process ============ */}
       <section className="l-voices">
         <div className="l-section-head">
-          <div className="l-section-head-num">§ 05</div>
+          <div className="l-section-head-num">§ 06</div>
           <h2 className="l-section-head-title">Be among the <em>first.</em></h2>
           <div className="l-section-head-meta">Allele opens in waves · Each cohort hand-reviewed</div>
         </div>
@@ -421,7 +592,12 @@ export default function Home() {
         <div className="l-final-eyebrow">§ Begin</div>
         <h2>Your <em>shade,</em><br />your <em>science.</em></h2>
         <p>Sixty seconds. One season. <em>Yours forever.</em></p>
-        <Link className="l-cta-primary" href="/quiz">
+        <Link className="l-cta-primary" href="/quiz?source=homepage_bottom" onClick={() => {
+          track.quizStarted("homepage_bottom");
+          if (typeof sessionStorage !== "undefined") {
+            sessionStorage.setItem("allele_quiz_started", "true");
+          }
+        }}>
           <span>Begin the analysis</span>
           <span className="arrow">→</span>
         </Link>
