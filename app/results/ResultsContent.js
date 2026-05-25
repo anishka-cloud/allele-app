@@ -2410,6 +2410,23 @@ function Edit({ s, seasonId }) {
               <div className="dt-prod-shot">
                 <div className="dt-prod-num">{String(i + 1).padStart(2, "0")}</div>
                 <div className="dt-prod-band" aria-hidden="true" />
+                {p.productImageUrl ? (
+                  <img
+                    src={p.productImageUrl}
+                    alt={`${p.brand} ${p.product}`}
+                    className="dt-prod-img"
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "contain",
+                      padding: "24px 16px",
+                      zIndex: 1,
+                    }}
+                    loading="lazy"
+                  />
+                ) : null}
                 <div className="dt-prod-swatch" style={{ background: p.swatch }} />
                 <div className="dt-prod-match">
                   <div className="dt-match-dot" /> Match
@@ -2423,7 +2440,7 @@ function Edit({ s, seasonId }) {
                 <div className="dt-prod-foot">
                   <span className="dt-prod-price">{p.price}</span>
                   <a
-                    href={withUTM(shopUrl, {
+                    href={withUTM(p.shopUrl || shopUrl, {
                       season: s.name,
                       category: catId,
                       tier,
@@ -2443,7 +2460,7 @@ function Edit({ s, seasonId }) {
                       });
                     }}
                   >
-                    Shop the season <span aria-hidden="true">→</span>
+                    {p.shopUrl ? "Shop" : "Shop the season"} <span aria-hidden="true">→</span>
                   </a>
                 </div>
               </div>
