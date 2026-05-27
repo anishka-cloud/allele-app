@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -18,6 +18,14 @@ import { track } from "@/lib/analytics";
 import "./results.css";
 
 const SEASON_IDS = Object.keys(SEASONS);
+
+// Priority → category order. Categories not listed keep default tail order.
+const PRIORITY_ORDER = {
+  foundation: ["foundation", "concealer", "lips", "blush", "bronzer", "eye", "lip-liner", "nails"],
+  lips:       ["lips", "lip-liner", "blush", "bronzer", "foundation", "concealer", "eye", "nails"],
+  wardrobe:   null, // wardrobe section (Basics) already renders above Edit; keep makeup default
+  full:       null,
+};
 
 function Nav({ seasonId, onChange }) {
   return (
@@ -375,10 +383,20 @@ const SHAPE_BY_CAT = {
   nails: "shape-bottle short",
 };
 
-function Edit({ s, seasonId }) {
+function Edit({ s, seasonId, priority }) {
   const products = useMemo(() => productsFor(seasonId), [seasonId]);
   const [tier, setTier] = useState("best-value");
-  const entries = Object.entries(products);
+
+  // Reorder by user's Q11 priority so foundation-first or lips-first users see their category first
+  const entries = useMemo(() => {
+    const all = Object.entries(products);
+    const order = PRIORITY_ORDER[priority];
+    if (!order) return all;
+    const byCat = Object.fromEntries(all);
+    const sorted = order.filter((cat) => byCat[cat]).map((cat) => [cat, byCat[cat]]);
+    const remaining = all.filter(([cat]) => !order.includes(cat));
+    return [...sorted, ...remaining];
+  }, [products, priority]);
 
   return (
     <section id="edit" className="dt-edit" style={{ "--accent": s.accent }}>
@@ -470,10 +488,30 @@ function Edit({ s, seasonId }) {
 function Collect({ s }) {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("idle");
+  const sectionRef = useRef(null);
+  const viewedRef = useRef(false);
+
+  // Fire email_capture_viewed when the section first scrolls into view
+  useEffect(() => {
+    if (!sectionRef.current || viewedRef.current) return;
+    const obs = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting && !viewedRef.current) {
+          viewedRef.current = true;
+          track.emailCaptureViewed(s.name);
+          obs.disconnect();
+        }
+      },
+      { threshold: 0.4 }
+    );
+    obs.observe(sectionRef.current);
+    return () => obs.disconnect();
+  }, [s.name]);
 
   const submit = async (e) => {
     e.preventDefault();
     if (!email || status === "loading") return;
+    track.dossierCtaClicked(s.name);
     setStatus("loading");
     try {
       const res = await fetch("/api/subscribe", {
@@ -501,8 +539,14 @@ function Collect({ s }) {
     }
   };
 
+  const skip = () => {
+    track.emailSkipped(s.name);
+    const next = document.querySelector(".dt-paid") || document.querySelector(".dt-deeper");
+    if (next) next.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
-    <section className="dt-collect" style={{ "--accent": s.accent }}>
+    <section className="dt-collect" style={{ "--accent": s.accent }} ref={sectionRef}>
       <div className="dt-collect-inner">
         <div>
           <div className="dt-section-num">04</div>
@@ -551,6 +595,13 @@ function Collect({ s }) {
               <div className="dt-collect-fine">
                 Free · No spam · Unsubscribe anytime · Affiliate disclosure on every email.
               </div>
+              <button
+                type="button"
+                onClick={skip}
+                style={{ background: "transparent", border: 0, padding: "12px 0 0", fontFamily: "var(--font-mono, 'JetBrains Mono'), monospace", fontSize: "0.7rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "var(--ink-60, rgba(26,22,19,.60))", cursor: "pointer", textDecoration: "underline", textUnderlineOffset: "4px" }}
+              >
+                Skip · I&rsquo;ll just view my results
+              </button>
             </>
           )}
         </form>
@@ -673,6 +724,127 @@ function Share({ s, seasonId }) {
   );
 }
 
+function WashesYouOut({ s }) {
+  if (!s.washesYouOut && !s.worstWhites && !s.worstLips && !s.worstFoundation) return null;
+  const items = [
+    s.worstWhites    && { k: "Worst whites + neutrals",  v: s.worstWhites },
+    s.worstLips      && { k: "Worst lip + blush family", v: s.worstLips },
+    s.worstFoundation && { k: "Foundation that goes wrong", v: s.worstFoundation },
+  ].filter(Boolean);
+
+  // Fallback to the single washesYouOut line if granular fields aren't filled yet
+  const fallback = !items.length && s.washesYouOut;
+
+  return (
+    <section className="dt-washes" style={{ padding: "60px 24px", background: "var(--cream-2, #F8F2E9)", "--accent": s.accent }}>
+      <div className="dt-section-head" style={{ maxWidth: "1120px", margin: "0 auto 32px" }}>
+        <span className="dt-section-num">·</span>
+        <h2 className="dt-section-title">What <em>washes you out</em></h2>
+        <span className="dt-section-meta">The shades to skip in your season</span>
+      </div>
+      <div style={{ maxWidth: "880px", margin: "0 auto" }}>
+        {fallback ? (
+          <p style={{ fontFamily: "var(--font-display, 'Lora'), Georgia, serif", fontStyle: "italic", fontSize: "clamp(1.05rem, 2vw, 1.3rem)", color: "var(--ink-80, rgba(26,22,19,.80))", lineHeight: 1.55, textAlign: "center" }}>
+            {s.washesYouOut}
+          </p>
+        ) : (
+          <ul style={{ display: "grid", gap: "20px", listStyle: "none", padding: 0, margin: 0 }}>
+            {items.map((it) => (
+              <li key={it.k} style={{ display: "grid", gridTemplateColumns: "minmax(180px, 220px) 1fr", gap: "24px", alignItems: "baseline", borderTop: "1px solid rgba(26,22,19,.10)", paddingTop: "16px" }}>
+                <div style={{ fontFamily: "var(--font-mono, 'JetBrains Mono'), monospace", fontSize: "0.7rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "var(--ink-60, rgba(26,22,19,.60))" }}>{it.k}</div>
+                <div style={{ fontFamily: "var(--font-display, 'Lora'), Georgia, serif", fontSize: "1.05rem", lineHeight: 1.5, color: "var(--ink, #1A1613)" }}>{it.v}</div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </section>
+  );
+}
+
+function OliveAmbiguity({ s, oliveFlag }) {
+  if (!oliveFlag) return null;
+  return (
+    <section className="dt-olive" style={{ padding: "72px 24px", background: "var(--cream, #FFFBF7)", "--accent": s.accent }}>
+      <div style={{ maxWidth: "880px", margin: "0 auto", borderTop: "2px solid var(--accent, #B5500B)", borderBottom: "2px solid var(--accent, #B5500B)", padding: "40px 32px", textAlign: "center" }}>
+        <div style={{ fontFamily: "var(--font-mono, 'JetBrains Mono'), monospace", fontSize: "0.7rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--accent, #B5500B)", marginBottom: "16px" }}>
+          Olive · Undertone Flag
+        </div>
+        <h2 style={{ fontFamily: "var(--font-display, 'Lora'), Georgia, serif", fontSize: "clamp(1.5rem, 3vw, 2.1rem)", fontWeight: 500, lineHeight: 1.15, color: "var(--ink, #1A1613)", marginBottom: "20px" }}>
+          Your skin doesn&rsquo;t read cleanly <em>warm or cool</em>.
+        </h2>
+        <p style={{ fontFamily: "var(--font-display, 'Lora'), Georgia, serif", fontStyle: "italic", fontSize: "1.05rem", lineHeight: 1.6, color: "var(--ink-80, rgba(26,22,19,.80))", maxWidth: "640px", margin: "0 auto 24px" }}>
+          You picked enough &ldquo;mixed veins,&rdquo; &ldquo;hard to tell,&rdquo; or foundation-goes-orange answers that you&rsquo;re likely <strong>olive or neutral-olive</strong>. Standard warm/cool advice will feel half-right on you — because it is.
+        </p>
+        <p style={{ fontFamily: "var(--font-display, 'Lora'), Georgia, serif", fontSize: "0.98rem", lineHeight: 1.6, color: "var(--ink-70, rgba(26,22,19,.70))", maxWidth: "640px", margin: "0 auto 28px" }}>
+          Your closest season is <em>{s.name}</em>, but treat it as a starting point. Test foundations in two undertones side-by-side. Favor neutralized greens and muted earth tones over pure pastels.
+        </p>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: "12px", fontFamily: "var(--font-mono, 'JetBrains Mono'), monospace", fontSize: "0.7rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--ink-60, rgba(26,22,19,.60))" }}>
+          <span>Coming soon</span>
+          <span>·</span>
+          <span>Olive Undertone Survival Kit</span>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function PaidReport({ s }) {
+  const onCta = () => {
+    track.paidReportCtaClicked({ season: s.name, placement: "post-edit" });
+    // TODO: replace with Stan / Gumroad checkout URL once live
+    window.open(`https://allele.app/report?season=${encodeURIComponent(s.name)}`, "_blank");
+  };
+  const includes = [
+    "Your season card + palette",
+    "Undertone, depth, chroma breakdown",
+    "Best whites, neutrals, metals, denim",
+    "Foundation + concealer undertone logic",
+    "Lip, blush, bronzer, highlighter map",
+    "Wardrobe color anchors",
+    "Your &ldquo;avoid this&rdquo; shade list",
+    "Shopping checklist + saveable palette card",
+  ];
+  return (
+    <section className="dt-paid" style={{ padding: "80px 24px", background: "var(--ink, #1A1613)", color: "#F8F2E9", "--accent": s.accent }}>
+      <div style={{ maxWidth: "1040px", margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "56px", alignItems: "center" }}>
+        <div>
+          <div style={{ fontFamily: "var(--font-mono, 'JetBrains Mono'), monospace", fontSize: "0.7rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--accent, #B5500B)", marginBottom: "16px" }}>
+            Volume I · The Full Report
+          </div>
+          <h2 style={{ fontFamily: "var(--font-display, 'Lora'), Georgia, serif", fontSize: "clamp(1.8rem, 3.6vw, 2.6rem)", fontWeight: 500, lineHeight: 1.1, color: "#F8F2E9", marginBottom: "20px" }}>
+            Your <em style={{ color: "var(--accent, #B5500B)" }}>Shade DNA</em> Report
+          </h2>
+          <p style={{ fontFamily: "var(--font-display, 'Lora'), Georgia, serif", fontStyle: "italic", fontSize: "1.1rem", lineHeight: 1.6, color: "rgba(248,242,233,.85)", marginBottom: "28px" }}>
+            Everything we know about <em>{s.name}</em>, in one downloadable PDF you can take into the dressing room or the foundation aisle.
+          </p>
+          <div style={{ display: "flex", alignItems: "baseline", gap: "16px", marginBottom: "28px" }}>
+            <span style={{ fontFamily: "var(--font-display, 'Lora'), Georgia, serif", fontSize: "2.4rem", fontWeight: 500, color: "#F8F2E9" }}>$14</span>
+            <span style={{ fontFamily: "var(--font-mono, 'JetBrains Mono'), monospace", fontSize: "0.7rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(248,242,233,.55)" }}>One-time · Instant download</span>
+          </div>
+          <button
+            onClick={onCta}
+            style={{ display: "inline-flex", alignItems: "center", gap: "10px", padding: "16px 28px", background: "var(--accent, #B5500B)", color: "#F8F2E9", border: 0, fontFamily: "var(--font-mono, 'JetBrains Mono'), monospace", fontSize: "0.78rem", letterSpacing: "0.18em", textTransform: "uppercase", cursor: "pointer", borderRadius: 0 }}
+          >
+            Get the report <span>→</span>
+          </button>
+          <div style={{ fontFamily: "var(--font-mono, 'JetBrains Mono'), monospace", fontSize: "0.62rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(248,242,233,.45)", marginTop: "16px" }}>
+            Includes affiliate disclosure · Refund within 7 days
+          </div>
+        </div>
+        <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: "12px" }}>
+          {includes.map((line, i) => (
+            <li key={i} style={{ display: "grid", gridTemplateColumns: "32px 1fr", alignItems: "baseline", gap: "12px", padding: "10px 0", borderTop: i === 0 ? "1px solid rgba(248,242,233,.15)" : "none", borderBottom: "1px solid rgba(248,242,233,.15)" }}>
+              <span style={{ fontFamily: "var(--font-mono, 'JetBrains Mono'), monospace", fontSize: "0.7rem", letterSpacing: "0.15em", color: "var(--accent, #B5500B)" }}>{String(i + 1).padStart(2, "0")}</span>
+              <span style={{ fontFamily: "var(--font-display, 'Lora'), Georgia, serif", fontSize: "0.98rem", color: "rgba(248,242,233,.92)" }} dangerouslySetInnerHTML={{ __html: line }} />
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
+}
+
 function Footer() {
   return (
     <footer className="dt-footer">
@@ -714,6 +886,9 @@ export default function ResultsContent() {
     return SEASONS[id] ? id : "true-autumn";
   }, [sp]);
 
+  const oliveFlag = sp.get("olive") === "1";
+  const priority = sp.get("priority"); // "foundation" | "lips" | "wardrobe" | "full" | null
+
   const [seasonId, setSeasonId] = useState(initialId);
 
   useEffect(() => {
@@ -724,22 +899,20 @@ export default function ResultsContent() {
 
   useEffect(() => {
     if (!s) return;
-    track.quizCompleted({
-      season: s.name,
-      undertone: s.undertone,
-      contrast: s.chroma,
-      value: s.depth,
-      chroma: s.chroma,
-    });
-  }, [s?.name]); // eslint-disable-line react-hooks/exhaustive-deps
+    track.resultRevealed({ season: s.name, oliveFlag, priority });
+  }, [s?.name, oliveFlag, priority]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const onSeasonChange = (id) => {
     setSeasonId(id);
-    const url = `/results?season=${encodeURIComponent(SEASONS[id].name)}`;
-    router.replace(url, { scroll: false });
+    const params = new URLSearchParams(sp.toString());
+    params.set("season", SEASONS[id].name);
+    router.replace(`/results?${params.toString()}`, { scroll: false });
   };
 
   if (!s) return null;
+
+  // If priority is "wardrobe", show Basics before Edit (already default). For others, keep default.
+  // Edit reorders its own category list based on priority.
 
   return (
     <main className="dt-results">
@@ -749,8 +922,11 @@ export default function ResultsContent() {
       <Drape s={s} seasonId={seasonId} />
       <PredictsThisYear seasonId={seasonId} />
       <Basics seasonId={seasonId} />
-      <Edit s={s} seasonId={seasonId} />
+      <Edit s={s} seasonId={seasonId} priority={priority} />
+      <WashesYouOut s={s} />
+      <OliveAmbiguity s={s} oliveFlag={oliveFlag} />
       <Collect s={s} />
+      <PaidReport s={s} />
       <Deeper s={s} />
       <Share s={s} seasonId={seasonId} />
       <Footer />
