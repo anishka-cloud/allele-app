@@ -33,22 +33,25 @@ function Nav() {
   );
 }
 
-function TopBar({ step, total, narrow }) {
+function TopBar({ step, total, narrow, complete }) {
+  const displayNum = complete ? total : Math.min(step + 1, total);
+  const fillPct = complete ? 100 : (step / total) * 100;
   return (
     <div className="qz-topbar">
       <div className="qz-topbar-inner">
         <div className="qz-topbar-left">
-          <span className="qz-topbar-label">Question</span>
+          <span className="qz-topbar-label">{complete ? "Result" : "Question"}</span>
           <span className="qz-topbar-num">
-            <strong>{String(step + 1).padStart(2, "0")}</strong> / {total}
+            <strong>{String(displayNum).padStart(2, "0")}</strong> / {total}
+            {complete && <span className="qz-topbar-complete"> · complete</span>}
           </span>
         </div>
         <div className="qz-topbar-track">
-          <div className="qz-topbar-fill" style={{ width: `${(step / total) * 100}%` }} />
+          <div className="qz-topbar-fill" style={{ width: `${fillPct}%` }} />
           {Array.from({ length: total }).map((_, i) => (
             <span
               key={i}
-              className={`qz-tick${i < step ? " done" : ""}${i === step ? " active" : ""}`}
+              className={`qz-tick${i < step || complete ? " done" : ""}${i === step && !complete ? " active" : ""}`}
               style={{ left: `${(i / (total - 1)) * 100}%` }}
             />
           ))}
@@ -483,7 +486,7 @@ export default function QuizPage() {
   return (
     <main className="qz-shell">
       <Nav />
-      <TopBar step={complete ? QUIZ.length : step} total={QUIZ.length} narrow={narrow} />
+      <TopBar step={step} total={QUIZ.length} narrow={narrow} complete={complete} />
 
       <div className="qz-main">
         <div className="qz-stage">
