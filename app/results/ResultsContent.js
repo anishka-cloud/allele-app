@@ -14,7 +14,7 @@ import {
   metalGradient,
   seasonIdFromName,
 } from "@/lib/handoffSeasons";
-import { track } from "@/lib/analytics";
+import { track, trackEvent } from "@/lib/analytics";
 import { getShopUrl, withUTM } from "@/lib/shopLinks";
 import "./results.css";
 
@@ -2782,6 +2782,130 @@ function Edit({ s, seasonId, shadeIndex, setShadeIndex }) {
   );
 }
 
+// Seasons most often mis-diagnosed when the underlying skin is olive.
+// Per the Olive Undertone Survival Kit: Cool Olive ↔ True/Soft Summer,
+// Warm Olive ↔ True/Soft Autumn, Muted Olive ↔ Soft Summer/Soft Autumn,
+// Deep Olive ↔ Dark Autumn/Dark Winter.
+const OLIVE_CONFUSED_SEASONS = new Set([
+  "soft-summer",
+  "true-summer",
+  "soft-autumn",
+  "true-autumn",
+  "dark-autumn",
+  "dark-winter",
+]);
+
+function OliveAmbiguity({ seasonId, seasonName }) {
+  if (!OLIVE_CONFUSED_SEASONS.has(seasonId)) return null;
+
+  const handleClick = (source) => {
+    trackEvent("kit_clicked", {
+      kit: "olive-undertone-survival-kit",
+      source,
+      from_season: seasonName,
+      price_usd: 24,
+    });
+  };
+
+  return (
+    <section
+      style={{
+        padding: "72px 24px",
+        background: "var(--cream-2, #F8F2E9)",
+        borderTop: "1px solid rgba(196,162,101,0.18)",
+        borderBottom: "1px solid rgba(196,162,101,0.18)",
+      }}
+    >
+      <div style={{ maxWidth: "760px", margin: "0 auto" }}>
+        <div
+          style={{
+            fontFamily: "var(--font-mono, 'JetBrains Mono'), monospace",
+            fontSize: "0.7rem",
+            letterSpacing: "0.2em",
+            textTransform: "uppercase",
+            color: "#C4A265",
+            marginBottom: "20px",
+            display: "flex",
+            alignItems: "center",
+            gap: "16px",
+          }}
+        >
+          <span>§ A Second-Read</span>
+          <span style={{ flex: 1, height: "1px", background: "rgba(196,162,101,0.4)" }} />
+          <span>For olive-prone seasons</span>
+        </div>
+
+        <h2
+          style={{
+            fontFamily: "var(--font-display, 'Lora'), Georgia, serif",
+            fontSize: "clamp(1.6rem, 3.2vw, 2.2rem)",
+            fontWeight: 500,
+            lineHeight: 1.2,
+            margin: "0 0 24px",
+            color: "var(--ink, #1A1613)",
+          }}
+        >
+          If <em>{seasonName}</em> feels a little off,<br />
+          you may be reading <em>olive</em>.
+        </h2>
+
+        <div
+          style={{
+            fontFamily: "var(--font-inter, system-ui, sans-serif)",
+            fontSize: "1.02rem",
+            lineHeight: 1.75,
+            color: "rgba(26,22,19,0.82)",
+            marginBottom: "32px",
+          }}
+        >
+          <p style={{ margin: "0 0 16px" }}>
+            If your foundation oxidizes warmer by 3pm, if half your &ldquo;season palette&rdquo; sings but the other half flattens, if you&rsquo;ve been between {seasonName} and one of its softer neighbors for years &mdash; you may be reading olive against the standard system, not within it.
+          </p>
+          <p style={{ margin: 0 }}>
+            Olive sits on a separate axis from the warm-cool diagnostic most quizzes are built on. <em>The Olive Undertone Survival Kit</em> maps the five olive presentations and shows which slices of your season palette were written for olive skin versus everyone else.
+          </p>
+        </div>
+
+        <div style={{ display: "flex", alignItems: "center", gap: "20px", flexWrap: "wrap" }}>
+          <Link
+            href="/olive-undertone-survival-kit"
+            onClick={() => handleClick("results_olive_ambiguity")}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "12px",
+              padding: "14px 26px",
+              background: "var(--ink, #1A1613)",
+              color: "var(--cream, #FFFBF7)",
+              fontFamily: "var(--font-inter, system-ui, sans-serif)",
+              fontSize: "0.9rem",
+              fontWeight: 500,
+              letterSpacing: "0.04em",
+              textDecoration: "none",
+              border: "1px solid #C4A265",
+              borderRadius: "2px",
+            }}
+          >
+            <span>Read the field guide &middot; $24</span>
+            <span>&rarr;</span>
+          </Link>
+          <span
+            style={{
+              fontFamily: "var(--font-mono, 'JetBrains Mono'), monospace",
+              fontSize: "0.7rem",
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+              color: "rgba(26,22,19,0.55)",
+            }}
+          >
+            PDF &middot; 28 sections &middot; 5 olive types
+          </span>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Collect({ s }) {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("idle");
@@ -3179,6 +3303,9 @@ function ResultsInner({ seasonParam, depthParam }) {
 
       {/* Sticky shopping bar for quick checkout accessibility */}
       <StickyShopBar s={s} shadeIndex={shadeIndex} />
+
+      {/* Olive ambiguity cross-link — only renders for the 6 olive-prone seasons */}
+      <OliveAmbiguity seasonId={seasonId} seasonName={s.name} />
 
       {/* Color Science theory details folded to reduce visual clutter and cognitive overload */}
       <details className="dt-science-accordion">
