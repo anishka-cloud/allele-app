@@ -187,7 +187,7 @@ export default function OliveKit() {
               ))}
             </div>
             <div className="l-hero-card-whisper">
-              &ldquo;Olive is not warm. Not cool. Not <em>neutral</em> in the way most shade ranges mean neutral. It is its own quality.&rdquo;
+              &ldquo;Olive is not warm. Not cool. Not <em>neutral</em>{" "}in the way most shade ranges mean neutral. It is its own quality.&rdquo;
             </div>
             <div className="l-hero-card-twins">
               <span className="l-hero-card-twins-label">For readers who</span>
