@@ -1914,19 +1914,6 @@ function Hero({ s, seasonId }) {
         </div>
 
         <div className="dt-hero-right">
-          <div className="dt-hero-model-container">
-            <div className="dt-hero-models-split">
-              <div className="dt-hero-model-frame">
-                <img src={`/models/${seasonId}-a.png?v=ai-tight`} alt={`${s.name} light-medium range`} className="dt-hero-model" />
-                <span className="dt-hero-model-sublabel">Light-Medium Range</span>
-              </div>
-              <div className="dt-hero-model-frame">
-                <img src={`/models/${seasonId}-b.png?v=ai-tight`} alt={`${s.name} medium-deep range`} className="dt-hero-model" />
-                <span className="dt-hero-model-sublabel">Medium-Deep Range</span>
-              </div>
-            </div>
-            <div className="dt-hero-model-caption">Coloring archetype reference: {s.name} shade ranges</div>
-          </div>
           <div className={`dt-specimen${isDarkHex(s.surface) ? " dark" : ""}`}>
             <div className="dt-specimen-tl">allele</div>
             <div className="dt-specimen-tr">{num}</div>
