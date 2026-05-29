@@ -3148,7 +3148,7 @@ function CelebAvatar({ celeb, seasonId }) {
 
   return (
     <img
-      src={`/celebs/${slug}.jpg`}
+      src={`/celebs/${slug}.jpg?v=2`}
       alt={celeb.name}
       title={celeb.name}
       className="dt-celeb-avatar"
