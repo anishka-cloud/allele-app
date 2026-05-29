@@ -1794,6 +1794,89 @@ function Hero({ s, seasonId }) {
   const idx = SEASON_IDS.indexOf(seasonId) + 1;
   const num = `N° ${String(idx).padStart(2, "0")} / 12`;
   const [first, ...rest] = s.name.split(" ");
+
+  const [theme, setTheme] = useState("cream");
+  const [layout, setLayout] = useState("specimen");
+  const [aspect, setAspect] = useState("story");
+  const [showCelebs, setShowCelebs] = useState("photo");
+  const [downloading, setDownloading] = useState(false);
+
+  const [tilt, setTilt] = useState({ x: 0, y: 0, showSheen: false, sheenX: 0, sheenY: 0 });
+  const cardRef = useRef(null);
+
+  const handleMouseMove = (e) => {
+    if (!cardRef.current) return;
+    const card = cardRef.current;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    const rotateX = -((y - rect.height / 2) / (rect.height / 2)) * 10;
+    const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 10;
+    
+    const sheenX = (x / rect.width) * 100;
+    const sheenY = (y / rect.height) * 100;
+
+    setTilt({ x: rotateY, y: rotateX, showSheen: true, sheenX, sheenY });
+  };
+
+  const handleMouseLeave = () => {
+    setTilt({ x: 0, y: 0, showSheen: false, sheenX: 0, sheenY: 0 });
+  };
+
+  const shareLink = async (method) => {
+    track.shareClicked(s.name, method);
+    if (method === "copy" && typeof window !== "undefined") {
+      const url = `${window.location.origin}/results?season=${encodeURIComponent(s.name)}`;
+      try { await navigator.clipboard.writeText(url); } catch {}
+      return;
+    }
+    if (method === "native" && typeof navigator !== "undefined" && navigator.share) {
+      try {
+        await navigator.share({
+          title: `I'm a ${s.name}`,
+          text: `What's your Shade DNA?`,
+          url: window.location.href,
+        });
+      } catch {}
+    }
+  };
+
+  const downloadCardPng = async () => {
+    if (downloading) return;
+    setDownloading(true);
+    track.downloadCard(s.name);
+    
+    if (cardRef.current) {
+      try {
+        const { toPng } = await import("html-to-image");
+        const dataUrl = await toPng(cardRef.current, {
+          quality: 0.98,
+          pixelRatio: 3,
+          backgroundColor: theme === "obsidian" ? "#0A0A0C" : theme === "tint" ? s.surface : "#FFFBF7",
+          style: {
+            transform: "none",
+            transition: "none",
+          }
+        });
+        
+        const link = document.createElement("a");
+        link.download = `allele-shade-dna-${seasonId}-${theme}-${layout}-${aspect}.png`;
+        link.href = dataUrl;
+        link.click();
+      } catch (err) {
+        console.error("Card render error:", err);
+        window.open(`/api/og?season=${encodeURIComponent(s.name)}`, "_blank");
+      } finally {
+        setDownloading(false);
+      }
+    } else {
+      setDownloading(false);
+    }
+  };
+
+  const coords = SEASON_COORDINATES[seasonId] || { x: 0, y: 0 };
+
   return (
     <section className="dt-hero" style={{ "--accent": s.accent, "--surface": s.surface }}>
       <div className="dt-hero-grid">
@@ -1908,43 +1991,190 @@ function Hero({ s, seasonId }) {
           )}
         </div>
 
-        <div className="dt-hero-right">
-          <div className={`dt-specimen${isDarkHex(s.surface) ? " dark" : ""}`}>
-            <div className="dt-specimen-tl">allele</div>
-            <div className="dt-specimen-tr">{num}</div>
-            <div className="dt-specimen-body">
-              <div className="dt-specimen-family">· {s.family} ·</div>
-              <div className="dt-specimen-name">{s.name}</div>
-              <div className="dt-specimen-tag">{s.tagline}</div>
-            </div>
-            <div className="dt-specimen-palette">
-              {s.palette.slice(0, 8).map((c, i) => (
-                <div
-                  key={i}
-                  className={`dt-specimen-cell${isDarkHex(c) ? " dark-cell" : ""}`}
-                  style={{ background: c }}
-                >
-                  <span className="label">{s.paletteLabels?.[i] || ""}</span>
-                  <span className="hex">{c.replace("#", "").toUpperCase()}</span>
+        <div className="dt-hero-right" id="share">
+          <div className="dt-share-preview">
+            <div className="dt-share-card-perspective">
+              <div
+                ref={cardRef}
+                className={`dt-share-card theme-${theme} layout-${layout} aspect-${aspect} show-celebs-${showCelebs}${isDarkHex(s.surface) && theme === "tint" ? " dark" : ""}`}
+                style={{
+                  "--accent": s.accent,
+                  "--surface": theme === "obsidian" ? "#0A0A0C" : theme === "tint" ? s.surface : "#FFFBF7",
+                  transform: `rotateY(${tilt.x}deg) rotateX(${tilt.y}deg)`,
+                  transition: tilt.showSheen ? "none" : "transform 0.5s ease",
+                }}
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
+              >
+                {/* Corner hairpins */}
+                <div className="dt-card-hairpin tl" />
+                <div className="dt-card-hairpin tr" />
+                <div className="dt-card-hairpin bl" />
+                <div className="dt-card-hairpin br" />
+
+                {/* Dynamic glare shine overlay */}
+                {tilt.showSheen && (
+                  <div
+                    className="dt-card-sheen"
+                    style={{
+                      background: `radial-gradient(circle at ${tilt.sheenX}% ${tilt.sheenY}%, rgba(255,255,255,0.08) 0%, transparent 60%)`,
+                    }}
+                  />
+                )}
+
+                <div className="dt-share-card-header">
+                  <span className="dt-share-card-tl">allele</span>
+                  <span className="dt-share-card-tr">{num}</span>
                 </div>
-              ))}
-            </div>
-            {s.celebs?.length > 0 && (
-              <div className="dt-specimen-twins">
-                <div className="dt-specimen-twins-label">Style twins</div>
-                <div className="dt-specimen-twins-names">
-                  {s.celebs.slice(0, 3).map((c, i) => (
-                    <span key={i}>
-                      <em>{c.name}</em>
-                      {i < Math.min(s.celebs.length, 3) - 1 && (
-                        <span className="dt-specimen-twins-sep"> · </span>
+
+                {layout === "specimen" ? (
+                  // SPECIMEN SCIENTIFIC LAYOUT
+                  <div className="dt-share-card-body specimen">
+                    <div className="dt-card-meta-row">
+                      <span className="dt-card-meta-label">DIAGNOSTIC DATA</span>
+                      <span className="dt-card-meta-value">VOL. I · MMXXVI</span>
+                    </div>
+
+                    <div className="dt-card-hero-block">
+                      <div className="dt-share-card-eyebrow">· {s.family.toUpperCase()} ·</div>
+                      <div className="dt-share-card-name">{s.name}</div>
+                      <div className="dt-share-card-tag">{s.tagline}</div>
+                    </div>
+
+                    <div className="dt-card-details-grid">
+                      {/* Diagnostic Coordinates Grid */}
+                      <div className="dt-card-grid-container">
+                        <div className="dt-card-grid">
+                          <div className="dt-card-grid-axis x"></div>
+                          <div className="dt-card-grid-axis y"></div>
+                          <div className="dt-card-grid-label top">MUTED</div>
+                          <div className="dt-card-grid-label bottom">BRIGHT</div>
+                          <div className="dt-card-grid-label left">COOL</div>
+                          <div className="dt-card-grid-label right">WARM</div>
+                          <div
+                            className="dt-card-grid-dot"
+                            style={{
+                              left: `calc(50% + ${coords.x}%)`,
+                              top: `calc(50% + ${coords.y}%)`,
+                            }}
+                          />
+                        </div>
+                        <div className="dt-card-grid-caption">AXIS MAPPING</div>
+                      </div>
+
+                      {/* specimens hex block */}
+                      <div className="dt-card-specimens-container">
+                        <div className="dt-card-specimens-grid">
+                          {s.palette.slice(0, 8).map((color, i) => (
+                            <div key={i} className="dt-card-specimen-item">
+                              <div className="dt-card-specimen-circle" style={{ background: color }} />
+                              <div className="dt-card-specimen-info">
+                                <span className="dt-card-specimen-label">{s.paletteLabels[i] || `Color ${i+1}`}</span>
+                                <span className="dt-card-specimen-hex">{color.toUpperCase()}</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Celebrity style twins */}
+                    {showCelebs !== "none" && s.celebs && s.celebs.length > 0 && (
+                      <div className="dt-card-celebs-section">
+                        <div className="dt-card-celebs-header">CELEBRITY STYLE TWINS</div>
+                        {showCelebs === "photo" ? (
+                          <div className="dt-card-celebs-avatars">
+                            {s.celebs.slice(0, 3).map((celeb) => (
+                              <div key={celeb.name} className="dt-card-celeb-avatar-wrap">
+                                <CelebAvatar key={celeb.name} celeb={celeb} seasonId={seasonId} />
+                                <span className="dt-card-celeb-avatar-name">{celeb.name.split(" ")[0]}</span>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="dt-card-celebs-text">
+                            {s.celebs.map((c) => c.name.toUpperCase()).join(" · ")}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  // MINIMAL EDITORIAL LAYOUT
+                  <div className="dt-share-card-body minimal">
+                    <div className="dt-share-card-center">
+                      <div className="dt-share-card-eyebrow">· {s.family} ·</div>
+                      <div className="dt-share-card-name">{s.name}</div>
+                      <div className="dt-share-card-tag">{s.tagline}</div>
+                      
+                      <div className="dt-share-card-rail">
+                        {s.palette.slice(0, 8).map((c, i) => (
+                          <div key={i} className="dt-share-chip" style={{ background: c }} />
+                        ))}
+                      </div>
+
+                      {showCelebs !== "none" && s.celebs && s.celebs.length > 0 && (
+                        <div className="dt-card-celebs-minimal">
+                          <span className="dt-card-celebs-minimal-label">TWINS · </span>
+                          <span>{s.celebs.map((c) => c.name).join(" · ")}</span>
+                        </div>
                       )}
-                    </span>
-                  ))}
-                </div>
+                    </div>
+                  </div>
+                )}
+
+                <div className="dt-share-card-foot">allele.app · find your season</div>
               </div>
-            )}
-            <div className="dt-specimen-foot">allele.app · your shade, your science</div>
+            </div>
+          </div>
+
+          {/* Customization controls */}
+          <div className="dt-share-controls">
+            <div className="dt-control-group">
+              <label>Theme</label>
+              <div className="dt-control-buttons">
+                <button className={`dt-control-btn${theme === "cream" ? " active" : ""}`} onClick={() => setTheme("cream")}>Cream</button>
+                <button className={`dt-control-btn${theme === "obsidian" ? " active" : ""}`} onClick={() => setTheme("obsidian")}>Obsidian</button>
+                <button className={`dt-control-btn${theme === "tint" ? " active" : ""}`} onClick={() => setTheme("tint")}>Tint</button>
+              </div>
+            </div>
+
+            <div className="dt-control-group">
+              <label>Format</label>
+              <div className="dt-control-buttons">
+                <button className={`dt-control-btn${aspect === "story" ? " active" : ""}`} onClick={() => setAspect("story")}>Story (9:16)</button>
+                <button className={`dt-control-btn${aspect === "square" ? " active" : ""}`} onClick={() => setAspect("square")}>Square (1:1)</button>
+              </div>
+            </div>
+            
+            <div className="dt-control-group">
+              <label>Layout</label>
+              <div className="dt-control-buttons">
+                <button className={`dt-control-btn${layout === "specimen" ? " active" : ""}`} onClick={() => setLayout("specimen")}>Specimen</button>
+                <button className={`dt-control-btn${layout === "minimal" ? " active" : ""}`} onClick={() => setLayout("minimal")}>Minimal</button>
+              </div>
+            </div>
+
+            <div className="dt-control-group">
+              <label>Style Twins</label>
+              <div className="dt-control-buttons">
+                <button className={`dt-control-btn${showCelebs === "photo" ? " active" : ""}`} onClick={() => setShowCelebs("photo")}>Photo</button>
+                <button className={`dt-control-btn${showCelebs === "text" ? " active" : ""}`} onClick={() => setShowCelebs("text")}>Text</button>
+                <button className={`dt-control-btn${showCelebs === "none" ? " active" : ""}`} onClick={() => setShowCelebs("none")}>Hide</button>
+              </div>
+            </div>
+          </div>
+
+          <div className="dt-share-targets">
+            <button className="dt-share-target" onClick={() => shareLink("native")}>Share</button>
+            <button className="dt-share-target" onClick={() => shareLink("copy")}>Copy link</button>
+            <button
+              className="dt-share-target highlight"
+              onClick={downloadCardPng}
+              disabled={downloading}
+            >
+              {downloading ? "Generating..." : "Download PNG"}
+            </button>
           </div>
         </div>
       </div>
@@ -3156,292 +3386,6 @@ function CelebAvatar({ celeb, seasonId }) {
   );
 }
 
-function Share({ s, seasonId }) {
-  const idx = SEASON_IDS.indexOf(seasonId) + 1;
-  const num = `N° ${String(idx).padStart(2, "0")} / 12`;
-  
-  const [theme, setTheme] = useState("cream");
-  const [layout, setLayout] = useState("specimen");
-  const [aspect, setAspect] = useState("story");
-  const [showCelebs, setShowCelebs] = useState("photo");
-  const [downloading, setDownloading] = useState(false);
-
-  const [tilt, setTilt] = useState({ x: 0, y: 0, showSheen: false, sheenX: 0, sheenY: 0 });
-  const cardRef = useRef(null);
-
-  const handleMouseMove = (e) => {
-    if (!cardRef.current) return;
-    const card = cardRef.current;
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    const rotateX = -((y - rect.height / 2) / (rect.height / 2)) * 10;
-    const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 10;
-    
-    const sheenX = (x / rect.width) * 100;
-    const sheenY = (y / rect.height) * 100;
-
-    setTilt({ x: rotateY, y: rotateX, showSheen: true, sheenX, sheenY });
-  };
-
-  const handleMouseLeave = () => {
-    setTilt({ x: 0, y: 0, showSheen: false, sheenX: 0, sheenY: 0 });
-  };
-
-  const shareLink = async (method) => {
-    track.shareClicked(s.name, method);
-    if (method === "copy" && typeof window !== "undefined") {
-      const url = `${window.location.origin}/results?season=${encodeURIComponent(s.name)}`;
-      try { await navigator.clipboard.writeText(url); } catch {}
-      return;
-    }
-    if (method === "native" && typeof navigator !== "undefined" && navigator.share) {
-      try {
-        await navigator.share({
-          title: `I'm a ${s.name}`,
-          text: `What's your Shade DNA?`,
-          url: window.location.href,
-        });
-      } catch {}
-    }
-  };
-
-  const downloadCardPng = async () => {
-    if (downloading) return;
-    setDownloading(true);
-    track.downloadCard(s.name);
-    
-    if (cardRef.current) {
-      try {
-        const { toPng } = await import("html-to-image");
-        const dataUrl = await toPng(cardRef.current, {
-          quality: 0.98,
-          pixelRatio: 3,
-          backgroundColor: theme === "obsidian" ? "#0A0A0C" : theme === "tint" ? s.surface : "#FFFBF7",
-          style: {
-            transform: "none",
-            transition: "none",
-          }
-        });
-        
-        const link = document.createElement("a");
-        link.download = `allele-shade-dna-${seasonId}-${theme}-${layout}-${aspect}.png`;
-        link.href = dataUrl;
-        link.click();
-      } catch (err) {
-        console.error("Card render error:", err);
-        window.open(`/api/og?season=${encodeURIComponent(s.name)}`, "_blank");
-      } finally {
-        setDownloading(false);
-      }
-    } else {
-      setDownloading(false);
-    }
-  };
-
-  const coords = SEASON_COORDINATES[seasonId] || { x: 0, y: 0 };
-
-  return (
-    <section id="share" className="dt-share" style={{ "--accent": s.accent }}>
-      <div className="dt-share-inner">
-        <div>
-          <div className="dt-share-eyebrow">Share</div>
-          <h2 className="dt-share-title">Shareable as a <em>specimen card</em></h2>
-          <p className="dt-share-body">
-            A customizable identity card ready for Instagram, TikTok, or iMessage. Toggle themes, formats, and layouts to match your feed.
-          </p>
-          
-          {/* Customization controls */}
-          <div className="dt-share-controls">
-            <div className="dt-control-group">
-              <label>Theme</label>
-              <div className="dt-control-buttons">
-                <button className={`dt-control-btn${theme === "cream" ? " active" : ""}`} onClick={() => setTheme("cream")}>Cream</button>
-                <button className={`dt-control-btn${theme === "obsidian" ? " active" : ""}`} onClick={() => setTheme("obsidian")}>Obsidian</button>
-                <button className={`dt-control-btn${theme === "tint" ? " active" : ""}`} onClick={() => setTheme("tint")}>Tint</button>
-              </div>
-            </div>
-
-            <div className="dt-control-group">
-              <label>Format</label>
-              <div className="dt-control-buttons">
-                <button className={`dt-control-btn${aspect === "story" ? " active" : ""}`} onClick={() => setAspect("story")}>Story (9:16)</button>
-                <button className={`dt-control-btn${aspect === "square" ? " active" : ""}`} onClick={() => setAspect("square")}>Square (1:1)</button>
-              </div>
-            </div>
-            
-            <div className="dt-control-group">
-              <label>Layout</label>
-              <div className="dt-control-buttons">
-                <button className={`dt-control-btn${layout === "specimen" ? " active" : ""}`} onClick={() => setLayout("specimen")}>Specimen</button>
-                <button className={`dt-control-btn${layout === "minimal" ? " active" : ""}`} onClick={() => setLayout("minimal")}>Minimal</button>
-              </div>
-            </div>
-
-            <div className="dt-control-group">
-              <label>Style Twins</label>
-              <div className="dt-control-buttons">
-                <button className={`dt-control-btn${showCelebs === "photo" ? " active" : ""}`} onClick={() => setShowCelebs("photo")}>Photo</button>
-                <button className={`dt-control-btn${showCelebs === "text" ? " active" : ""}`} onClick={() => setShowCelebs("text")}>Text</button>
-                <button className={`dt-control-btn${showCelebs === "none" ? " active" : ""}`} onClick={() => setShowCelebs("none")}>Hide</button>
-              </div>
-            </div>
-          </div>
-
-          <div className="dt-share-targets">
-            <button className="dt-share-target" onClick={() => shareLink("native")}>Share</button>
-            <button className="dt-share-target" onClick={() => shareLink("copy")}>Copy link</button>
-            <button
-              className="dt-share-target highlight"
-              onClick={downloadCardPng}
-              disabled={downloading}
-            >
-              {downloading ? "Generating..." : "Download PNG"}
-            </button>
-          </div>
-        </div>
-        
-        <div className="dt-share-preview">
-          <div className="dt-share-card-perspective">
-            <div
-              ref={cardRef}
-              className={`dt-share-card theme-${theme} layout-${layout} aspect-${aspect} show-celebs-${showCelebs}${isDarkHex(s.surface) && theme === "tint" ? " dark" : ""}`}
-              style={{
-                "--accent": s.accent,
-                "--surface": theme === "obsidian" ? "#0A0A0C" : theme === "tint" ? s.surface : "#FFFBF7",
-                transform: `rotateY(${tilt.x}deg) rotateX(${tilt.y}deg)`,
-                transition: tilt.showSheen ? "none" : "transform 0.5s ease",
-              }}
-              onMouseMove={handleMouseMove}
-              onMouseLeave={handleMouseLeave}
-            >
-              {/* Corner hairpins */}
-              <div className="dt-card-hairpin tl" />
-              <div className="dt-card-hairpin tr" />
-              <div className="dt-card-hairpin bl" />
-              <div className="dt-card-hairpin br" />
-
-              {/* Dynamic glare shine overlay */}
-              {tilt.showSheen && (
-                <div
-                  className="dt-card-sheen"
-                  style={{
-                    background: `radial-gradient(circle at ${tilt.sheenX}% ${tilt.sheenY}%, rgba(255,255,255,0.08) 0%, transparent 60%)`,
-                  }}
-                />
-              )}
-
-              <div className="dt-share-card-header">
-                <span className="dt-share-card-tl">allele</span>
-                <span className="dt-share-card-tr">{num}</span>
-              </div>
-
-              {layout === "specimen" ? (
-                // SPECIMEN SCIENTIFIC LAYOUT
-                <div className="dt-share-card-body specimen">
-                  <div className="dt-card-meta-row">
-                    <span className="dt-card-meta-label">DIAGNOSTIC DATA</span>
-                    <span className="dt-card-meta-value">VOL. I · MMXXVI</span>
-                  </div>
-
-                  <div className="dt-card-hero-block">
-                    <div className="dt-share-card-eyebrow">· {s.family.toUpperCase()} ·</div>
-                    <div className="dt-share-card-name">{s.name}</div>
-                    <div className="dt-share-card-tag">{s.tagline}</div>
-                  </div>
-
-                  <div className="dt-card-details-grid">
-                    {/* Diagnostic Coordinates Grid */}
-                    <div className="dt-card-grid-container">
-                      <div className="dt-card-grid">
-                        <div className="dt-card-grid-axis x"></div>
-                        <div className="dt-card-grid-axis y"></div>
-                        <div className="dt-card-grid-label top">MUTED</div>
-                        <div className="dt-card-grid-label bottom">BRIGHT</div>
-                        <div className="dt-card-grid-label left">COOL</div>
-                        <div className="dt-card-grid-label right">WARM</div>
-                        <div
-                          className="dt-card-grid-dot"
-                          style={{
-                            left: `calc(50% + ${coords.x}%)`,
-                            top: `calc(50% + ${coords.y}%)`,
-                          }}
-                        />
-                      </div>
-                      <div className="dt-card-grid-caption">AXIS MAPPING</div>
-                    </div>
-
-                    {/* specimens hex block */}
-                    <div className="dt-card-specimens-container">
-                      <div className="dt-card-specimens-grid">
-                        {s.palette.slice(0, 8).map((color, i) => (
-                          <div key={i} className="dt-card-specimen-item">
-                            <div className="dt-card-specimen-circle" style={{ background: color }} />
-                            <div className="dt-card-specimen-info">
-                              <span className="dt-card-specimen-label">{s.paletteLabels[i] || `Color ${i+1}`}</span>
-                              <span className="dt-card-specimen-hex">{color.toUpperCase()}</span>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Celebrity style twins */}
-                  {showCelebs !== "none" && s.celebs && s.celebs.length > 0 && (
-                    <div className="dt-card-celebs-section">
-                      <div className="dt-card-celebs-header">CELEBRITY STYLE TWINS</div>
-                      {showCelebs === "photo" ? (
-                        <div className="dt-card-celebs-avatars">
-                          {s.celebs.slice(0, 3).map((celeb, i) => (
-                            <div key={i} className="dt-card-celeb-avatar-wrap">
-                              <CelebAvatar key={celeb.name} celeb={celeb} seasonId={seasonId} />
-                              <span className="dt-card-celeb-avatar-name">{celeb.name.split(" ")[0]}</span>
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <div className="dt-card-celebs-text">
-                          {s.celebs.map((c) => c.name.toUpperCase()).join(" · ")}
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              ) : (
-                // MINIMAL EDITORIAL LAYOUT
-                <div className="dt-share-card-body minimal">
-                  <div className="dt-share-card-center">
-                    <div className="dt-share-card-eyebrow">· {s.family} ·</div>
-                    <div className="dt-share-card-name">{s.name}</div>
-                    <div className="dt-share-card-tag">{s.tagline}</div>
-                    
-                    <div className="dt-share-card-rail">
-                      {s.palette.slice(0, 8).map((c, i) => (
-                        <div key={i} className="dt-share-chip" style={{ background: c }} />
-                      ))}
-                    </div>
-
-                    {showCelebs !== "none" && s.celebs && s.celebs.length > 0 && (
-                      <div className="dt-card-celebs-minimal">
-                        <span className="dt-card-celebs-minimal-label">TWINS · </span>
-                        <span>{s.celebs.map((c) => c.name).join(" · ")}</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              <div className="dt-share-card-foot">allele.app · find your season</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function StickyShopBar({ s, shadeIndex }) {
   const [isVisible, setIsVisible] = useState(false);
   const shopUrl = getShopUrl(s.name);
@@ -3654,7 +3598,6 @@ function ResultsInner({ seasonParam, depthParam }) {
         </div>
       </details>
 
-      <Share s={s} seasonId={seasonId} />
       <Collect s={s} />
       <Footer />
     </main>
