@@ -32,7 +32,7 @@ const CELEB_WIKI_MAP = {
   'Jada Smith': 'Jada Pinkett Smith'
 };
 
-const OUTPUT_DIR = path.join(__dirname, 'public', 'celebs');
+const OUTPUT_DIR = path.join(__dirname, 'public', 'twins');
 
 if (!fs.existsSync(OUTPUT_DIR)) {
   fs.mkdirSync(OUTPUT_DIR, { recursive: true });
