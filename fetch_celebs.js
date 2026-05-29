@@ -57,7 +57,7 @@ function getJson(url) {
 function downloadFile(url, dest) {
   return new Promise((resolve, reject) => {
     const file = fs.createWriteStream(dest);
-    https.get(url, (res) => {
+    https.get(url, { headers: { 'User-Agent': 'AlleleCelebFetcher/1.0 (anishka.content@gmail.com)' } }, (res) => {
       res.pipe(file);
       file.on('finish', () => {
         file.close();
