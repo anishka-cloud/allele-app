@@ -413,7 +413,7 @@ export default function QuizPage() {
                 Save your<br /><em>{lead.name}</em> results.
               </h2>
               <p className="qz-gate-body">
-                We&rsquo;ll send the full dossier to your inbox &mdash; every shade with hex codes, your 24-product edit, wardrobe anchors, and seasonal shopping tips you can pull up in the dressing room.
+                We&rsquo;ll send the full dossier to your inbox &mdash; every shade with hex codes, your 24-product edit, and seasonal shopping tips you can pull up in the dressing room.
               </p>
 
               <form className="qz-gate-form" onSubmit={handleGateSubmit}>

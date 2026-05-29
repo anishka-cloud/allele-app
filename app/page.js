@@ -813,7 +813,7 @@ export default function Home() {
         <div className="l-voices-grid">
           <div className="l-voice">
             <div className="l-voice-quote-mark">I</div>
-            <p className="l-voice-body">Take the analysis. <em>Twelve questions, one minute.</em> Your archetype is named, your palette is rendered, your wardrobe anchors are pulled.</p>
+            <p className="l-voice-body">Take the analysis. <em>Twelve questions, one minute.</em> Your archetype is named, your palette is rendered, your 24-product edit is generated.</p>
             <div className="l-voice-attr">
               <div className="l-voice-avatar" style={{ background: "linear-gradient(135deg,#FDE4C4,#D9A47C)" }}></div>
               <div>
