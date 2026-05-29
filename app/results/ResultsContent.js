@@ -3138,6 +3138,10 @@ function CelebAvatar({ celeb, seasonId }) {
   const slug = `${seasonId}-${celeb.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
   const initials = getInitials(celeb.name);
 
+  useEffect(() => {
+    setImageError(false);
+  }, [slug]);
+
   if (imageError || !celeb.name) {
     return (
       <div className="dt-celeb-monogram" title={celeb.name}>
@@ -3397,7 +3401,7 @@ function Share({ s, seasonId }) {
                         <div className="dt-card-celebs-avatars">
                           {s.celebs.slice(0, 3).map((celeb, i) => (
                             <div key={i} className="dt-card-celeb-avatar-wrap">
-                              <CelebAvatar celeb={celeb} seasonId={seasonId} />
+                              <CelebAvatar key={celeb.name} celeb={celeb} seasonId={seasonId} />
                               <span className="dt-card-celeb-avatar-name">{celeb.name.split(" ")[0]}</span>
                             </div>
                           ))}
