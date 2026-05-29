@@ -1890,25 +1890,20 @@ function Hero({ s, seasonId }) {
           {s.celebs?.length > 0 && (
             <div className="dt-twins">
               <span className="dt-twins-label">Style twins</span>
-              <span className="dt-twins-names">
-                {s.celebs.map((c, i) => (
-                  <span key={i}>
-                    <em>{c.name}</em>
-                    {c.signatureColor && (
-                      <span
-                        className="dt-twins-swatch"
-                        style={{ background: c.signatureColor }}
-                        aria-hidden="true"
-                      />
-                    )}
-                    {c.contested && (
-                      <sup className="dt-twins-contested" title="Sources disagree">*</sup>
-                    )}
-                    {c.note && <span className="dt-twins-note"> ({c.note})</span>}
-                    {i < s.celebs.length - 1 && <span className="dt-sep"> · </span>}
-                  </span>
+              <div className="dt-twins-avatars-row">
+                {s.celebs.map((celeb) => (
+                  <div key={celeb.name} className="dt-twin-avatar-item">
+                    <CelebAvatar key={celeb.name} celeb={celeb} seasonId={seasonId} />
+                    <span className="dt-twin-avatar-name">
+                      <em>{celeb.name}</em>
+                      {celeb.contested && (
+                        <sup className="dt-twins-contested" title="Sources disagree">*</sup>
+                      )}
+                      {celeb.note && <span className="dt-twins-note"> ({celeb.note})</span>}
+                    </span>
+                  </div>
                 ))}
-              </span>
+              </div>
             </div>
           )}
         </div>
