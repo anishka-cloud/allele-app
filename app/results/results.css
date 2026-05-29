@@ -274,11 +274,20 @@ body:has(.dt-results) { background: var(--cream); }
 .dt-twin-avatar-item {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+}
+.dt-twins-avatars-row .dt-celeb-avatar,
+.dt-twins-avatars-row .dt-celeb-monogram {
+  width: 48px;
+  height: 48px;
+  border-width: 1.5px;
+}
+.dt-twins-avatars-row .dt-celeb-monogram span {
+  font-size: 13px;
 }
 .dt-twin-avatar-name {
   font-family: var(--serif);
-  font-size: 15px;
+  font-size: 16px;
   color: var(--ink);
 }
 .dt-twin-avatar-name em {
@@ -1702,6 +1711,8 @@ body:has(.dt-results) { background: var(--cream); }
   border-radius: 50%;
   object-fit: cover;
   border: 1px solid rgba(196,162,101,0.22);
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
 }
 .dt-celeb-monogram {
   width: 32px;
@@ -1717,6 +1728,8 @@ body:has(.dt-results) { background: var(--cream); }
   letter-spacing: 0.05em;
   border: 1.5px solid #FFFBF7;
   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
 }
 .dt-share-card.theme-obsidian .dt-celeb-monogram {
   border-color: #0A0A0C;
