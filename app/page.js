@@ -188,6 +188,271 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ============ Portfolio (umbrella signal) ============ */}
+      <section
+        id="portfolio"
+        style={{
+          padding: "72px 24px",
+          background: "var(--cream-2, #F8F2E9)",
+          borderTop: "1px solid rgba(196,162,101,0.18)",
+          borderBottom: "1px solid rgba(196,162,101,0.18)",
+        }}
+      >
+        <div style={{ maxWidth: "1120px", margin: "0 auto" }}>
+          <div className="l-section-head" style={{ marginBottom: "48px" }}>
+            <div className="l-section-head-num">§ I</div>
+            <h2 className="l-section-head-title">The DNA <em>Portfolio</em>.</h2>
+            <div className="l-section-head-meta">Three volumes &middot; One identity</div>
+          </div>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+              gap: "0",
+              border: "1px solid rgba(196,162,101,0.28)",
+              background: "var(--cream, #FFFBF7)",
+            }}
+          >
+            {/* Shade DNA — active */}
+            <Link
+              href="/quiz?source=portfolio_strip"
+              onClick={() => {
+                track.quizStarted("portfolio_strip");
+                if (typeof sessionStorage !== "undefined") {
+                  sessionStorage.setItem("allele_quiz_started", "true");
+                }
+              }}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                padding: "36px 28px",
+                borderRight: "1px solid rgba(196,162,101,0.28)",
+                textDecoration: "none",
+                color: "inherit",
+                background: "var(--cream, #FFFBF7)",
+                transition: "background 0.2s",
+              }}
+            >
+              <div
+                style={{
+                  fontFamily: "var(--font-mono, 'JetBrains Mono'), monospace",
+                  fontSize: "0.7rem",
+                  letterSpacing: "0.2em",
+                  textTransform: "uppercase",
+                  color: "#C4A265",
+                  marginBottom: "20px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                }}
+              >
+                <span>N&deg; 01 / 03</span>
+                <span style={{ flex: 1, height: "1px", background: "rgba(196,162,101,0.4)" }} />
+                <span style={{ color: "#3A6B3A" }}>&middot; Live</span>
+              </div>
+              <div
+                style={{
+                  fontFamily: "var(--font-display, 'Lora'), Georgia, serif",
+                  fontSize: "1.5rem",
+                  fontWeight: 500,
+                  marginBottom: "6px",
+                  color: "var(--ink, #1A1613)",
+                }}
+              >
+                Shade <em>DNA</em>
+              </div>
+              <div
+                style={{
+                  fontFamily: "var(--font-mono, 'JetBrains Mono'), monospace",
+                  fontSize: "0.72rem",
+                  letterSpacing: "0.14em",
+                  textTransform: "uppercase",
+                  color: "rgba(26,22,19,0.55)",
+                  marginBottom: "20px",
+                }}
+              >
+                Vol. I &middot; MMXXVI
+              </div>
+              <p
+                style={{
+                  fontFamily: "var(--font-inter, system-ui, sans-serif)",
+                  fontSize: "0.92rem",
+                  lineHeight: 1.65,
+                  color: "rgba(26,22,19,0.78)",
+                  margin: "0 0 24px",
+                  flex: 1,
+                }}
+              >
+                Your color season, mapped from twelve questions. Twelve archetypes, ninety-six curated shades, three price tiers. Free.
+              </p>
+              <div
+                style={{
+                  fontFamily: "var(--font-inter, system-ui, sans-serif)",
+                  fontSize: "0.85rem",
+                  fontWeight: 500,
+                  color: "var(--ink, #1A1613)",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "8px",
+                }}
+              >
+                Begin the analysis <span>&rarr;</span>
+              </div>
+            </Link>
+
+            {/* Vibe DNA — forthcoming */}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                padding: "36px 28px",
+                borderRight: "1px solid rgba(196,162,101,0.28)",
+                background: "rgba(255,251,247,0.6)",
+              }}
+            >
+              <div
+                style={{
+                  fontFamily: "var(--font-mono, 'JetBrains Mono'), monospace",
+                  fontSize: "0.7rem",
+                  letterSpacing: "0.2em",
+                  textTransform: "uppercase",
+                  color: "#C4A265",
+                  marginBottom: "20px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                }}
+              >
+                <span>N&deg; 02 / 03</span>
+                <span style={{ flex: 1, height: "1px", background: "rgba(196,162,101,0.4)" }} />
+                <span style={{ color: "rgba(26,22,19,0.55)" }}>&middot; Forthcoming</span>
+              </div>
+              <div
+                style={{
+                  fontFamily: "var(--font-display, 'Lora'), Georgia, serif",
+                  fontSize: "1.5rem",
+                  fontWeight: 500,
+                  marginBottom: "6px",
+                  color: "var(--ink, #1A1613)",
+                }}
+              >
+                Vibe <em>DNA</em>
+              </div>
+              <div
+                style={{
+                  fontFamily: "var(--font-mono, 'JetBrains Mono'), monospace",
+                  fontSize: "0.72rem",
+                  letterSpacing: "0.14em",
+                  textTransform: "uppercase",
+                  color: "rgba(26,22,19,0.55)",
+                  marginBottom: "20px",
+                }}
+              >
+                Vol. II &middot; Forthcoming
+              </div>
+              <p
+                style={{
+                  fontFamily: "var(--font-inter, system-ui, sans-serif)",
+                  fontSize: "0.92rem",
+                  lineHeight: 1.65,
+                  color: "rgba(26,22,19,0.78)",
+                  margin: "0 0 24px",
+                  flex: 1,
+                }}
+              >
+                Your wardrobe archetype, mapped from the silhouettes and textures you keep coming back to. Same method, new lens.
+              </p>
+              <div
+                style={{
+                  fontFamily: "var(--font-inter, system-ui, sans-serif)",
+                  fontSize: "0.85rem",
+                  fontWeight: 500,
+                  color: "rgba(26,22,19,0.5)",
+                  fontStyle: "italic",
+                }}
+              >
+                In final review
+              </div>
+            </div>
+
+            {/* Signature DNA — in development */}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                padding: "36px 28px",
+                background: "rgba(26,22,19,0.04)",
+              }}
+            >
+              <div
+                style={{
+                  fontFamily: "var(--font-mono, 'JetBrains Mono'), monospace",
+                  fontSize: "0.7rem",
+                  letterSpacing: "0.2em",
+                  textTransform: "uppercase",
+                  color: "#C4A265",
+                  marginBottom: "20px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                }}
+              >
+                <span>N&deg; 03 / 03</span>
+                <span style={{ flex: 1, height: "1px", background: "rgba(196,162,101,0.4)" }} />
+                <span style={{ color: "rgba(26,22,19,0.55)" }}>&middot; In Development</span>
+              </div>
+              <div
+                style={{
+                  fontFamily: "var(--font-display, 'Lora'), Georgia, serif",
+                  fontSize: "1.5rem",
+                  fontWeight: 500,
+                  marginBottom: "6px",
+                  color: "var(--ink, #1A1613)",
+                }}
+              >
+                Signature <em>DNA</em>
+              </div>
+              <div
+                style={{
+                  fontFamily: "var(--font-mono, 'JetBrains Mono'), monospace",
+                  fontSize: "0.72rem",
+                  letterSpacing: "0.14em",
+                  textTransform: "uppercase",
+                  color: "rgba(26,22,19,0.55)",
+                  marginBottom: "20px",
+                }}
+              >
+                Vol. III &middot; In Development
+              </div>
+              <p
+                style={{
+                  fontFamily: "var(--font-inter, system-ui, sans-serif)",
+                  fontSize: "0.92rem",
+                  lineHeight: 1.65,
+                  color: "rgba(26,22,19,0.78)",
+                  margin: "0 0 24px",
+                  flex: 1,
+                }}
+              >
+                The identity layer. When you&rsquo;ve completed two DNAs, the third becomes yours &mdash; your color, your archetype, your map across all of it.
+              </p>
+              <div
+                style={{
+                  fontFamily: "var(--font-inter, system-ui, sans-serif)",
+                  fontSize: "0.85rem",
+                  fontWeight: 500,
+                  color: "rgba(26,22,19,0.5)",
+                  fontStyle: "italic",
+                }}
+              >
+                Unlocks with 2+ volumes
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ============ Twelve ============ */}
       <section className="l-twelve" id="twelve">
         <div className="l-section-head">
