@@ -2104,49 +2104,7 @@ function Drape({ s, seasonId }) {
   );
 }
 
-function Basics({ seasonId }) {
-  const n = neutralsFor(seasonId);
-  return (
-    <section className="dt-basics">
-      <div className="dt-section-head">
-        <span className="dt-section-num">·</span>
-        <h2 className="dt-section-title">Your <em>wardrobe anchors</em></h2>
-        <span className="dt-section-meta">
-          The eight pieces every closet is built around. In your exact shade.
-        </span>
-      </div>
-      <p className="dt-basics-intro">
-        If you don&rsquo;t gravitate to the statement colors, that&rsquo;s fine. Most of what you wear is <em>neutral</em>. Here&rsquo;s what every basic should be, translated into your season.
-      </p>
-      <div className="dt-basics-grid">
-        {n.basics.map((b, i) => {
-          const isMetal = /metal/i.test(b.piece);
-          const swatchBg = isMetal ? metalGradient(b.hex) : b.hex;
-          return (
-            <article
-              key={i}
-              className={`dt-basic${isMetal ? " dt-basic-metal" : ""}`}
-              style={{ "--swatch": b.hex }}
-            >
-              <div className="dt-basic-swatch" style={{ background: swatchBg }}>
-                <span className="dt-basic-num">{String(i + 1).padStart(2, "0")}</span>
-                {isMetal && <span className="dt-basic-metal-sheen" aria-hidden="true" />}
-              </div>
-              <div className="dt-basic-body">
-                <div className="dt-basic-k">{b.piece}</div>
-                <div className="dt-basic-v">
-                  <span className="dt-basic-arrow">→</span> {b.answer}
-                </div>
-                <div className="dt-basic-hex">{b.hex.replace("#", "").toUpperCase()}</div>
-                <div className="dt-basic-note">{b.note}</div>
-              </div>
-            </article>
-          );
-        })}
-      </div>
-    </section>
-  );
-}
+
 
 function swatchIsDark(hex) {
   const h = hex.replace("#", "");
@@ -2906,6 +2864,115 @@ function OliveAmbiguity({ seasonId, seasonName }) {
   );
 }
 
+function TravelCapsule({ seasonId, seasonName }) {
+  const handleClick = (source) => {
+    trackEvent("kit_clicked", {
+      kit: "summer-travel-capsule-planner",
+      source,
+      from_season: seasonName,
+      price_usd: 12,
+    });
+  };
+
+  return (
+    <section
+      style={{
+        padding: "72px 24px",
+        background: "var(--cream, #FFFBF7)",
+        borderTop: "1px solid rgba(196,162,101,0.18)",
+        borderBottom: "1px solid rgba(196,162,101,0.18)",
+      }}
+    >
+      <div style={{ maxWidth: "760px", margin: "0 auto" }}>
+        <div
+          style={{
+            fontFamily: "var(--font-mono, 'JetBrains Mono'), monospace",
+            fontSize: "0.7rem",
+            letterSpacing: "0.2em",
+            textTransform: "uppercase",
+            color: "#C4A265",
+            marginBottom: "20px",
+            display: "flex",
+            alignItems: "center",
+            gap: "16px",
+          }}
+        >
+          <span>§ The summer edit</span>
+          <span style={{ flex: 1, height: "1px", background: "rgba(196,162,101,0.4)" }} />
+          <span>Vol. II &middot; mini planner</span>
+        </div>
+
+        <h2
+          style={{
+            fontFamily: "var(--font-display, 'Lora'), Georgia, serif",
+            fontSize: "clamp(1.6rem, 3.2vw, 2.2rem)",
+            fontWeight: 500,
+            lineHeight: 1.2,
+            margin: "0 0 24px",
+            color: "var(--ink, #1A1613)",
+          }}
+        >
+          Half your suitcase doesn&rsquo;t <em>work on you</em>.<br />
+          The other half does the work of <em>six</em>.
+        </h2>
+
+        <div
+          style={{
+            fontFamily: "var(--font-inter, system-ui, sans-serif)",
+            fontSize: "1.02rem",
+            lineHeight: 1.75,
+            color: "rgba(26,22,19,0.82)",
+            marginBottom: "32px",
+          }}
+        >
+          <p style={{ margin: "0 0 16px" }}>
+            Most travel packing lists assume everyone reads the same in light. They don&rsquo;t. The grey-blue linen that anchors a Soft Summer dissolves on a Bright Winter. The terracotta that grounds a True Autumn flattens a Light Spring. You&rsquo;ve packed it before. The photos came back flat.
+          </p>
+          <p style={{ margin: 0 }}>
+            <em>The Summer Travel Capsule Planner by Color Season</em> shows you the pieces that actually work for <em>{seasonName}</em> &mdash; the ones that pull double duty across dinner, beach, plane, and golden hour &mdash; and the ones to leave on the closet floor. One PDF, twelve season-specific capsules, the math already done.
+          </p>
+        </div>
+
+        <div style={{ display: "flex", alignItems: "center", gap: "20px", flexWrap: "wrap" }}>
+          <Link
+            href="/travel-capsule"
+            onClick={() => handleClick("results_capsule")}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "12px",
+              padding: "14px 26px",
+              background: "var(--ink, #1A1613)",
+              color: "var(--cream, #FFFBF7)",
+              fontFamily: "var(--font-inter, system-ui, sans-serif)",
+              fontSize: "0.9rem",
+              fontWeight: 500,
+              letterSpacing: "0.04em",
+              textDecoration: "none",
+              border: "1px solid #C4A265",
+              borderRadius: "2px",
+            }}
+          >
+            <span>Pack the capsule &middot; $12</span>
+            <span>&rarr;</span>
+          </Link>
+          <span
+            style={{
+              fontFamily: "var(--font-mono, 'JetBrains Mono'), monospace",
+              fontSize: "0.7rem",
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+              color: "rgba(26,22,19,0.55)",
+            }}
+          >
+            PDF &middot; 12 seasons &middot; 8 pages
+          </span>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Collect({ s }) {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("idle");
@@ -2947,7 +3014,7 @@ function Collect({ s }) {
           <div className="dt-section-num">02</div>
           <h2 className="dt-collect-title">The <em>dossier</em></h2>
           <p className="dt-collect-body">
-            We&rsquo;ll send the long-form letter: every shade with names and hexes, your wardrobe anchors, the 24-product edit, and tips you can save for the dressing room.
+            We&rsquo;ll send the long-form letter: every shade with names and hexes, the 24-product edit, and tips you can save for the dressing room.
           </p>
         </div>
         <form className="dt-collect-form" onSubmit={submit}>
@@ -3307,6 +3374,9 @@ function ResultsInner({ seasonParam, depthParam }) {
       {/* Olive ambiguity cross-link — only renders for the 6 olive-prone seasons */}
       <OliveAmbiguity seasonId={seasonId} seasonName={s.name} />
 
+      {/* Summer Travel Capsule cross-link — renders for all 12 seasons */}
+      <TravelCapsule seasonId={seasonId} seasonName={s.name} />
+
       {/* Color Science theory details folded to reduce visual clutter and cognitive overload */}
       <details className="dt-science-accordion">
         <summary className="dt-science-summary">
@@ -3317,7 +3387,6 @@ function ResultsInner({ seasonParam, depthParam }) {
           <Contrast seasonId={seasonId} />
           <Drape s={s} seasonId={seasonId} />
           <PredictsThisYear seasonId={seasonId} />
-          <Basics seasonId={seasonId} />
           <Deeper s={s} />
         </div>
       </details>
