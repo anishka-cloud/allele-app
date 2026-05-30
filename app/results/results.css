@@ -1287,6 +1287,11 @@ body:has(.dt-results) { background: var(--cream); }
   border-top: 1px solid var(--rule-soft);
   border-bottom: 1px solid var(--rule-soft);
   padding: 24px 0;
+  width: 100%;
+  max-width: 380px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
 }
 .dt-control-group {
   display: flex;
@@ -1330,9 +1335,14 @@ body:has(.dt-results) { background: var(--cream); }
 }
 
 .dt-share-targets {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+  max-width: 380px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
 }
 .dt-share-target {
   padding: 12px 20px;
@@ -1345,12 +1355,16 @@ body:has(.dt-results) { background: var(--cream); }
   color: var(--ink);
   cursor: pointer;
   transition: all 0.2s;
+  width: 100%;
+  text-align: center;
+  box-sizing: border-box;
 }
 .dt-share-target:hover { background: var(--ink); color: var(--cream); border-color: var(--ink); }
 .dt-share-target.highlight {
   background: var(--ink);
   color: var(--cream);
   border-color: var(--ink);
+  grid-column: span 2;
 }
 .dt-share-target.highlight:hover {
   background: var(--cream);
@@ -1397,10 +1411,92 @@ body:has(.dt-results) { background: var(--cream); }
 .dt-share-card.aspect-square {
   max-width: 420px;
   aspect-ratio: 1 / 1;
+  padding: 16px 20px 12px;
 }
+.dt-share-card.aspect-square .dt-share-card-header {
+  margin-bottom: 10px;
+}
+.dt-share-card.aspect-square .dt-share-card-body.specimen {
+  gap: 6px;
+}
+.dt-share-card.aspect-square .dt-card-hero-block {
+  margin: 4px 0;
+}
+.dt-share-card.aspect-square .dt-card-grid {
+  width: 70px;
+  height: 70px;
+}
+.dt-share-card.aspect-square .dt-card-grid-caption {
+  margin-top: 6px;
+}
+.dt-share-card.aspect-square .dt-card-specimen-circle {
+  width: 18px;
+  height: 18px;
+  margin-bottom: 4px;
+}
+.dt-share-card.aspect-square .dt-card-specimens-grid {
+  gap: 6px 8px;
+}
+.dt-share-card.aspect-square .dt-card-celebs-section {
+  padding-top: 8px;
+  gap: 6px;
+  margin-top: 4px;
+}
+.dt-share-card.aspect-square .dt-card-celebs-section .dt-celeb-avatar,
+.dt-share-card.aspect-square .dt-card-celebs-section .dt-celeb-monogram {
+  width: 32px;
+  height: 32px;
+}
+.dt-share-card.aspect-square .dt-card-celebs-section .dt-celeb-monogram {
+  font-size: 8px;
+  border-width: 1px;
+}
+.dt-share-card.aspect-square .dt-share-card-foot {
+  margin-top: 10px;
+  padding-top: 8px;
+}
+
 .dt-share-card.aspect-story {
   max-width: 380px;
   aspect-ratio: 9 / 16;
+  padding: 24px 24px 16px;
+}
+.dt-share-card.aspect-story .dt-share-card-header {
+  margin-bottom: 14px;
+}
+.dt-share-card.aspect-story .dt-share-card-body.specimen {
+  gap: 8px;
+}
+.dt-share-card.aspect-story .dt-card-grid {
+  width: 80px;
+  height: 80px;
+}
+.dt-share-card.aspect-story .dt-card-grid-caption {
+  margin-top: 8px;
+}
+.dt-share-card.aspect-story .dt-card-specimen-circle {
+  width: 20px;
+  height: 20px;
+  margin-bottom: 4px;
+}
+.dt-share-card.aspect-story .dt-card-specimens-grid {
+  gap: 8px 10px;
+}
+.dt-share-card.aspect-story .dt-card-celebs-section {
+  padding-top: 8px;
+  gap: 6px;
+}
+.dt-share-card.aspect-story .dt-card-celebs-section .dt-celeb-avatar,
+.dt-share-card.aspect-story .dt-card-celebs-section .dt-celeb-monogram {
+  width: 36px;
+  height: 36px;
+}
+.dt-share-card.aspect-story .dt-card-celebs-section .dt-celeb-monogram {
+  font-size: 9px;
+}
+.dt-share-card.aspect-story .dt-share-card-foot {
+  margin-top: 14px;
+  padding-top: 10px;
 }
 
 /* Card hairpins for blueprint/specimen feel */
@@ -1576,9 +1672,9 @@ body:has(.dt-results) { background: var(--cream); }
 
 /* Ordering elements for Story vs Square */
 .dt-share-card.aspect-story .dt-card-grid-container { order: 1; }
-.dt-share-card.aspect-story .dt-card-hero-block { order: 2; margin: 16px 0; }
+.dt-share-card.aspect-story .dt-card-hero-block { order: 2; margin: 8px 0; }
 .dt-share-card.aspect-story .dt-card-specimens-container { order: 3; }
-.dt-share-card.aspect-story .dt-card-celebs-section { order: 4; margin-top: 12px; }
+.dt-share-card.aspect-story .dt-card-celebs-section { order: 4; margin-top: 8px; }
 
 /* 2D coordinates reticle grid styling */
 .dt-card-grid-container {
@@ -1631,7 +1727,8 @@ body:has(.dt-results) { background: var(--cream); }
   border: 1.5px solid #FFFBF7;
   border-radius: 50%;
   box-shadow: 0 0 0 1.5px var(--accent);
-  transform: translate(-50%, -50%);
+  transform: translate3d(-50%, -50%, 2px);
+  -webkit-transform: translate3d(-50%, -50%, 2px);
   transition: left 0.5s ease, top 0.5s ease;
 }
 .dt-card-grid-caption {
@@ -1660,6 +1757,9 @@ body:has(.dt-results) { background: var(--cream); }
   border-radius: 50%;
   box-shadow: inset 0 0 0 0.5px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.06);
   margin-bottom: 6px;
+  transform: translate3d(0, 0, 2px);
+  -webkit-transform: translate3d(0, 0, 2px);
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
 }
 .dt-card-specimen-info {
   display: flex;
@@ -1713,8 +1813,10 @@ body:has(.dt-results) { background: var(--cream); }
   border-radius: 50%;
   object-fit: cover;
   border: 1px solid rgba(196,162,101,0.22);
-  transform: translate3d(0, 0, 0);
-  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 2px);
+  -webkit-transform: translate3d(0, 0, 2px);
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  will-change: transform;
 }
 .dt-celeb-monogram {
   width: 44px;
@@ -1730,8 +1832,10 @@ body:has(.dt-results) { background: var(--cream); }
   letter-spacing: 0.05em;
   border: 1.5px solid #FFFBF7;
   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-  transform: translate3d(0, 0, 0);
-  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 2px);
+  -webkit-transform: translate3d(0, 0, 2px);
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  will-change: transform;
 }
 .dt-share-card.theme-obsidian .dt-celeb-monogram {
   border-color: #0A0A0C;
@@ -3057,14 +3161,7 @@ body:has(.dt-results) { background: var(--cream); }
    CRO Boosters & Visual Audit Refinements (2026-05-25)
    ============================================================ */
 /* Model Portrait & Specimen side-by-side on desktop */
-.dt-hero-right {
-  display: flex;
-  flex-direction: row;
-  gap: 28px;
-  align-items: stretch;
-  justify-content: center;
-  width: 100%;
-}
+
 
 .dt-hero-model-container {
   position: relative;
