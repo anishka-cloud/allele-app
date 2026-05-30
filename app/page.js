@@ -9,12 +9,12 @@ const SEASONS = [
   { family: "Spring", items: [
     { id: "01", name: "Clear Spring",  tagline: "Bright · Warm · Clear",   whisper: "Coral, peach, and sun-warmed yellow.",                                  attrs: ["Warm","Medium","Bright"],         twins: ["Emma Stone","Emmy Rossum","Kerry Washington"],   palette: ["#F26A4B","#F4A460","#F5D547","#3EB489","#2F8FB0","#1F5FA8","#E83F6F","#6D2E5B"] },
     { id: "02", name: "True Spring",   tagline: "Warm · Bright · Golden",  whisper: "Honey, apricot, and fresh leaf. Gold is your neutral.",                attrs: ["Warm","Medium","Bright"],         twins: ["Amy Adams","Isla Fisher","Nicole Scherzinger"],  palette: ["#F4A460","#FFB74D","#FFD54F","#8BC34A","#26A69A","#FF7043","#E91E63","#A0522D"] },
-    { id: "03", name: "Light Spring",  tagline: "Light · Warm · Fresh",    whisper: "Blush, buttercream, warm ivory.",                                       attrs: ["Warm","Light","Soft-Bright"],     twins: ["Taylor Swift","Margot Robbie","Saoirse Ronan"],  palette: ["#FDE4C4","#F5D5AE","#FFD76B","#C6E2B5","#A8D8EA","#D4A5C7","#FFA6A6","#E8B28C"] },
+    { id: "03", name: "Light Spring",  tagline: "Light · Warm · Fresh",    whisper: "Blush, buttercream, warm ivory.",                                       attrs: ["Warm","Light","Soft-Bright"],     twins: ["Taylor Swift","Margot Robbie","IU (Lee Ji-eun)"],  palette: ["#FDE4C4","#F5D5AE","#FFD76B","#C6E2B5","#A8D8EA","#D4A5C7","#FFA6A6","#E8B28C"] },
   ]},
   { family: "Summer", items: [
     { id: "04", name: "Light Summer",  tagline: "Light · Cool · Soft",     whisper: "Dusty rose, periwinkle, pale cool morning.",                            attrs: ["Cool","Light","Soft-Muted"],      twins: ["Elle Fanning","Cate Blanchett","Gemma Chan"],    palette: ["#E8D5E4","#C9B8D8","#B8D4E8","#A9C4D4","#F2D4D4","#D4C4B8","#B8B8B8","#8FA9B8"] },
     { id: "05", name: "True Summer",   tagline: "Cool · Soft · Rosy",      whisper: "Mauve, raspberry, a quiet ocean at dusk.",                              attrs: ["Cool","Medium","Muted"],          twins: ["Emily Blunt","Sarah Jessica Parker","Zoe Saldana"], palette: ["#8DA9C4","#A89BC4","#C4A9B8","#E8B5A8","#7A8FA8","#5D7A8C","#B89BA8","#6B8CAD"] },
-    { id: "06", name: "Soft Summer",   tagline: "Soft · Cool · Grayed",    whisper: "Grayed plum, fog, taupe rose. Everything whispers.",                    attrs: ["Cool-N","Medium","Very Muted"],   twins: ["Cara Delevingne","Jennifer Aniston","Kate Middleton"], palette: ["#B8A9C9","#C4B5B8","#A89B8C","#8C9B8A","#7A6B7A","#9B8B7A","#6B5D6B","#A89B9B"] },
+    { id: "06", name: "Soft Summer",   tagline: "Soft · Cool · Grayed",    whisper: "Grayed plum, fog, taupe rose. Everything whispers.",                    attrs: ["Cool-N","Medium","Very Muted"],   twins: ["Leona Lewis","Jennifer Aniston","Kate Middleton"], palette: ["#B8A9C9","#C4B5B8","#A89B8C","#8C9B8A","#7A6B7A","#9B8B7A","#6B5D6B","#A89B9B"] },
   ]},
   { family: "Autumn", items: [
     { id: "07", name: "Soft Autumn",   tagline: "Soft · Warm · Earthy",    whisper: "Dried herbs, terracotta, honey on linen.",                              attrs: ["Warm","Medium","Muted"],          twins: ["Gigi Hadid","Jennifer Lopez","Jessica Biel"],    palette: ["#C67C52","#B08968","#9B7F5C","#7A8C5C","#A89268","#8B6F47","#6B5D3F","#C4A574"] },
@@ -23,8 +23,8 @@ const SEASONS = [
   ]},
   { family: "Winter", items: [
     { id: "10", name: "Dark Winter",   tagline: "Deep · Cool · Dramatic",  whisper: "Midnight, plum, charcoal, deep wine.",                                  attrs: ["Cool","Deep","Muted"],            twins: ["Lily Collins","Lucy Liu","Viola Davis"],         palette: ["#1F1F3D","#4B0082","#3D1F3D","#1F3D3D","#722F37","#2D2D2D","#3D1F1F","#4D4D5C"] },
-    { id: "11", name: "True Winter",   tagline: "Cool · Clear · Icy",      whisper: "Ice, emerald, true red. High contrast, high drama.",                    attrs: ["Cool","Medium-Deep","Bright"],    twins: ["Anne Hathaway","Fan Bingbing","Lupita Nyong'o"], palette: ["#1F3D7A","#003366","#7A1F3D","#C41E3A","#E8E8E8","#1F7A3D","#4B0082","#2D2D2D"] },
-    { id: "12", name: "Bright Winter", tagline: "Bright · Cool · Vivid",   whisper: "Fuchsia, electric blue, icy white. Nothing pastel.",                    attrs: ["Cool","Medium","Bright"],         twins: ["Megan Fox","Dita Von Teese","Naomi Campbell"],   palette: ["#E91E63","#1E88E5","#00E676","#FFEB3B","#9C27B0","#F44336","#00BCD4","#212121"] },
+    { id: "11", name: "True Winter",   tagline: "Cool · Clear · Icy",      whisper: "Ice, emerald, true red. High contrast, high drama.",                    attrs: ["Cool","Medium-Deep","Bright"],    twins: ["Anne Hathaway","Fan Bingbing","Lupita Nyong'o"], palette: ["#DC143C","#1E3A8A","#0F0F0F","#FFFFFF","#C71585","#00BFFF","#4B0082","#FFB6C1"] },
+    { id: "12", name: "Bright Winter", tagline: "Bright · Cool · Vivid",   whisper: "Fuchsia, electric blue, icy white. Nothing pastel.",                    attrs: ["Cool","Medium","Bright"],         twins: ["Megan Fox","Dita Von Teese","Naomi Campbell"],   palette: ["#FF1493","#00CED1","#8A2BE2","#FFD700","#FF4500","#0066FF","#FF69B4","#00FF7F"] },
   ]},
 ];
 
