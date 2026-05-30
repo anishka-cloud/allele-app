@@ -1812,6 +1812,7 @@ body:has(.dt-results) { background: var(--cream); }
   height: 44px;
   border-radius: 50%;
   object-fit: cover;
+  object-position: center top;
   border: 1px solid rgba(196,162,101,0.22);
   transform: translate3d(0, 0, 2px);
   -webkit-transform: translate3d(0, 0, 2px);
