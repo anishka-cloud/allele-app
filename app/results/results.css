@@ -1409,7 +1409,7 @@ body:has(.dt-results) { background: var(--cream); }
 
 /* Aspect ratio support */
 .dt-share-card.aspect-square {
-  max-width: 420px;
+  max-width: min(420px, 100%);
   aspect-ratio: 1 / 1;
   padding: 16px 20px 12px;
 }
@@ -1457,7 +1457,7 @@ body:has(.dt-results) { background: var(--cream); }
 }
 
 .dt-share-card.aspect-story {
-  max-width: 380px;
+  max-width: min(380px, 100%);
   aspect-ratio: 9 / 16;
   padding: 24px 24px 16px;
 }
@@ -2090,6 +2090,10 @@ body:has(.dt-results) { background: var(--cream); }
 /* Phone-tight (≤640px) — added 2026-05-07 mobile pass */
 @media (max-width: 640px) {
   :root { --edge: 16px; }
+
+  /* Reserve space for the fixed sticky shop bar (restacks to a ~120px column
+     on mobile) so it never covers the footer FTC disclosure link / last card. */
+  .dt-results { padding-bottom: 120px; }
 
   /* Nav */
   .dt-nav-inner { padding: 12px 16px; gap: 12px; grid-template-columns: auto auto; }
@@ -3494,7 +3498,10 @@ a.dt-prod:hover .dt-prod-shop span {
 
   .dt-share-card-name {
     font-size: 22px !important;
-    white-space: nowrap;
+    white-space: normal;
+    overflow-wrap: break-word;
+    text-wrap: balance;
+    line-height: 1.05;
   }
   .dt-share-card-eyebrow {
     font-size: 7px !important;
