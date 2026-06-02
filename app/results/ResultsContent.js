@@ -1779,15 +1779,23 @@ function getShadeIndexForDepth(depth, shadeLadder) {
   const repIdx = shadeLadder.findIndex(rung => rung.representative);
   const fallback = repIdx !== -1 ? repIdx : Math.floor(shadeLadder.length / 2);
   if (!depth) return fallback;
-  const map = {
-    "fair": 0,
-    "light": 1,
-    "medium": 2,
-    "deep": 4
+  // Normalize depth (including compound labels) to a 0..4 rank, then scale it
+  // proportionally onto THIS ladder's length. Foundation ladders are 5 rungs,
+  // but concealer ladders are 3, 4, or 5 — a literal index (the old deep:4)
+  // silently clamped to the last rung and headlined the wrong shade. Scaling by
+  // (len-1) maps fair→first rung and deep→last rung on any ladder length, with
+  // no clamp surprises, and reproduces the old 0/1/2/4 mapping on 5-rung ladders.
+  const rankMap = {
+    "very_fair": 0, "fair": 0, "fair-light": 0,
+    "light": 1, "light-medium": 1,
+    "medium": 2, "medium-light": 2,
+    "medium-deep": 3, "tan": 3,
+    "deep": 4, "very_deep": 4, "dark": 4
   };
-  const mappedIdx = map[depth];
-  if (mappedIdx === undefined) return fallback;
-  return Math.max(0, Math.min(shadeLadder.length - 1, mappedIdx));
+  const rank = rankMap[String(depth).toLowerCase().trim()];
+  if (rank === undefined) return fallback;
+  const scaled = Math.round((rank / 4) * (shadeLadder.length - 1));
+  return Math.max(0, Math.min(shadeLadder.length - 1, scaled));
 }
 
 function Hero({ s, seasonId }) {
@@ -2184,8 +2192,9 @@ function Hero({ s, seasonId }) {
 
 function Contrast({ seasonId }) {
   const c = contrastFor(seasonId);
+  const accent = SEASONS[seasonId]?.accent;
   return (
-    <section className="dt-contrast" style={{ padding: "60px 24px", background: "var(--cream-2, #F8F2E9)" }}>
+    <section className="dt-contrast" style={{ "--accent": accent, padding: "60px 24px", background: "var(--cream-2, #F8F2E9)" }}>
       <div className="dt-section-head" style={{ maxWidth: "1120px", margin: "0 auto 32px", display: "flex", alignItems: "baseline", gap: "20px", justifyContent: "space-between" }}>
         <span className="dt-section-num" style={{ fontFamily: "var(--font-mono, 'JetBrains Mono'), monospace", fontSize: "0.7rem", letterSpacing: "0.18em", color: "var(--accent, #B5500B)" }}>·</span>
         <h2 className="dt-section-title" style={{ fontFamily: "var(--font-display, 'Lora'), Georgia, serif", fontSize: "clamp(1.6rem, 3.4vw, 2.4rem)", fontWeight: 500, lineHeight: 1.1, color: "var(--ink, #1A1613)", flex: 1, textAlign: "center" }}>
@@ -2210,8 +2219,9 @@ function Contrast({ seasonId }) {
 function PredictsThisYear({ seasonId }) {
   const colors = pinterestPredictsFor(seasonId);
   if (!colors.length) return null;
+  const accent = SEASONS[seasonId]?.accent;
   return (
-    <section className="dt-predicts" style={{ padding: "60px 24px", background: "var(--cream, #FFFBF7)" }}>
+    <section className="dt-predicts" style={{ "--accent": accent, padding: "60px 24px", background: "var(--cream, #FFFBF7)" }}>
       <div className="dt-section-head" style={{ maxWidth: "1120px", margin: "0 auto 32px", display: "flex", alignItems: "baseline", gap: "20px", justifyContent: "space-between" }}>
         <span className="dt-section-num" style={{ fontFamily: "var(--font-mono, 'JetBrains Mono'), monospace", fontSize: "0.65rem", letterSpacing: "0.18em", color: "var(--accent, #B5500B)", textTransform: "uppercase" }}>2026</span>
         <h2 className="dt-section-title" style={{ fontFamily: "var(--font-display, 'Lora'), Georgia, serif", fontSize: "clamp(1.6rem, 3.4vw, 2.4rem)", fontWeight: 500, lineHeight: 1.1, color: "var(--ink, #1A1613)", flex: 1, textAlign: "center" }}>
@@ -2221,10 +2231,10 @@ function PredictsThisYear({ seasonId }) {
           Pinterest Predicts
         </span>
       </div>
-      <div style={{ maxWidth: "880px", margin: "0 auto", display: "grid", gridTemplateColumns: `repeat(${colors.length}, 1fr)`, gap: "32px" }}>
+      <div style={{ maxWidth: "880px", margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: "32px" }}>
         {colors.map((c) => (
           <div key={c.name} style={{ textAlign: "center" }}>
-            <div style={{ width: "120px", height: "120px", borderRadius: "50%", background: c.hex, margin: "0 auto 18px", boxShadow: `0 8px 32px ${c.hex}50, inset 0 2px 4px rgba(255,255,255,0.15)`, border: "3px solid rgba(255,255,255,0.6)" }} />
+            <div style={{ width: "clamp(80px, 22vw, 120px)", aspectRatio: "1", borderRadius: "50%", background: c.hex, margin: "0 auto 18px", boxShadow: `0 8px 32px ${c.hex}50, inset 0 2px 4px rgba(255,255,255,0.15)`, border: "3px solid rgba(255,255,255,0.6)" }} />
             <div style={{ fontFamily: "var(--font-display, 'Lora'), Georgia, serif", fontSize: "1.35rem", fontWeight: 500, color: "var(--ink, #1A1613)", marginBottom: "8px", letterSpacing: "-0.01em" }}>
               {c.name}
             </div>
@@ -2572,7 +2582,7 @@ function AlternateCard({ category, item, season, onShopClick }) {
   );
 }
 
-function Edit({ s, seasonId, shadeIndex, setShadeIndex }) {
+function Edit({ s, seasonId, shadeIndex, setShadeIndex, depthParam }) {
   const products = useMemo(() => productsFor(seasonId), [seasonId]);
   const [tier, setTier] = useState("best-value");
   const [copiedShade, setCopiedShade] = useState(null);
@@ -2588,6 +2598,22 @@ function Edit({ s, seasonId, shadeIndex, setShadeIndex }) {
   const foundationAlternates = FOUNDATION_ALTERNATES[s.name] || [];
   const concealerHero = CONCEALER_HEROES[s.name];
   const concealerAlternates = CONCEALER_ALTERNATES[s.name] || [];
+
+  // Concealer ladders differ in length/representative position from the
+  // foundation ladder, so the foundation-derived shadeIndex headlined the wrong
+  // concealer shade. Derive a separate index from the concealer's OWN ladder.
+  const concealerInitialIndex = useMemo(() => {
+    if (!concealerHero || !concealerHero.shadeLadder) return 0;
+    let depthVal = depthParam;
+    if (!depthVal && typeof sessionStorage !== "undefined") {
+      depthVal = sessionStorage.getItem("allele_user_depth");
+    }
+    return getShadeIndexForDepth(depthVal, concealerHero.shadeLadder);
+  }, [concealerHero, depthParam]);
+  const [concealerShadeIndex, setConcealerShadeIndex] = useState(concealerInitialIndex);
+  useEffect(() => {
+    setConcealerShadeIndex(concealerInitialIndex);
+  }, [concealerInitialIndex]);
 
   return (
     <section id="edit" className="dt-edit" style={{ "--accent": s.accent }}>
@@ -2820,8 +2846,8 @@ function Edit({ s, seasonId, shadeIndex, setShadeIndex }) {
                 season={s}
                 sourceUrl={CONCEALER_URL}
                 onShopClick={track.shopClick}
-                shadeIndex={shadeIndex}
-                setShadeIndex={setShadeIndex}
+                shadeIndex={concealerShadeIndex}
+                setShadeIndex={setConcealerShadeIndex}
               />
 
               {concealerAlternates.length > 0 && (
@@ -3573,7 +3599,7 @@ function ResultsInner({ seasonParam, depthParam }) {
       <Hero s={s} seasonId={seasonId} />
       
       {/* 24-product edit presented FIRST below hero to drive immediate affiliate conversions */}
-      <Edit s={s} seasonId={seasonId} shadeIndex={shadeIndex} setShadeIndex={setShadeIndex} />
+      <Edit s={s} seasonId={seasonId} shadeIndex={shadeIndex} setShadeIndex={setShadeIndex} depthParam={depthParam} />
 
       {/* Sticky shopping bar for quick checkout accessibility */}
       <StickyShopBar s={s} shadeIndex={shadeIndex} />
