@@ -50,6 +50,9 @@ export const metadata = {
   alternates: {
     canonical: "https://www.allele.app",
   },
+  other: {
+    "p:domain_verify": "a4b2231540b22c1cfe44cadea598de4d",
+  },
 };
 
 export default function RootLayout({ children }) {
