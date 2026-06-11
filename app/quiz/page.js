@@ -303,6 +303,8 @@ export default function QuizPage() {
         label: opt.label,
         swatch: opt.swatch || (opt.swatches && opt.swatches[0]),
         swatches: opt.swatches,
+        evidence: q.evidence ?? 1,
+        priority: opt.priority,
       },
     ];
     setAnswers(newAnswers);
@@ -321,6 +323,7 @@ export default function QuizPage() {
 
   const back = () => {
     if (step === 0) return;
+    track.quizBackClicked(step + 1);
     setStep(step - 1);
     setAnswers(answers.slice(0, -1));
   };
@@ -339,6 +342,8 @@ export default function QuizPage() {
       contrast: SEASONS[lead.id]?.chroma,
       value: SEASONS[lead.id]?.depth,
       chroma: SEASONS[lead.id]?.chroma,
+      olive_flag: !!score.oliveFlag,
+      priority: score.priority || "full",
     });
     setShowGate(true);
   };
@@ -347,18 +352,19 @@ export default function QuizPage() {
     if (!lead) return;
     const seasonName = SEASONS[lead.id]?.name || "True Autumn";
     
-    // Extract skin depth answer from step index 2 (Question 3)
-    const depthAnswer = answers.find(a => a.step === 2)?.key;
+    // Extract skin depth answer from V2 Q4.
+    const depthAnswer = answers.find(a => a.step === 3)?.key;
     if (depthAnswer && typeof sessionStorage !== "undefined") {
       sessionStorage.setItem("allele_user_depth", depthAnswer);
     }
-    
-    const query = depthAnswer
-      ? `?season=${encodeURIComponent(seasonName)}&depth=${encodeURIComponent(depthAnswer)}`
-      : `?season=${encodeURIComponent(seasonName)}`;
-      
-    router.push(`/results${query}`);
-  }, [lead, router, answers]);
+
+    const params = new URLSearchParams({ season: seasonName });
+    if (depthAnswer) params.set("depth", depthAnswer);
+    if (score.oliveFlag) params.set("olive", "1");
+    if (score.priority) params.set("priority", score.priority);
+
+    router.push(`/results?${params.toString()}`);
+  }, [lead, router, answers, score.oliveFlag, score.priority]);
 
   const handleGateSubmit = async (e) => {
     e.preventDefault();
@@ -391,8 +397,16 @@ export default function QuizPage() {
   };
 
   const handleGateSkip = () => {
+    const seasonName = SEASONS[lead.id]?.name || "True Autumn";
+    track.emailSkipped(seasonName);
     navigateToResults();
   };
+
+  useEffect(() => {
+    if (!showGate || !lead) return;
+    const seasonName = SEASONS[lead.id]?.name || "True Autumn";
+    track.emailCaptureViewed(seasonName);
+  }, [showGate, lead]);
 
   if (!q && !complete) return null;
 
