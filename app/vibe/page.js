@@ -3,6 +3,30 @@ import Link from "next/link";
 export const metadata = {
   title: "Vibe DNA by Allele — Find Your Aesthetic Archetype",
   description: "Discover your aesthetic archetype in 90 seconds. Are you Clean Girl, Dark Academia, Cottagecore, or something else entirely? Take the quiz and get personalized style recommendations.",
+  alternates: {
+    canonical: "https://www.allele.app/vibe",
+  },
+  openGraph: {
+    title: "Vibe DNA by Allele",
+    description: "Discover your aesthetic archetype in 90 seconds.",
+    url: "https://www.allele.app/vibe",
+    siteName: "Allele",
+    type: "website",
+    images: [
+      {
+        url: "/og/vibe-dna.png",
+        width: 1200,
+        height: 630,
+        alt: "Vibe DNA by Allele",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Vibe DNA by Allele",
+    description: "Discover your aesthetic archetype in 90 seconds.",
+    images: ["/og/vibe-dna.png"],
+  },
 };
 
 const archetypePreviews = [

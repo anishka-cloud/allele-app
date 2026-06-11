@@ -4,6 +4,30 @@ import VibeResultsContent from "./VibeResultsContent";
 export const metadata = {
   title: "Your Vibe DNA Results — Allele",
   description: "Your aesthetic archetype revealed. Discover your style, shop your vibe, and share your DNA.",
+  alternates: {
+    canonical: "https://www.allele.app/vibe/results",
+  },
+  openGraph: {
+    title: "Your Vibe DNA Results — Allele",
+    description: "Your aesthetic archetype revealed. Discover your style, shop your vibe, and share your DNA.",
+    url: "https://www.allele.app/vibe/results",
+    siteName: "Allele",
+    type: "website",
+    images: [
+      {
+        url: "/og/vibe-dna.png",
+        width: 1200,
+        height: 630,
+        alt: "Vibe DNA by Allele",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Your Vibe DNA Results — Allele",
+    description: "Your aesthetic archetype revealed. Discover your style, shop your vibe, and share your DNA.",
+    images: ["/og/vibe-dna.png"],
+  },
 };
 
 export default function VibeResultsPage() {
