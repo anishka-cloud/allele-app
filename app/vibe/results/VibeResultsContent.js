@@ -6,8 +6,9 @@ import Link from "next/link";
 import { archetypes, archetypeNames } from "@/lib/vibeArchetypes";
 import { vibeProducts, VIBE_TIER_META, VIBE_CATEGORIES } from "@/lib/vibeProducts";
 
-function VibeTierCard({ product, tierKey, tierMeta, archetype }) {
+function VibeTierCard({ product, tierKey, tierMeta, archetype, categoryKey }) {
   const isValue = tierKey === "value";
+  const shopUrl = product.buy_url || "https://shopmy.us/shop/nish";
   return (
     <div
       className="relative rounded-2xl p-5 flex flex-col items-center text-center transition-all duration-300 hover:scale-[1.02]"
@@ -55,10 +56,20 @@ function VibeTierCard({ product, tierKey, tierMeta, archetype }) {
       <p className="text-sm font-semibold mt-2" style={{ color: archetype.accentColor, fontFamily: "var(--font-inter)" }}>${product.price}</p>
 
       <a
-        href="https://shopmy.us/shop/nish"
+        href={shopUrl}
         target="_blank"
         rel="sponsored noopener noreferrer"
         className="w-full mt-3 py-2.5 px-4 rounded-full text-xs font-semibold tracking-wider transition-all duration-200 hover:opacity-90 block text-center"
+        onClick={() => {
+          track.shopClick({
+            season: archetype.name,
+            category: `vibe_${categoryKey}`,
+            tier: tierKey,
+            brand: product.brand,
+            productName: product.product,
+            price: product.price,
+          });
+        }}
         style={{
           background: "var(--text-primary)",
           color: "white",
@@ -68,6 +79,17 @@ function VibeTierCard({ product, tierKey, tierMeta, archetype }) {
       >
         SHOP THIS VIBE →
       </a>
+      <p
+        className="mt-3"
+        style={{
+          fontFamily: "var(--font-inter)",
+          fontSize: "0.64rem",
+          lineHeight: 1.45,
+          color: "var(--text-muted)",
+        }}
+      >
+        Affiliate link. We may earn a small commission at no extra cost to you.
+      </p>
     </div>
   );
 }
@@ -102,6 +124,7 @@ function VibeProductCategory({ categoryData, products, archetype, proTip }) {
             tierKey={tier}
             tierMeta={VIBE_TIER_META[tier]}
             archetype={archetype}
+            categoryKey={categoryData.key}
           />
         ))}
       </div>
@@ -117,6 +140,113 @@ function VibeProductCategory({ categoryData, products, archetype, proTip }) {
         </div>
       )}
     </div>
+  );
+}
+
+function VibeEmailCapture({ archetype }) {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState("idle");
+  const viewedRef = useRef(false);
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    if (!sectionRef.current || viewedRef.current) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting && !viewedRef.current) {
+          viewedRef.current = true;
+          track.emailCaptureViewed(`Vibe DNA: ${archetype.name}`);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.35 }
+    );
+    observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, [archetype.name]);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (!email || status === "loading") return;
+    setStatus("loading");
+
+    try {
+      const response = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          season: `Vibe DNA: ${archetype.name}`,
+          undertone: "vibe",
+          contrast: "",
+          skin: "",
+          value: archetype.name,
+        }),
+      });
+
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        track.emailSubmitFailed(`Vibe DNA: ${archetype.name}`, err?.error || response.status);
+        setStatus("error");
+        return;
+      }
+
+      track.emailSubmitted(`Vibe DNA: ${archetype.name}`);
+      setStatus("success");
+    } catch {
+      track.emailSubmitFailed(`Vibe DNA: ${archetype.name}`, "network_error");
+      setStatus("error");
+    }
+  };
+
+  return (
+    <section ref={sectionRef} className="px-6 py-14 max-w-2xl mx-auto text-center">
+      <span className="text-xs tracking-[0.3em] uppercase mb-4 block" style={{ color: archetype.accentColor, fontFamily: "var(--font-inter)", fontWeight: 600 }}>
+        Keep the dossier
+      </span>
+      <h2 className="mb-3" style={{ fontFamily: "var(--font-display, 'Lora')", fontSize: "clamp(1.4rem, 3.5vw, 2rem)", fontWeight: 500, color: "var(--text-primary)" }}>
+        Send your <span style={{ fontStyle: "italic" }}>{archetype.name}</span> edit to your inbox.
+      </h2>
+      <p className="mb-7" style={{ fontFamily: "var(--font-inter)", fontSize: "0.92rem", color: "var(--text-muted)", lineHeight: 1.7, fontWeight: 300 }}>
+        We&rsquo;ll send your archetype, shopping notes, and product edit. Free · unsubscribe anytime.
+      </p>
+      <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 justify-center">
+        <input
+          type="email"
+          required
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+          placeholder="you@example.com"
+          disabled={status === "loading" || status === "success"}
+          className="px-5 py-3 rounded-full"
+          style={{
+            minWidth: 260,
+            border: "1.5px solid var(--border-light)",
+            fontFamily: "var(--font-inter)",
+            color: "var(--text-primary)",
+            background: "white",
+          }}
+        />
+        <button
+          type="submit"
+          disabled={status === "loading" || status === "success"}
+          className="btn-primary"
+          style={{ borderRadius: "100px", padding: "14px 28px", fontSize: "13px" }}
+        >
+          {status === "loading" ? "Saving..." : status === "success" ? "Sent" : "Email My Vibe"}
+        </button>
+      </form>
+      {status === "error" && (
+        <p className="mt-4" style={{ fontFamily: "var(--font-inter)", fontSize: "0.8rem", color: "#8B4A4A" }}>
+          Something went wrong. Try again in a moment.
+        </p>
+      )}
+      {status === "success" && (
+        <p className="mt-4" style={{ fontFamily: "var(--font-inter)", fontSize: "0.8rem", color: "var(--text-secondary)" }}>
+          Saved. Your Vibe DNA notes are on their way.
+        </p>
+      )}
+    </section>
   );
 }
 
@@ -440,6 +570,8 @@ export default function VibeResultsContent() {
           />
         ))}
       </section>
+
+      <VibeEmailCapture archetype={archetype} />
 
       {/* Cross-sell CTA */}
       <section className="px-6 py-16 text-center" style={{ background: "rgba(255,255,255,0.5)" }}>
