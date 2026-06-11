@@ -87,6 +87,12 @@ export default function Home() {
   }, []);
 
   const hero = ALL_SEASONS[HERO_INDICES[heroIdx]];
+  const markQuizStarted = (source) => {
+    track.quizStarted(source);
+    if (typeof sessionStorage !== "undefined") {
+      sessionStorage.setItem("allele_quiz_started", "true");
+    }
+  };
 
   return (
     <main className="landing">
@@ -101,14 +107,19 @@ export default function Home() {
             <a href="#showcase">Results</a>
             <a href="#science">Philosophy</a>
           </div>
-          <Link className="l-nav-cta" href="/quiz?source=homepage_nav" onClick={() => {
-            track.quizStarted("homepage_nav");
-            if (typeof sessionStorage !== "undefined") {
-              sessionStorage.setItem("allele_quiz_started", "true");
-            }
-          }}>Begin the analysis →</Link>
+          <Link className="l-nav-cta" href="/quiz?source=homepage_nav" onClick={() => markQuizStarted("homepage_nav")}>Begin the analysis →</Link>
         </div>
       </nav>
+
+      <Link
+        className="l-sticky-cta"
+        href="/quiz?source=homepage_sticky"
+        onClick={() => markQuizStarted("homepage_sticky")}
+      >
+        <span className="l-sticky-cta-kicker">Shade DNA</span>
+        <span className="l-sticky-cta-copy">Begin the analysis</span>
+        <span className="l-sticky-cta-arrow">→</span>
+      </Link>
 
       {/* ============ Hero ============ */}
       <section className="l-hero">
@@ -136,16 +147,11 @@ export default function Home() {
               Twelve questions. One archetype. A palette matched to your skin, your eyes, and the <em>light you live in</em>. Free to take. Free to retake. Yours forever.
             </p>
             <div className="l-hero-cta-row">
-              <Link className="l-cta-primary" href="/quiz?source=homepage_hero" onClick={() => {
-                track.quizStarted("homepage_hero");
-                if (typeof sessionStorage !== "undefined") {
-                  sessionStorage.setItem("allele_quiz_started", "true");
-                }
-              }}>
+              <Link className="l-cta-primary" href="/quiz?source=homepage_hero" onClick={() => markQuizStarted("homepage_hero")}>
                 <span>Begin the analysis</span>
                 <span className="arrow">→</span>
               </Link>
-              <span className="l-cta-meta">2:30 min · No app · No subscription</span>
+              <span className="l-cta-meta">~2 min · free · no sign-up</span>
             </div>
             <div className="l-hero-meta">
               <div className="l-hero-meta-item"><strong>12</strong><span>Archetypes</span></div>
@@ -217,12 +223,7 @@ export default function Home() {
             {/* Shade DNA — active */}
             <Link
               href="/quiz?source=portfolio_strip"
-              onClick={() => {
-                track.quizStarted("portfolio_strip");
-                if (typeof sessionStorage !== "undefined") {
-                  sessionStorage.setItem("allele_quiz_started", "true");
-                }
-              }}
+              onClick={() => markQuizStarted("portfolio_strip")}
               style={{
                 display: "flex",
                 flexDirection: "column",
@@ -857,12 +858,7 @@ export default function Home() {
         <div className="l-final-eyebrow">§ Begin</div>
         <h2>Your <em>shade,</em><br />your <em>science.</em></h2>
         <p>Sixty seconds. One season. <em>Yours forever.</em></p>
-        <Link className="l-cta-primary" href="/quiz?source=homepage_bottom" onClick={() => {
-          track.quizStarted("homepage_bottom");
-          if (typeof sessionStorage !== "undefined") {
-            sessionStorage.setItem("allele_quiz_started", "true");
-          }
-        }}>
+        <Link className="l-cta-primary" href="/quiz?source=homepage_bottom" onClick={() => markQuizStarted("homepage_bottom")}>
           <span>Begin the analysis</span>
           <span className="arrow">→</span>
         </Link>
