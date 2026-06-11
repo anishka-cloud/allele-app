@@ -21,6 +21,12 @@ import "./results.css";
 const SEASON_IDS = Object.keys(SEASONS);
 const FOUNDATION_URL = "https://shopmy.us/shop/collections/4652210";
 const CONCEALER_URL = "https://shopmy.us/shop/collections/4653190";
+const PRIORITY_ORDER = {
+  lips: ["lips", "lipLiner", "blush", "bronzer", "eyes", "nails"],
+  foundation: ["lips", "lipLiner", "blush", "bronzer", "eyes", "nails"],
+  wardrobe: null,
+  full: null,
+};
 const UNDERTONE_COLORS = {
   warm: "#C4873A",
   cool: "#9BAEC4",
@@ -2572,16 +2578,16 @@ function AlternateCard({ category, item, season, onShopClick }) {
   );
 }
 
-function Edit({ s, seasonId, shadeIndex, setShadeIndex }) {
+function Edit({ s, seasonId, shadeIndex, setShadeIndex, priority }) {
   const products = useMemo(() => productsFor(seasonId), [seasonId]);
   const [tier, setTier] = useState("best-value");
   const [copiedShade, setCopiedShade] = useState(null);
   const selectedProducts = useMemo(() => {
-    const desiredOrder = ["blush", "eyes", "lips", "lipLiner", "bronzer", "nails"];
+    const desiredOrder = PRIORITY_ORDER[priority] || ["blush", "eyes", "lips", "lipLiner", "bronzer", "nails"];
     return desiredOrder
       .map((catId) => ({ catId, product: products[catId]?.[tier] }))
       .filter(({ product }) => Boolean(product));
-  }, [products, tier]);
+  }, [products, tier, priority]);
   const shopUrl = getShopUrl(s.name);
   const undertoneGuidance = UNDERTONE_GUIDANCE[s.name];
   const foundationHero = FOUNDATION_HEROES[s.name];
@@ -2978,8 +2984,8 @@ const OLIVE_CONFUSED_SEASONS = new Set([
   "dark-winter",
 ]);
 
-function OliveAmbiguity({ seasonId, seasonName }) {
-  if (!OLIVE_CONFUSED_SEASONS.has(seasonId)) return null;
+function OliveAmbiguity({ seasonId, seasonName, oliveFlag = false }) {
+  if (!oliveFlag && !OLIVE_CONFUSED_SEASONS.has(seasonId)) return null;
 
   const handleClick = (source) => {
     trackEvent("kit_clicked", {
@@ -2988,6 +2994,7 @@ function OliveAmbiguity({ seasonId, seasonName }) {
       from_season: seasonName,
       price_usd: 24,
     });
+    track.paidReportCtaClicked({ season: seasonName, placement: source });
   };
 
   return (
@@ -3097,6 +3104,7 @@ function TravelCapsule({ seasonId, seasonName }) {
       from_season: seasonName,
       price_usd: 12,
     });
+    track.paidReportCtaClicked({ season: seasonName, placement: source });
   };
 
   return (
@@ -3496,7 +3504,14 @@ function Footer() {
 // Keeping it isolated means the rest of the tree hydrates immediately.
 function ParamReader() {
   const sp = useSearchParams();
-  return <ResultsInner seasonParam={sp.get("season")} depthParam={sp.get("depth")} />;
+  return (
+    <ResultsInner
+      seasonParam={sp.get("season")}
+      depthParam={sp.get("depth")}
+      oliveFlag={sp.get("olive") === "1"}
+      priority={sp.get("priority")}
+    />
+  );
 }
 
 export default function ResultsContent() {
@@ -3515,7 +3530,7 @@ export default function ResultsContent() {
   );
 }
 
-function ResultsInner({ seasonParam, depthParam }) {
+function ResultsInner({ seasonParam, depthParam, oliveFlag, priority }) {
   const router = useRouter();
 
   const initialId = useMemo(() => {
@@ -3550,19 +3565,29 @@ function ResultsInner({ seasonParam, depthParam }) {
 
   useEffect(() => {
     if (!s) return;
+    track.resultRevealed({
+      season: s.name,
+      oliveFlag,
+      priority,
+    });
     track.quizCompleted({
       season: s.name,
       undertone: s.undertone,
       contrast: s.chroma,
       value: s.depth,
       chroma: s.chroma,
+      olive_flag: !!oliveFlag,
+      priority: priority || "full",
     });
-  }, [s?.name]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [s?.name, oliveFlag, priority]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const onSeasonChange = (id) => {
     setSeasonId(id);
-    const url = `/results?season=${encodeURIComponent(SEASONS[id].name)}`;
-    router.replace(url, { scroll: false });
+    const params = new URLSearchParams({ season: SEASONS[id].name });
+    if (depthParam) params.set("depth", depthParam);
+    if (oliveFlag) params.set("olive", "1");
+    if (priority) params.set("priority", priority);
+    router.replace(`/results?${params.toString()}`, { scroll: false });
   };
 
   if (!s) return null;
@@ -3573,13 +3598,13 @@ function ResultsInner({ seasonParam, depthParam }) {
       <Hero s={s} seasonId={seasonId} />
       
       {/* 24-product edit presented FIRST below hero to drive immediate affiliate conversions */}
-      <Edit s={s} seasonId={seasonId} shadeIndex={shadeIndex} setShadeIndex={setShadeIndex} />
+      <Edit s={s} seasonId={seasonId} shadeIndex={shadeIndex} setShadeIndex={setShadeIndex} priority={priority} />
 
       {/* Sticky shopping bar for quick checkout accessibility */}
       <StickyShopBar s={s} shadeIndex={shadeIndex} />
 
       {/* Olive ambiguity cross-link — only renders for the 6 olive-prone seasons */}
-      <OliveAmbiguity seasonId={seasonId} seasonName={s.name} />
+      <OliveAmbiguity seasonId={seasonId} seasonName={s.name} oliveFlag={oliveFlag} />
 
       {/* Summer Travel Capsule cross-link — renders for all 12 seasons */}
       <TravelCapsule seasonId={seasonId} seasonName={s.name} />
