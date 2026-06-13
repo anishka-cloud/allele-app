@@ -2984,6 +2984,12 @@ const OLIVE_CONFUSED_SEASONS = new Set([
   "dark-winter",
 ]);
 
+const OLIVE_SURVIVAL_KIT_URL =
+  "https://alleleapp.gumroad.com/l/olive-undertone-survival-kit?utm_source=allele&utm_medium=results&utm_campaign=olive-undertone-survival-kit";
+
+const SUMMER_TRAVEL_CAPSULE_URL =
+  "https://alleleapp.gumroad.com/l/summer-travel-capsule-planner?utm_source=allele&utm_medium=results&utm_campaign=summer-travel-capsule-planner";
+
 function OliveAmbiguity({ seasonId, seasonName, oliveFlag = false }) {
   if (!oliveFlag && !OLIVE_CONFUSED_SEASONS.has(seasonId)) return null;
 
@@ -3057,8 +3063,10 @@ function OliveAmbiguity({ seasonId, seasonName, oliveFlag = false }) {
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: "20px", flexWrap: "wrap" }}>
-          <Link
-            href="/olive-undertone-survival-kit"
+          <a
+            href={OLIVE_SURVIVAL_KIT_URL}
+            target="_blank"
+            rel="sponsored noopener noreferrer"
             onClick={() => handleClick("results_olive_ambiguity")}
             style={{
               display: "inline-flex",
@@ -3078,7 +3086,7 @@ function OliveAmbiguity({ seasonId, seasonName, oliveFlag = false }) {
           >
             <span>Read the field guide &middot; $24</span>
             <span>&rarr;</span>
-          </Link>
+          </a>
           <span
             style={{
               fontFamily: "var(--font-mono, 'JetBrains Mono'), monospace",
@@ -3167,8 +3175,10 @@ function TravelCapsule({ seasonId, seasonName }) {
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: "20px", flexWrap: "wrap" }}>
-          <Link
-            href="/travel-capsule"
+          <a
+            href={SUMMER_TRAVEL_CAPSULE_URL}
+            target="_blank"
+            rel="sponsored noopener noreferrer"
             onClick={() => handleClick("results_capsule")}
             style={{
               display: "inline-flex",
@@ -3188,7 +3198,7 @@ function TravelCapsule({ seasonId, seasonName }) {
           >
             <span>Pack the capsule &middot; $12</span>
             <span>&rarr;</span>
-          </Link>
+          </a>
           <span
             style={{
               fontFamily: "var(--font-mono, 'JetBrains Mono'), monospace",
