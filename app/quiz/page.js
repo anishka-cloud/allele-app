@@ -380,8 +380,10 @@ export default function QuizPage() {
           email: gateEmail,
           season: seasonName,
           undertone: s?.undertone || "",
-          chroma: s?.chroma || "",
-          depth: s?.depth || "",
+          contrast: s?.chroma || "",
+          value: s?.depth || "",
+          skin: answers.find((a) => a.step === 3)?.key || "",
+          olive: score.oliveFlag ? "1" : "0",
         }),
       });
       if (!res.ok) {

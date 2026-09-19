@@ -3216,7 +3216,7 @@ function TravelCapsule({ seasonId, seasonName }) {
   );
 }
 
-function Collect({ s }) {
+function Collect({ s, depthParam, oliveFlag }) {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("idle");
 
@@ -3232,8 +3232,10 @@ function Collect({ s }) {
           email,
           season: s.name,
           undertone: s.undertone,
-          chroma: s.chroma,
-          depth: s.depth,
+          contrast: s.chroma,
+          value: s.depth,
+          skin: depthParam || "",
+          olive: oliveFlag ? "1" : "0",
         }),
       });
       if (!res.ok) {
@@ -3633,7 +3635,7 @@ function ResultsInner({ seasonParam, depthParam, oliveFlag, priority }) {
         </div>
       </details>
 
-      <Collect s={s} />
+      <Collect s={s} depthParam={depthParam} oliveFlag={oliveFlag} />
       <Footer />
     </main>
   );

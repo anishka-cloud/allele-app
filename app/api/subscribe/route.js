@@ -3,7 +3,25 @@ import { NextResponse } from "next/server";
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { email, season, undertone, contrast, skin, value, olive } = body;
+    const {
+      email,
+      season,
+      undertone,
+      contrast,
+      chroma,
+      skin,
+      value,
+      depth,
+      olive,
+      olive_flag: oliveFlag,
+    } = body;
+
+    // Accept the canonical Beehiiv field names as well as the older quiz aliases.
+    // The clients historically sent `chroma` and `depth`, while this route read
+    // `contrast` and `value`, which silently left personalization fields blank.
+    const normalizedContrast = contrast || chroma || "";
+    const normalizedValue = value || depth || "";
+    const normalizedOlive = olive ?? oliveFlag;
 
     if (!email || !email.includes("@")) {
       return NextResponse.json({ error: "Valid email required" }, { status: 400 });
@@ -39,10 +57,14 @@ export async function POST(request) {
           custom_fields: [
             { name: "season", value: season || "" },
             { name: "undertone", value: undertone || "" },
-            { name: "contrast", value: contrast || "" },
+            { name: "contrast", value: normalizedContrast },
             { name: "skin", value: skin || "" },
-            { name: "value", value: value || "" },
-            { name: "olive", value: olive || "0" },
+            { name: "value", value: normalizedValue },
+            {
+              name: "olive",
+              value:
+                normalizedOlive === true || normalizedOlive === "1" ? "1" : "0",
+            },
           ],
         }),
       }
