@@ -315,6 +315,27 @@ body:has(.ma-shell) {
   text-transform: capitalize;
 }
 
+.ma-outcome-tag {
+  display: inline-block;
+  margin-bottom: 8px;
+  padding: 3px 7px;
+  border: 1px solid var(--rule);
+  color: var(--ink-60);
+  font-size: 9px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.ma-outcome-tag.love {
+  border-color: #8b956e;
+  color: #4e5939;
+}
+
+.ma-outcome-tag.miss {
+  border-color: #a4745e;
+  color: #744832;
+}
+
 .ma-ledger-item h3 {
   margin: 5px 0 8px;
   font-family: var(--serif);
@@ -432,6 +453,150 @@ body:has(.ma-shell) {
   background: var(--cream-2);
   color: var(--ink-60);
   font-size: 12px;
+}
+
+.ma-product-entry {
+  margin-bottom: 30px;
+  display: grid;
+  gap: 18px;
+}
+
+.ma-product-entry .ma-field input {
+  min-height: 54px;
+  padding-right: 12px;
+  padding-left: 12px;
+  border: 1px solid var(--ink-40);
+  background: #fffdf9;
+  font-size: 16px;
+}
+
+.ma-source-draft {
+  padding: 14px 16px;
+  border-left: 3px solid var(--gold);
+  background: var(--cream-2);
+}
+
+.ma-source-draft span {
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.ma-source-draft p {
+  margin: 5px 0 0;
+  color: var(--ink-60);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.ma-outcome-picker {
+  margin: 0 0 28px;
+  padding: 0;
+  border: 0;
+}
+
+.ma-outcome-picker legend {
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.ma-outcome-picker > div {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border: 1px solid var(--rule);
+}
+
+.ma-outcome-picker label {
+  min-height: 50px;
+  border-right: 1px solid var(--rule);
+  display: grid;
+  place-items: center;
+  color: var(--ink-60);
+  cursor: pointer;
+}
+
+.ma-outcome-picker label:last-child {
+  border-right: 0;
+}
+
+.ma-outcome-picker label.active {
+  background: var(--ink);
+  color: var(--cream);
+}
+
+.ma-outcome-picker input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.ma-outcome-picker label:has(input:focus-visible) {
+  outline: 2px solid var(--rust);
+  outline-offset: 3px;
+}
+
+.ma-outcome-picker span {
+  font-family: var(--serif);
+  font-size: 15px;
+}
+
+.ma-experience-note {
+  margin-bottom: 26px;
+}
+
+.ma-refinement {
+  margin-top: 30px;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+
+.ma-refinement summary {
+  min-height: 72px;
+  padding: 16px 34px 16px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  position: relative;
+  color: var(--ink);
+  cursor: pointer;
+  list-style: none;
+}
+
+.ma-refinement summary::-webkit-details-marker {
+  display: none;
+}
+
+.ma-refinement summary::after {
+  content: "+";
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  color: var(--rust);
+  font-family: var(--serif);
+  font-size: 24px;
+  transform: translateY(-50%);
+}
+
+.ma-refinement[open] summary::after {
+  content: "−";
+}
+
+.ma-refinement summary span {
+  font-family: var(--serif);
+  font-size: 17px;
+}
+
+.ma-refinement summary small {
+  color: var(--ink-60);
+  font-size: 11px;
+}
+
+.ma-refinement-body {
+  padding: 24px 0 30px;
+  border-top: 1px solid var(--rule-soft);
 }
 
 .ma-form-grid {

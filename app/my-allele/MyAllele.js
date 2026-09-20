@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { evaluatePurchase } from "@/lib/purchaseEvaluation.mjs";
+import { parseProductEntry } from "@/lib/productInput.mjs";
 
 const STORAGE_KEY = "allele_my_profile_v1";
 
@@ -14,18 +15,23 @@ const EMPTY_PROFILE = {
 
 const EMPTY_OWNED = {
   category: "makeup",
+  entry: "",
   brand: "",
   name: "",
+  sourceUrl: "",
+  sourceHost: "",
+  outcome: "",
   variant: "",
   finishOrFit: "",
   size: "",
-  frequency: "often",
+  frequency: "",
   works: "",
   doesNotWork: "",
 };
 
 const EMPTY_CANDIDATE = {
   category: "makeup",
+  entry: "",
   brand: "",
   name: "",
   variant: "",
@@ -33,9 +39,16 @@ const EMPTY_CANDIDATE = {
   size: "",
   price: "",
   sourceUrl: "",
+  sourceHost: "",
   facts: "",
   motivation: "",
   hesitations: "",
+};
+
+const OUTCOME_LABELS = {
+  love: "Love it",
+  mixed: "Mixed",
+  miss: "Miss",
 };
 
 const CATEGORY_COPY = {
@@ -120,6 +133,69 @@ function CategoryPicker({ value, onChange }) {
   );
 }
 
+function ProductEntry({ entry, name, sourceUrl, sourceHost, onEntryChange, onNameChange, noun = "item" }) {
+  return (
+    <div className="ma-product-entry">
+      <Field
+        label={`${noun === "item" ? "Item" : "Product"} name or link`}
+        hint="Paste a retailer link to draft the name"
+        className="ma-field-wide"
+      >
+        <input
+          required
+          value={entry}
+          onChange={(event) => onEntryChange(event.target.value)}
+          placeholder={noun === "item" ? "Type a name or paste a product link" : "What are you considering?"}
+          autoComplete="off"
+        />
+      </Field>
+
+      {sourceUrl && (
+        <div className="ma-source-draft" role="status">
+          <span>Link recognized · {sourceHost}</span>
+          <p>
+            Allele drafted a name from the URL. Confirm it below. No price, reviews, availability, or retailer claims were fetched.
+          </p>
+        </div>
+      )}
+
+      {sourceUrl && (
+        <Field label="Confirm the product name" hint="Editable draft" className="ma-field-wide">
+          <input
+            required
+            value={name}
+            onChange={(event) => onNameChange(event.target.value)}
+            placeholder="The link did not contain a readable name—type it here"
+          />
+        </Field>
+      )}
+    </div>
+  );
+}
+
+function OutcomePicker({ value, onChange }) {
+  return (
+    <fieldset className="ma-outcome-picker">
+      <legend>How did it work for you?</legend>
+      <div>
+        {Object.entries(OUTCOME_LABELS).map(([id, label]) => (
+          <label key={id} className={value === id ? "active" : ""}>
+            <input
+              required
+              type="radio"
+              name="owned-outcome"
+              value={id}
+              checked={value === id}
+              onChange={() => onChange(id)}
+            />
+            <span>{label}</span>
+          </label>
+        ))}
+      </div>
+    </fieldset>
+  );
+}
+
 function EmptyLedger({ onExample }) {
   return (
     <div className="ma-empty-ledger">
@@ -151,6 +227,7 @@ function OwnedLedger({ items, onAdd, onDelete }) {
             <div>
               <span className="ma-item-category">{item.category}</span>
               <h3>{[item.brand, item.name].filter(Boolean).join(" ")}</h3>
+              {item.outcome && <span className={`ma-outcome-tag ${item.outcome}`}>{OUTCOME_LABELS[item.outcome]}</span>}
               <p>{item.works}</p>
               <div className="ma-item-traits">
                 {[item.variant, item.finishOrFit, item.size].filter(Boolean).map((trait) => (
@@ -229,11 +306,25 @@ export default function MyAllele() {
   const updateOwned = (key, value) => setOwned((current) => ({ ...current, [key]: value }));
   const updateCandidate = (key, value) => setCandidate((current) => ({ ...current, [key]: value }));
 
+  const updateProductEntry = (target, value) => {
+    const parsed = parseProductEntry(value);
+    const setter = target === "owned" ? setOwned : setCandidate;
+    setter((current) => ({
+      ...current,
+      entry: value,
+      name: parsed.name,
+      sourceUrl: parsed.sourceUrl,
+      sourceHost: parsed.sourceHost,
+    }));
+  };
+
   const loadOwnedExample = () => {
     setOwned({
       ...EMPTY_OWNED,
       category: "makeup",
+      entry: "Everyday cream blush",
       name: "Everyday cream blush",
+      outcome: "love",
       variant: "Muted rosewood",
       finishOrFit: "Creamy, natural finish",
       frequency: "often",
@@ -247,6 +338,7 @@ export default function MyAllele() {
     setCandidate({
       ...EMPTY_CANDIDATE,
       category: "makeup",
+      entry: "New cream blush",
       name: "New cream blush",
       variant: "Muted rosewood",
       finishOrFit: "Creamy, natural finish",
@@ -335,7 +427,7 @@ export default function MyAllele() {
           <p className="ma-volume">A personal buying notebook</p>
           <h1>Buy from what already works.</h1>
           <p className="ma-intro-lede">
-            Start with your own experience. Allele compares a possible purchase with the things you already know, then shows what supports the decision and what is still missing.
+            Paste a link or type a name, then tell Allele what happened. Your experience becomes evidence for the next thing you consider.
           </p>
           <button type="button" className="ma-intro-action" onClick={scrollToSheet}>
             Start your first note <span aria-hidden="true">↓</span>
@@ -380,46 +472,68 @@ export default function MyAllele() {
               <div className="ma-sheet-heading">
                 <p>Field note 01</p>
                 <h2>Add something you already own.</h2>
-                <span>Choose an item you love, tolerate, or regret. The reason matters more than the rating.</span>
+                <span>Three quick answers are enough. Add specifics only when they matter to you.</span>
               </div>
 
               <CategoryPicker
                 value={owned.category}
-                onChange={(category) => setOwned({ ...EMPTY_OWNED, category })}
+                onChange={(category) => setOwned((current) => ({ ...current, category }))}
               />
 
-              <div className="ma-form-grid">
-                <Field label="Brand" hint="Optional">
-                  <input value={owned.brand} onChange={(event) => updateOwned("brand", event.target.value)} placeholder="e.g. a brand or maker" />
-                </Field>
-                <Field label="Item name">
-                  <input required value={owned.name} onChange={(event) => updateOwned("name", event.target.value)} placeholder="What do you call it?" />
-                </Field>
-                <Field label={categoryCopy.variant} hint="Optional">
-                  <input value={owned.variant} onChange={(event) => updateOwned("variant", event.target.value)} placeholder="Be as specific as you can" />
-                </Field>
-                <Field label={categoryCopy.detail} hint="Optional">
-                  <input value={owned.finishOrFit} onChange={(event) => updateOwned("finishOrFit", event.target.value)} placeholder={categoryCopy.detailPlaceholder} />
-                </Field>
-                {categoryCopy.size && (
-                  <Field label={categoryCopy.size}>
-                    <input value={owned.size} onChange={(event) => updateOwned("size", event.target.value)} placeholder="Include brand-specific sizing if useful" />
+              <ProductEntry
+                entry={owned.entry}
+                name={owned.name}
+                sourceUrl={owned.sourceUrl}
+                sourceHost={owned.sourceHost}
+                onEntryChange={(value) => updateProductEntry("owned", value)}
+                onNameChange={(value) => updateOwned("name", value)}
+              />
+
+              <OutcomePicker value={owned.outcome} onChange={(value) => updateOwned("outcome", value)} />
+
+              <Field label="Why?" hint="One useful detail is enough" className="ma-field-wide ma-experience-note">
+                <textarea
+                  required
+                  rows="3"
+                  value={owned.works}
+                  onChange={(event) => updateOwned("works", event.target.value)}
+                  placeholder="The color feels right, the waist pinches, the fabric is comfortable, it fades too quickly…"
+                />
+              </Field>
+
+              <details className="ma-refinement">
+                <summary>
+                  <span>Add details for a sharper comparison</span>
+                  <small>Optional · shade, finish, fit, size, or frequency</small>
+                </summary>
+                <div className="ma-form-grid ma-refinement-body">
+                  <Field label="Brand" hint="Optional">
+                    <input value={owned.brand} onChange={(event) => updateOwned("brand", event.target.value)} placeholder="Brand or maker" />
                   </Field>
-                )}
-                <Field label="How often do you reach for it?">
-                  <select value={owned.frequency} onChange={(event) => updateOwned("frequency", event.target.value)}>
-                    <option value="often">Often</option>
-                    <option value="sometimes">Sometimes</option>
-                    <option value="rarely">Rarely</option>
-                  </select>
-                </Field>
-                <Field label="What has your experience been?" hint="Required" className="ma-field-wide">
-                  <textarea required rows="4" value={owned.works} onChange={(event) => updateOwned("works", event.target.value)} placeholder="Explain why it works or doesn’t: color, finish, fit, comfort, sizing, usefulness, or a real-life moment." />
-                </Field>
-                <Field label="What could be better?" hint="Optional" className="ma-field-wide">
-                  <textarea rows="3" value={owned.doesNotWork} onChange={(event) => updateOwned("doesNotWork", event.target.value)} placeholder="Fades, pills, pinches, duplicates another item, hard to style…" />
-                </Field>
-              </div>
+                  <Field label={categoryCopy.variant} hint="Optional">
+                    <input value={owned.variant} onChange={(event) => updateOwned("variant", event.target.value)} placeholder="Be as specific as you can" />
+                  </Field>
+                  <Field label={categoryCopy.detail} hint="Optional">
+                    <input value={owned.finishOrFit} onChange={(event) => updateOwned("finishOrFit", event.target.value)} placeholder={categoryCopy.detailPlaceholder} />
+                  </Field>
+                  {categoryCopy.size && (
+                    <Field label={categoryCopy.size} hint="Optional">
+                      <input value={owned.size} onChange={(event) => updateOwned("size", event.target.value)} placeholder="Include brand-specific sizing if useful" />
+                    </Field>
+                  )}
+                  <Field label="How often do you reach for it?" hint="Optional">
+                    <select value={owned.frequency} onChange={(event) => updateOwned("frequency", event.target.value)}>
+                      <option value="">Not noted</option>
+                      <option value="often">Often</option>
+                      <option value="sometimes">Sometimes</option>
+                      <option value="rarely">Rarely</option>
+                    </select>
+                  </Field>
+                  <Field label="Anything else Allele should remember?" hint="Optional" className="ma-field-wide">
+                    <textarea rows="3" value={owned.doesNotWork} onChange={(event) => updateOwned("doesNotWork", event.target.value)} placeholder="Fades, pills, pinches, runs small, duplicates another item…" />
+                  </Field>
+                </div>
+              </details>
 
               <div className="ma-form-actions">
                 <button type="button" className="ma-text-button" onClick={startWithoutReference}>
@@ -435,12 +549,12 @@ export default function MyAllele() {
               <div className="ma-sheet-heading">
                 <p>Decision note 02</p>
                 <h2>What are you considering?</h2>
-                <span>Add only what you know. Blank fields become questions, not invented answers.</span>
+                <span>Start with the product and the job you want it to do. Everything else is optional.</span>
               </div>
 
               <CategoryPicker
                 value={candidate.category}
-                onChange={(category) => setCandidate({ ...EMPTY_CANDIDATE, category })}
+                onChange={(category) => setCandidate((current) => ({ ...current, category }))}
               />
 
               <div className="ma-comparison-note">
@@ -449,40 +563,62 @@ export default function MyAllele() {
                   : `You have no saved ${candidate.category} items yet. The result will focus on what to learn before buying.`}
               </div>
 
-              <div className="ma-form-grid">
-                <Field label="Brand" hint="Optional">
-                  <input value={candidate.brand} onChange={(event) => updateCandidate("brand", event.target.value)} placeholder="Brand or maker" />
-                </Field>
-                <Field label="Product name">
-                  <input required value={candidate.name} onChange={(event) => updateCandidate("name", event.target.value)} placeholder="The item you are considering" />
-                </Field>
-                <Field label={candidateCopy.variant} hint="Optional">
-                  <input value={candidate.variant} onChange={(event) => updateCandidate("variant", event.target.value)} placeholder="The exact option, if known" />
-                </Field>
-                <Field label={candidateCopy.detail} hint="Optional">
-                  <input value={candidate.finishOrFit} onChange={(event) => updateCandidate("finishOrFit", event.target.value)} placeholder={candidateCopy.detailPlaceholder} />
-                </Field>
-                {candidateCopy.size && (
-                  <Field label="Size you are considering">
-                    <input value={candidate.size} onChange={(event) => updateCandidate("size", event.target.value)} placeholder="Include the retailer's size" />
+              <ProductEntry
+                entry={candidate.entry}
+                name={candidate.name}
+                sourceUrl={candidate.sourceUrl}
+                sourceHost={candidate.sourceHost}
+                onEntryChange={(value) => updateProductEntry("candidate", value)}
+                onNameChange={(value) => updateCandidate("name", value)}
+                noun="product"
+              />
+
+              <Field label="What do you want it to do for you?" hint="Required" className="ma-field-wide ma-experience-note">
+                <textarea
+                  required
+                  rows="3"
+                  value={candidate.motivation}
+                  onChange={(event) => updateCandidate("motivation", event.target.value)}
+                  placeholder="Replace something that runs out, solve a fit problem, add a genuinely new color…"
+                />
+              </Field>
+
+              <details className="ma-refinement">
+                <summary>
+                  <span>Add details for a sharper answer</span>
+                  <small>Optional · facts, price, shade, fit, or concerns</small>
+                </summary>
+                <div className="ma-form-grid ma-refinement-body">
+                  <Field label="Brand" hint="Optional">
+                    <input value={candidate.brand} onChange={(event) => updateCandidate("brand", event.target.value)} placeholder="Brand or maker" />
                   </Field>
-                )}
-                <Field label="Current price" hint="Optional, not verified">
-                  <input value={candidate.price} onChange={(event) => updateCandidate("price", event.target.value)} placeholder="$0.00" inputMode="decimal" />
-                </Field>
-                <Field label="Product source" hint="Optional but useful" className="ma-field-wide">
-                  <input type="url" value={candidate.sourceUrl} onChange={(event) => updateCandidate("sourceUrl", event.target.value)} placeholder="https://brand-or-retailer.example/product" />
-                </Field>
-                <Field label="Known product facts" hint="From packaging, the brand, or a retailer" className="ma-field-wide">
-                  <textarea rows="3" value={candidate.facts} onChange={(event) => updateCandidate("facts", event.target.value)} placeholder={candidateCopy.factPlaceholder} />
-                </Field>
-                <Field label="What is drawing you to it?" className="ma-field-wide">
-                  <textarea rows="3" value={candidate.motivation} onChange={(event) => updateCandidate("motivation", event.target.value)} placeholder="The problem you hope it solves or the role you want it to fill." />
-                </Field>
-                <Field label="What makes you hesitate?" hint="Optional" className="ma-field-wide">
-                  <textarea rows="3" value={candidate.hesitations} onChange={(event) => updateCandidate("hesitations", event.target.value)} placeholder="Duplication, fit, shade, comfort, price, returns…" />
-                </Field>
-              </div>
+                  <Field label={candidateCopy.variant} hint="Optional">
+                    <input value={candidate.variant} onChange={(event) => updateCandidate("variant", event.target.value)} placeholder="The exact option, if known" />
+                  </Field>
+                  <Field label={candidateCopy.detail} hint="Optional">
+                    <input value={candidate.finishOrFit} onChange={(event) => updateCandidate("finishOrFit", event.target.value)} placeholder={candidateCopy.detailPlaceholder} />
+                  </Field>
+                  {candidateCopy.size && (
+                    <Field label="Size you are considering" hint="Optional">
+                      <input value={candidate.size} onChange={(event) => updateCandidate("size", event.target.value)} placeholder="Include the retailer&apos;s size" />
+                    </Field>
+                  )}
+                  <Field label="Current price" hint="Optional · not verified">
+                    <input value={candidate.price} onChange={(event) => updateCandidate("price", event.target.value)} placeholder="$0.00" inputMode="decimal" />
+                  </Field>
+                  {!candidate.sourceHost && (
+                    <Field label="Product source" hint="Optional but useful" className="ma-field-wide">
+                      <input type="url" value={candidate.sourceUrl} onChange={(event) => updateCandidate("sourceUrl", event.target.value)} placeholder="https://brand-or-retailer.example/product" />
+                    </Field>
+                  )}
+                  <Field label="Known product facts" hint="From packaging, the brand, or a retailer" className="ma-field-wide">
+                    <textarea rows="3" value={candidate.facts} onChange={(event) => updateCandidate("facts", event.target.value)} placeholder={candidateCopy.factPlaceholder} />
+                  </Field>
+                  <Field label="What makes you hesitate?" hint="Optional" className="ma-field-wide">
+                    <textarea rows="3" value={candidate.hesitations} onChange={(event) => updateCandidate("hesitations", event.target.value)} placeholder="Duplication, fit, shade, comfort, price, returns…" />
+                  </Field>
+                </div>
+              </details>
 
               <div className="ma-form-actions">
                 <button type="button" className="ma-secondary" onClick={loadCandidateExample}>Use an illustrative candidate</button>
