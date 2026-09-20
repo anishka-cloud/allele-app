@@ -106,6 +106,7 @@ export default function Home() {
             <a href="#axes">The Axes</a>
             <a href="#showcase">Results</a>
             <a href="#science">Philosophy</a>
+            <Link href="/my-allele">My Allele</Link>
           </div>
           <Link className="l-nav-cta" href="/quiz?source=homepage_nav" onClick={() => markQuizStarted("homepage_nav")}>Begin the analysis →</Link>
         </div>
@@ -150,6 +151,9 @@ export default function Home() {
               <Link className="l-cta-primary" href="/quiz?source=homepage_hero" onClick={() => markQuizStarted("homepage_hero")}>
                 <span>Begin the analysis</span>
                 <span className="arrow">→</span>
+              </Link>
+              <Link className="l-cta-secondary" href="/my-allele">
+                Start with something you own
               </Link>
               <span className="l-cta-meta">~2 min · free · no sign-up</span>
             </div>
