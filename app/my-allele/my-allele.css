@@ -101,13 +101,36 @@ body:has(.ma-shell) {
   line-height: 0.94;
 }
 
-.ma-intro-copy > p:last-child {
+.ma-intro-lede {
   max-width: 720px;
   margin: 0;
   font-family: var(--serif);
   font-size: clamp(17px, 1.7vw, 22px);
   line-height: 1.65;
   color: var(--ink-80);
+}
+
+.ma-intro-action {
+  min-height: 46px;
+  margin-top: 24px;
+  padding: 10px 0;
+  border: 0;
+  border-bottom: 1px solid var(--ink-40);
+  background: transparent;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.ma-intro-action:hover {
+  border-color: var(--rust);
+  color: var(--rust);
+}
+
+.ma-intro-action span {
+  display: inline-block;
+  margin-left: 6px;
+  color: var(--rust);
 }
 
 .ma-boundary {
@@ -144,7 +167,7 @@ body:has(.ma-shell) {
   display: flex;
   gap: 12px;
   align-items: center;
-  color: var(--ink-40);
+  color: var(--ink-60);
 }
 
 .ma-steps li + li {
@@ -228,7 +251,7 @@ body:has(.ma-shell) {
 .ma-ledger-head span {
   display: block;
   margin-top: 3px;
-  color: var(--ink-40);
+  color: var(--ink-60);
   font-size: 11px;
 }
 
@@ -287,7 +310,7 @@ body:has(.ma-shell) {
 }
 
 .ma-item-category {
-  color: var(--ink-40);
+  color: var(--ink-60);
   font-size: 10px;
   text-transform: capitalize;
 }
@@ -325,7 +348,7 @@ body:has(.ma-shell) {
   position: absolute;
   left: 64px;
   bottom: 18px;
-  color: var(--ink-40);
+  color: var(--ink-60);
   font-size: 10px;
 }
 
@@ -434,7 +457,7 @@ body:has(.ma-shell) {
 
 .ma-field-hint {
   margin-left: 7px;
-  color: var(--ink-40);
+  color: var(--ink-60);
   font-size: 11px;
 }
 
@@ -470,7 +493,7 @@ body:has(.ma-shell) {
 
 .ma-field input::placeholder,
 .ma-field textarea::placeholder {
-  color: var(--ink-40);
+  color: var(--ink-60);
 }
 
 .ma-form-actions {
@@ -484,7 +507,7 @@ body:has(.ma-shell) {
 }
 
 .ma-form-actions > span {
-  color: var(--ink-40);
+  color: var(--ink-60);
   font-size: 11px;
 }
 
@@ -674,7 +697,14 @@ body:has(.ma-shell) {
 @media (max-width: 900px) {
   .ma-intro {
     grid-template-columns: 1fr;
-    gap: 34px;
+    gap: 24px;
+    padding-top: 40px;
+    padding-bottom: 30px;
+  }
+
+  .ma-intro h1 {
+    margin-bottom: 20px;
+    font-size: clamp(50px, 9vw, 76px);
   }
 
   .ma-boundary {
@@ -683,10 +713,16 @@ body:has(.ma-shell) {
 
   .ma-workspace {
     grid-template-columns: 1fr;
+    padding-top: 32px;
+  }
+
+  .ma-sheet {
+    order: 1;
   }
 
   .ma-ledger {
     position: static;
+    order: 2;
   }
 
   .ma-ledger-list {
@@ -723,7 +759,7 @@ body:has(.ma-shell) {
   }
 
   .ma-intro {
-    padding: 48px 20px 34px;
+    padding: 36px 20px 24px;
   }
 
   .ma-intro h1 {

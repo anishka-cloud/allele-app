@@ -63,7 +63,7 @@ const CATEGORY_COPY = {
 };
 
 const STEP_LABELS = {
-  owned: "Add what works",
+  owned: "Add what you know",
   candidate: "Consider a purchase",
   verdict: "Read the evidence",
 };
@@ -124,7 +124,7 @@ function EmptyLedger({ onExample }) {
   return (
     <div className="ma-empty-ledger">
       <p>No field notes yet.</p>
-      <span>Start with one item you reach for without thinking.</span>
+      <span>Start with one item you know well—even if it was a miss.</span>
       <button type="button" className="ma-text-button" onClick={onExample}>
         Fill an illustrative example
       </button>
@@ -334,9 +334,12 @@ export default function MyAllele() {
         <div className="ma-intro-copy">
           <p className="ma-volume">A personal buying notebook</p>
           <h1>Buy from what already works.</h1>
-          <p>
+          <p className="ma-intro-lede">
             Start with your own experience. Allele compares a possible purchase with the things you already know, then shows what supports the decision and what is still missing.
           </p>
+          <button type="button" className="ma-intro-action" onClick={scrollToSheet}>
+            Start your first note <span aria-hidden="true">↓</span>
+          </button>
         </div>
         <div className="ma-boundary">
           <span>Data boundary</span>
@@ -392,10 +395,10 @@ export default function MyAllele() {
                 <Field label="Item name">
                   <input required value={owned.name} onChange={(event) => updateOwned("name", event.target.value)} placeholder="What do you call it?" />
                 </Field>
-                <Field label={categoryCopy.variant}>
+                <Field label={categoryCopy.variant} hint="Optional">
                   <input value={owned.variant} onChange={(event) => updateOwned("variant", event.target.value)} placeholder="Be as specific as you can" />
                 </Field>
-                <Field label={categoryCopy.detail}>
+                <Field label={categoryCopy.detail} hint="Optional">
                   <input value={owned.finishOrFit} onChange={(event) => updateOwned("finishOrFit", event.target.value)} placeholder={categoryCopy.detailPlaceholder} />
                 </Field>
                 {categoryCopy.size && (
@@ -410,8 +413,8 @@ export default function MyAllele() {
                     <option value="rarely">Rarely</option>
                   </select>
                 </Field>
-                <Field label="Why does it work for you?" hint="Required" className="ma-field-wide">
-                  <textarea required rows="4" value={owned.works} onChange={(event) => updateOwned("works", event.target.value)} placeholder="Describe the color, finish, fit, comfort, sizing, usefulness, or real-life moment that makes this work." />
+                <Field label="What has your experience been?" hint="Required" className="ma-field-wide">
+                  <textarea required rows="4" value={owned.works} onChange={(event) => updateOwned("works", event.target.value)} placeholder="Explain why it works or doesn’t: color, finish, fit, comfort, sizing, usefulness, or a real-life moment." />
                 </Field>
                 <Field label="What could be better?" hint="Optional" className="ma-field-wide">
                   <textarea rows="3" value={owned.doesNotWork} onChange={(event) => updateOwned("doesNotWork", event.target.value)} placeholder="Fades, pills, pinches, duplicates another item, hard to style…" />
@@ -453,10 +456,10 @@ export default function MyAllele() {
                 <Field label="Product name">
                   <input required value={candidate.name} onChange={(event) => updateCandidate("name", event.target.value)} placeholder="The item you are considering" />
                 </Field>
-                <Field label={candidateCopy.variant}>
+                <Field label={candidateCopy.variant} hint="Optional">
                   <input value={candidate.variant} onChange={(event) => updateCandidate("variant", event.target.value)} placeholder="The exact option, if known" />
                 </Field>
-                <Field label={candidateCopy.detail}>
+                <Field label={candidateCopy.detail} hint="Optional">
                   <input value={candidate.finishOrFit} onChange={(event) => updateCandidate("finishOrFit", event.target.value)} placeholder={candidateCopy.detailPlaceholder} />
                 </Field>
                 {candidateCopy.size && (
