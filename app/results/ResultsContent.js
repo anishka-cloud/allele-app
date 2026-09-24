@@ -22,10 +22,10 @@ const SEASON_IDS = Object.keys(SEASONS);
 const FOUNDATION_URL = "https://shopmy.us/shop/collections/4652210";
 const CONCEALER_URL = "https://shopmy.us/shop/collections/4653190";
 const PRIORITY_ORDER = {
-  lips: ["lips", "lipLiner", "blush", "bronzer", "eyes", "nails"],
-  foundation: ["lips", "lipLiner", "blush", "bronzer", "eyes", "nails"],
-  wardrobe: null,
-  full: null,
+  lips: ["lips", "lip-liner", "blush"],
+  foundation: ["blush", "lips", "eye"],
+  wardrobe: ["lips", "blush", "nails"],
+  full: ["blush", "lips", "eye"],
 };
 const UNDERTONE_COLORS = {
   warm: "#C4873A",
@@ -104,76 +104,10 @@ function cleanHostName(host) {
   return "Retailer";
 }
 
-function getMatchRationale(category, seasonName, tier, p) {
-  const undertone = seasonName.toLowerCase().includes("summer") || seasonName.toLowerCase().includes("winter") ? "cool" : "warm";
-  
-  const rationales = {
-    foundation: {
-      cool: `Calibrated to match cool skin without looking ashy.`,
-      warm: `Rich peach-golden undertone to enhance your natural warmth.`,
-      neutral: `Perfect neutral baseline that adapts to your season's warmth.`
-    },
-    concealer: {
-      cool: `Rosy-cool highlight that melts seamlessly into the skin.`,
-      warm: `Peach corrector designed to neutralize cool shadows naturally.`,
-      neutral: `Universal spot corrector that locks to your exact skin depth.`
-    },
-    lips: {
-      cool: `Muted cool mauve designed to bring life to cool lip tones.`,
-      warm: `Warm terracotta-peach gloss to lift your natural lip pigment.`,
-      neutral: `Perfect rosewood neutral matching your soft undertone.`
-    },
-    lipLiner: {
-      cool: `Soft ash-rose pencil to define the lip line without harshness.`,
-      warm: `Warm neutral liner to structure lip color without turning orange.`,
-      neutral: `Soft universal lip cheat shade for editorial definition.`
-    },
-    blush: {
-      cool: `Cool pink flush that mimics your natural healthy temperature.`,
-      warm: `Warm peach-coral to wash cheeks in golden-hour warmth.`,
-      neutral: `Natural soft mauve blush that structures without looking heavy.`
-    },
-    eyes: {
-      cool: `Mauve-taupe shadows to sculpt and dramatize cool gazes.`,
-      warm: `Warm bronze-gold shimmers that draw out the gold flecks in your eyes.`,
-      neutral: `Editorial soft neutrals that define your eyes naturally.`
-    },
-    bronzer: {
-      cool: `Soft grey-toned contour to sculpt without warm orange lines.`,
-      warm: `Sun-kissed honey wash that warms the high points of your face.`,
-      neutral: `Balanced neutral sculpting powder to define cheekbones.`
-    },
-    nails: {
-      cool: `Crisp cool glaze that complements your hands elegantly.`,
-      warm: `Warm creamy lacquer that highlights your warm skin undertone.`,
-      neutral: `Sophisticated neutral glaze that finishes your look.`
-    }
-  };
-
-  // Specific seasonal highlights
-  if (category === "foundation") {
-    if (seasonName.includes("Winter")) return `Crisp cool base that matches Winter's porcelain-to-espresso depth.`;
-    if (seasonName.includes("Autumn")) return `Golden-olive base that harmonizes with Autumn's muted depth.`;
-    if (seasonName.includes("Spring")) return `Fresh peach-golden base to lift Spring's clear complexion.`;
-    if (seasonName.includes("Summer")) return `Cool rosy-neutral finish that prevents yellowing in Summer skin.`;
-  }
-  
-  if (category === "lips") {
-    if (seasonName.includes("Winter")) return `Vivid high-contrast berry shade matching Winter's clarity.`;
-    if (seasonName.includes("Autumn")) return `Warm terracotta-brick tone to anchor Autumn's rich warmth.`;
-    if (seasonName.includes("Spring")) return `Fresh golden-peach tint that echoes Spring's high energy.`;
-    if (seasonName.includes("Summer")) return `Dusty rose-pink gloss complementing Summer's soft elegance.`;
-  }
-  
-  if (category === "blush") {
-    if (seasonName.includes("Winter")) return `Cool plum-rose flush that matches Winter's natural temperature.`;
-    if (seasonName.includes("Autumn")) return `Warm terracotta-clay to mimic Autumn's earthy gold sheen.`;
-    if (seasonName.includes("Spring")) return `Bright coral-peach pigment to lift Spring's fresh cheeks.`;
-    if (seasonName.includes("Summer")) return `Soft pink-orchid flush mimicking your natural cool blush.`;
-  }
-
-  const catMap = rationales[category] || rationales.lips;
-  return catMap[undertone] || catMap.neutral;
+function getMatchRationale(category, seasonName, p) {
+  const categoryLabel = category.replace("-", " ");
+  const article = categoryLabel === "eye" ? "an" : "a";
+  return `${p.shade} is ${article} ${categoryLabel} starting point for the ${seasonName} palette. Check finish, texture, and the retailer shade before buying.`;
 }
 
 const FOUNDATION_HEROES = {
@@ -1760,26 +1694,6 @@ function Nav({ seasonId, onChange }) {
   );
 }
 
-function getMonthlyVolume(seasonName) {
-  const volumes = {
-    "Clear Spring": 520,
-    "True Spring": 480,
-    "Light Spring": 450,
-    "Light Summer": 680,
-    "True Summer": 980,
-    "Soft Summer": 1420,
-    "Soft Autumn": 1380,
-    "True Autumn": 810,
-    "Dark Autumn": 1290,
-    "Dark Winter": 1250,
-    "True Winter": 850,
-    "Bright Winter": 640,
-    "Deep Autumn": 1290,
-    "Deep Winter": 1250,
-  };
-  return (volumes[seasonName] || 750).toLocaleString();
-}
-
 function getShadeIndexForDepth(depth, shadeLadder) {
   if (!shadeLadder || shadeLadder.length === 0) return 0;
   const repIdx = shadeLadder.findIndex(rung => rung.representative);
@@ -1902,7 +1816,7 @@ function Hero({ s, seasonId }) {
             </div>
           )}
           <div className="dt-hero-social-proof" style={{ fontSize: "12.5px", fontStyle: "italic", color: "var(--ink-60)", marginTop: "-10px", marginBottom: "20px", fontFamily: "var(--font-serif, Georgia, serif)" }}>
-            You&rsquo;re 1 of {getMonthlyVolume(s.name)} {s.name}s mapped this month · <Link href="/#method" style={{ textDecoration: "underline" }}>see method</Link>
+            A guided color-season starting point · <Link href="/#method" style={{ textDecoration: "underline" }}>see the method</Link>
           </div>
           <p className="dt-hero-whisper">{s.whisper}</p>
           {s.washesYouOut && (
@@ -1934,7 +1848,7 @@ function Hero({ s, seasonId }) {
           <div className="dt-hero-ctas" style={{ display: "flex", flexDirection: "column", gap: "10px", alignItems: "flex-start" }}>
             <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
               <a href="#edit" className="dt-btn dt-btn-primary">
-                See the 24-product edit <span>↓</span>
+                See my starting edit <span>↓</span>
               </a>
               {(() => {
                 const foundationHero = FOUNDATION_HEROES[s.name];
@@ -1944,16 +1858,16 @@ function Hero({ s, seasonId }) {
                   tier: "hero",
                   source: "hero-secondary",
                 });
-                const isShopMy = heroShopUrl && heroShopUrl.startsWith("https://shopmy.us");
-                const relVal = isShopMy ? "sponsored noopener noreferrer" : "sponsored noopener";
                 const heroShopLabel = foundationHero
-                  ? `Shop Foundation · ${foundationHero.brand}`
-                  : "Shop Your Palette";
+                  ? foundationHero.shopUrl
+                    ? `View foundation · ${foundationHero.brand}`
+                    : "Browse foundation options"
+                  : "Browse the palette";
                 return (
                   <a
                     href={heroShopUrl}
                     target="_blank"
-                    rel={relVal}
+                    rel="sponsored noopener noreferrer"
                     className="dt-btn dt-btn-ghost"
                     onClick={() => {
                       track.shopClick({
@@ -1982,7 +1896,7 @@ function Hero({ s, seasonId }) {
               <div className="dt-twins-avatars-row">
                 {s.celebs.map((celeb) => (
                   <div key={celeb.name} className="dt-twin-avatar-item">
-                    <CelebAvatar key={celeb.name} celeb={celeb} seasonId={seasonId} />
+                    <CelebAvatar key={`${seasonId}-${celeb.name}`} celeb={celeb} seasonId={seasonId} />
                     <span className="dt-twin-avatar-name">
                       <em>{celeb.name}</em>
                       {celeb.contested && (
@@ -2092,7 +2006,7 @@ function Hero({ s, seasonId }) {
                           <div className="dt-card-celebs-avatars">
                             {s.celebs.slice(0, 3).map((celeb) => (
                               <div key={celeb.name} className="dt-card-celeb-avatar-wrap">
-                                <CelebAvatar key={celeb.name} celeb={celeb} seasonId={seasonId} />
+                                <CelebAvatar key={`${seasonId}-${celeb.name}`} celeb={celeb} seasonId={seasonId} />
                                 <span className="dt-card-celeb-avatar-name">{celeb.name.split(" ")[0]}</span>
                               </div>
                             ))}
@@ -2382,8 +2296,10 @@ function HeroProductCard({ category, hero, season, sourceUrl, onShopClick, shade
   const swatchHex = activeRung ? activeRung.hex : hero.swatchHex;
   const shadeNumber = activeRung ? activeRung.code : hero.shadeNumber;
   const shadeName = activeRung ? activeRung.label : hero.shadeName;
+  const productUrl = hero.shopUrl || sourceUrl;
+  const retailerLabel = hero.shopUrl ? hero.source : "ShopMy collection";
   const dark = swatchIsDark(swatchHex);
-  const metaLine = `BEST MATCH · ${hero.undertone} · ${activeRung ? activeRung.label.toUpperCase() : hero.depth.toUpperCase()} · ${hero.finish.toUpperCase()}`;
+  const metaLine = `STARTING SHADE · ${hero.undertone} · ${activeRung ? activeRung.label.toUpperCase() : hero.depth.toUpperCase()} · ${hero.finish.toUpperCase()}`;
 
   return (
     <article className="dt-spec-hero" data-category={category}>
@@ -2391,7 +2307,7 @@ function HeroProductCard({ category, hero, season, sourceUrl, onShopClick, shade
 
       <header className="dt-spec-head" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "8.5px", width: "100%" }}>
         <span className="dt-spec-comp">Composition no. {hero.compositionNumber}</span>
-        <span className="dt-spec-verified-badge" style={{ fontFamily: "var(--font-mono, monospace)", fontSize: "9px", letterSpacing: "0.15em", textTransform: "uppercase", color: "var(--accent, #C4A265)", border: "1px solid rgba(196, 162, 101, 0.3)", padding: "3px 8px", borderRadius: "999px", background: "rgba(255, 251, 247, 0.95)" }}>Lab Verified Match</span>
+        <span className="dt-spec-verified-badge" style={{ fontFamily: "var(--font-mono, monospace)", fontSize: "9px", letterSpacing: "0.15em", textTransform: "uppercase", color: "var(--accent, #C4A265)", border: "1px solid rgba(196, 162, 101, 0.3)", padding: "3px 8px", borderRadius: "999px", background: "rgba(255, 251, 247, 0.95)" }}>Season-based suggestion</span>
       </header>
 
       <div className="dt-spec-body">
@@ -2467,21 +2383,21 @@ function HeroProductCard({ category, hero, season, sourceUrl, onShopClick, shade
             <div className="dt-spec-shade-sub"><em>Shade {shadeNumber}</em> · {shadeName}</div>
           </div>
 
-          <p className="dt-spec-reasoning">{hero.reasoningText}</p>
+          <p className="dt-spec-reasoning">
+            This is a color-season starting point, not a guaranteed personal shade match. Compare the undertone and depth with a product you already know works.
+          </p>
 
-          {hero.formulaNote && (
-            <aside className="dt-spec-lab">
-              <span className="dt-spec-lab-label">From the lab</span>
-              <p className="dt-spec-lab-body">{hero.formulaNote}</p>
-            </aside>
-          )}
+          <aside className="dt-spec-lab">
+            <span className="dt-spec-lab-label">What to verify</span>
+            <p className="dt-spec-lab-body">Exact shade, finish, ingredients, price, and availability on the retailer page.</p>
+          </aside>
 
           <div className="dt-spec-foot">
             <span className="dt-spec-retail">
-              <span className="dt-spec-retail-k">Retail</span> {hero.price}
+              <span className="dt-spec-retail-k">Listed price</span> {hero.price}
             </span>
             <a
-              href={withUTM(hero.shopUrl || sourceUrl, {
+              href={withUTM(productUrl, {
                 season: season.name,
                 category,
                 tier: "hero",
@@ -2501,7 +2417,7 @@ function HeroProductCard({ category, hero, season, sourceUrl, onShopClick, shade
                 })
               }
             >
-              Shop at {hero.source} <span aria-hidden="true">→</span>
+              View at {retailerLabel} <span aria-hidden="true">→</span>
             </a>
           </div>
         </div>
@@ -2546,7 +2462,7 @@ function AlternateCard({ category, item, season, onShopClick }) {
       </div>
       <div className="dt-spec-alt-brand">{item.brand}</div>
       <h5 className="dt-spec-alt-name">{item.name}</h5>
-      <p className="dt-spec-alt-reasoning">{item.reasoningText}</p>
+      <p className="dt-spec-alt-reasoning">An alternate color-season starting point. Compare its finish and coverage with your known preferences.</p>
 
       <div className="dt-spec-alt-foot">
         <span className="dt-spec-alt-price">{item.price}</span>
@@ -2583,38 +2499,39 @@ function Edit({ s, seasonId, shadeIndex, setShadeIndex, priority }) {
   const [tier, setTier] = useState("best-value");
   const [copiedShade, setCopiedShade] = useState(null);
   const selectedProducts = useMemo(() => {
-    const desiredOrder = PRIORITY_ORDER[priority] || ["blush", "eyes", "lips", "lipLiner", "bronzer", "nails"];
+    const desiredOrder = PRIORITY_ORDER[priority] || PRIORITY_ORDER.full;
     return desiredOrder
       .map((catId) => ({ catId, product: products[catId]?.[tier] }))
-      .filter(({ product }) => Boolean(product));
+      .filter(({ product }) => Boolean(product))
+      .slice(0, 3);
   }, [products, tier, priority]);
   const shopUrl = getShopUrl(s.name);
   const undertoneGuidance = UNDERTONE_GUIDANCE[s.name];
   const foundationHero = FOUNDATION_HEROES[s.name];
-  const foundationAlternates = FOUNDATION_ALTERNATES[s.name] || [];
+  const foundationAlternates = (FOUNDATION_ALTERNATES[s.name] || []).slice(0, 1);
   const concealerHero = CONCEALER_HEROES[s.name];
-  const concealerAlternates = CONCEALER_ALTERNATES[s.name] || [];
+  const concealerAlternates = (CONCEALER_ALTERNATES[s.name] || []).slice(0, 1);
 
   return (
-    <section id="edit" className="dt-edit" style={{ "--accent": s.accent }}>
+    <section id="edit" className={`dt-edit${priority === "foundation" ? " dt-edit-priority-foundation" : ""}`} style={{ "--accent": s.accent }}>
       <div className="dt-section-head">
         <span className="dt-section-num">01</span>
         <h2 className="dt-section-title">The <em>edit</em></h2>
         <span className="dt-section-meta">
-          Twenty-four products · three tiers · all in stock
+          Three starting points · choose one price tier
         </span>
       </div>
 
       <div className="dt-edit-intro">
         <div>
           <p className="dt-edit-body">
-            These are curated to your exact coloring. Each product is hand-matched by undertone, depth, and chroma. Not just &ldquo;warm&rdquo; or &ldquo;cool.&rdquo;
+            These are season-based suggestions, narrowed to a useful starting edit. Your finish, formula, fit, and exact shade preferences still matter.
           </p>
           {s.shadeGuidance && (
             <p className="dt-shade-guidance">{s.shadeGuidance}</p>
           )}
           <div className="dt-ftc">
-            Links are affiliate. We earn a small commission. Costs you nothing, keeps Allele free.
+            Affiliate links may earn Allele a commission. Product facts come from the linked retailer; verify current price, shade, and availability there.
           </div>
         </div>
         <div className="dt-tier-picker" style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "10px" }}>
@@ -2623,9 +2540,9 @@ function Edit({ s, seasonId, shadeIndex, setShadeIndex, priority }) {
             {(() => {
               const TIER_DECOYS = {
                 "budget": "Under $15",
-                "best-value": "Hand-matched · most picked",
-                "value": "Hand-matched · most picked",
-                "splurge": "$50+ · investment"
+                "best-value": "Mid-range starting point",
+                "value": "Mid-range starting point",
+                "splurge": "$30+ · higher spend"
               };
               return TIERS.map((t) => (
                 <button
@@ -2664,7 +2581,7 @@ function Edit({ s, seasonId, shadeIndex, setShadeIndex, priority }) {
             })()}
           </div>
           <span style={{ fontSize: "11px", fontFamily: "var(--font-serif, Georgia, serif)", fontStyle: "italic", color: "var(--ink-60)", marginTop: "4px", textAlign: "right" }}>
-            Most readers stay on Best Value — it's where the shade match is exact.
+            Best Value is the default starting point. Switch tiers to compare price, not certainty.
           </span>
         </div>
       </div>
@@ -2681,7 +2598,7 @@ function Edit({ s, seasonId, shadeIndex, setShadeIndex, priority }) {
                 source: "results",
               })}
               target="_blank"
-              rel={(p.shopUrl || shopUrl)?.startsWith("https://shopmy.us") ? "sponsored noopener noreferrer" : "sponsored noopener"}
+              rel="sponsored noopener noreferrer"
               className="dt-prod"
               style={{ "--swatch": p.swatch, "--season-accent": s.accent || "#f5f0eb", display: "block", color: "inherit", textDecoration: "none" }}
               onClick={() => {
@@ -2717,7 +2634,7 @@ function Edit({ s, seasonId, shadeIndex, setShadeIndex, priority }) {
                 ) : null}
                 <div className="dt-prod-swatch" style={{ background: p.swatch }} />
                 <div className="dt-prod-match">
-                  <div className="dt-match-dot" /> Lab Verified
+                  <div className="dt-match-dot" /> Palette starting point
                 </div>
               </div>
               <div className="dt-prod-body">
@@ -2744,10 +2661,10 @@ function Edit({ s, seasonId, shadeIndex, setShadeIndex, priority }) {
                   </span>
                 </div>
 
-                <p className="dt-prod-match-reason">{getMatchRationale(catId, s.name, tier, p)}</p>
+                <p className="dt-prod-match-reason">{getMatchRationale(catId, s.name, p)}</p>
 
                 <div className="dt-prod-stock">
-                  <span className="dt-stock-pulse" /> Verified in stock today
+                  <span className="dt-stock-pulse" /> Check price + availability
                 </div>
 
                 <div className="dt-prod-foot">
@@ -2779,7 +2696,7 @@ function Edit({ s, seasonId, shadeIndex, setShadeIndex, priority }) {
             <span className="dt-spec-section-num">The Base</span>
             <h3 className="dt-spec-section-title">Foundation &amp; Concealer</h3>
             <p className="dt-spec-section-intro">
-              Your base palette. One match from our analysis — verified against your {s.name} coordinates — and three alternates if you prefer a different finish or coverage.
+              A season-based place to begin. Confirm undertone, depth, finish, ingredients, and current availability with the retailer before buying.
             </p>
           </header>
 
@@ -2877,8 +2794,7 @@ function Edit({ s, seasonId, shadeIndex, setShadeIndex, priority }) {
             {FOUNDATION_CARDS.map((foundation) => (
               <article key={foundation.name} className="dt-foundation-card">
                 <div className="dt-foundation-card-head">
-                  <span>{foundation.rating} stars</span>
-                  <span>{foundation.reviews} reviews</span>
+                  <span>Product overview</span>
                   <span
                     className="dt-foundation-undertone-dot"
                     title={`${foundation.undertone} undertone`}
@@ -2908,8 +2824,7 @@ function Edit({ s, seasonId, shadeIndex, setShadeIndex, priority }) {
             {CONCEALER_CARDS.map((concealer) => (
               <article key={concealer.name} className="dt-foundation-card">
                 <div className="dt-foundation-card-head">
-                  <span>{concealer.rating} stars</span>
-                  <span>{concealer.reviews} reviews</span>
+                  <span>Product overview</span>
                   <span
                     className="dt-foundation-undertone-dot"
                     title={`${concealer.undertone} undertone`}
@@ -2931,7 +2846,7 @@ function Edit({ s, seasonId, shadeIndex, setShadeIndex, priority }) {
           <a
             href={FOUNDATION_URL}
             target="_blank"
-            rel="noopener noreferrer"
+              rel="sponsored noopener noreferrer"
             className="dt-btn dt-btn-primary"
             onClick={() => {
               track.shopClick({
@@ -2949,7 +2864,7 @@ function Edit({ s, seasonId, shadeIndex, setShadeIndex, priority }) {
           <a
             href={CONCEALER_URL}
             target="_blank"
-            rel="noopener noreferrer"
+              rel="sponsored noopener noreferrer"
             className="dt-btn dt-btn-ghost"
             onClick={() => {
               track.shopClick({
@@ -3259,7 +3174,7 @@ function Collect({ s, depthParam, oliveFlag }) {
           <div className="dt-section-num">02</div>
           <h2 className="dt-collect-title">The <em>dossier</em></h2>
           <p className="dt-collect-body">
-            We&rsquo;ll send the long-form letter: every shade with names and hexes, the 24-product edit, and tips you can save for the dressing room.
+            We&rsquo;ll send your palette, the smaller product starting edit, and tips you can save for the dressing room.
           </p>
         </div>
         <form className="dt-collect-form" onSubmit={submit}>
@@ -3383,10 +3298,6 @@ function CelebAvatar({ celeb, seasonId }) {
   const slug = `${seasonId}-${celeb.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
   const initials = getInitials(celeb.name);
 
-  useEffect(() => {
-    setImageError(false);
-  }, [slug]);
-
   if (imageError || !celeb.name) {
     return (
       <div className="dt-celeb-monogram" title={celeb.name}>
@@ -3434,19 +3345,16 @@ function StickyShopBar({ s, shadeIndex }) {
     tier: "hero",
     source: "sticky-bar",
   });
-  const isShopMy = targetUrl && targetUrl.startsWith("https://shopmy.us");
-  const relVal = isShopMy ? "sponsored noopener noreferrer" : "sponsored noopener";
-
   return (
     <div className="dt-sticky-shop-bar" style={{ "--accent": s.accent }}>
       <div className="dt-sticky-left" style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
         {foundationHero ? (
           <>
             <div className="dt-sticky-title">
-              Your Match: <em>{foundationHero.brand} {activeRung ? activeRung.code : foundationHero.shadeNumber} ({activeRung ? activeRung.label : foundationHero.shadeName})</em>
+              Suggested starting point: <em>{foundationHero.brand} {activeRung ? activeRung.code : foundationHero.shadeNumber} ({activeRung ? activeRung.label : foundationHero.shadeName})</em>
             </div>
             <span className="dt-sticky-desc" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <span>24 curated products matching your science</span>
+              <span>Season-based starting point</span>
               <span>·</span>
               <a href={shopUrl} target="_blank" rel="sponsored noopener noreferrer" style={{ textDecoration: "underline", color: "var(--ink-60)" }}>
                 or browse the full edit
@@ -3456,14 +3364,14 @@ function StickyShopBar({ s, shadeIndex }) {
         ) : (
           <>
             <div className="dt-sticky-title">Your <em>{s.name}</em> Edit</div>
-            <span className="dt-sticky-desc">24 products matching your science</span>
+            <span className="dt-sticky-desc">A smaller edit with clear tradeoffs</span>
           </>
         )}
       </div>
       <a
         href={targetUrl}
         target="_blank"
-        rel={relVal}
+        rel="sponsored noopener noreferrer"
         className="dt-sticky-cta"
         onClick={() => {
           track.shopClick({
@@ -3476,7 +3384,7 @@ function StickyShopBar({ s, shadeIndex }) {
           });
         }}
       >
-        {foundationHero ? `Shop Foundation Match · ${foundationHero.price}` : "Shop Full Season"} <span>→</span>
+        {foundationHero ? `View foundation · ${foundationHero.price}` : "Browse full season"} <span>→</span>
       </a>
     </div>
   );
@@ -3582,15 +3490,6 @@ function ResultsInner({ seasonParam, depthParam, oliveFlag, priority }) {
       oliveFlag,
       priority,
     });
-    track.quizCompleted({
-      season: s.name,
-      undertone: s.undertone,
-      contrast: s.chroma,
-      value: s.depth,
-      chroma: s.chroma,
-      olive_flag: !!oliveFlag,
-      priority: priority || "full",
-    });
   }, [s?.name, oliveFlag, priority]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const onSeasonChange = (id) => {
@@ -3609,7 +3508,7 @@ function ResultsInner({ seasonParam, depthParam, oliveFlag, priority }) {
       <Nav seasonId={seasonId} onChange={onSeasonChange} />
       <Hero s={s} seasonId={seasonId} />
       
-      {/* 24-product edit presented FIRST below hero to drive immediate affiliate conversions */}
+      {/* A small, priority-aware edit comes first so the result stays useful. */}
       <Edit s={s} seasonId={seasonId} shadeIndex={shadeIndex} setShadeIndex={setShadeIndex} priority={priority} />
 
       {/* Sticky shopping bar for quick checkout accessibility */}

@@ -733,7 +733,13 @@ body:has(.dt-results) { background: var(--cream); }
    ============================================================ */
 .dt-edit {
   background: var(--cream);
+  display: flex;
+  flex-direction: column;
 }
+.dt-edit-priority-foundation > .dt-section-head { order: 0; }
+.dt-edit-priority-foundation > .dt-edit-intro { order: 1; }
+.dt-edit-priority-foundation > .dt-spec-section { order: 2; margin-top: 0; }
+.dt-edit-priority-foundation > .dt-edit-grid { order: 3; }
 .dt-edit-intro {
   max-width: var(--content-max);
   margin: 0 auto 48px;
@@ -910,7 +916,7 @@ body:has(.dt-results) { background: var(--cream); }
   max-width: var(--content-max);
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 }
 .dt-prod {
@@ -1004,8 +1010,8 @@ body:has(.dt-results) { background: var(--cream); }
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #3A8A4A;
-  box-shadow: 0 0 0 2px rgba(58, 138, 74, 0.2);
+  background: var(--gold);
+  box-shadow: 0 0 0 2px rgba(196, 162, 101, 0.18);
 }
 
 /* Product body */
@@ -3253,7 +3259,7 @@ a.dt-prod:hover .dt-prod-shop span {
   transform: translate(2px, -2px);
 }
 
-/* Pulsating Stock Indicator */
+/* Retailer verification reminder */
 .dt-prod-stock {
   display: flex;
   align-items: center;
@@ -3262,29 +3268,16 @@ a.dt-prod:hover .dt-prod-shop span {
   font-size: 8px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #3A8A4A;
+  color: var(--ink-60);
   margin-top: 10px;
 }
 .dt-stock-pulse {
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: #3A8A4A;
+  background: var(--gold);
   position: relative;
   display: inline-block;
-}
-.dt-stock-pulse::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  border-radius: 50%;
-  background: #3A8A4A;
-  animation: dt-pulse 2s infinite;
-}
-@keyframes dt-pulse {
-  0% { transform: scale(1); opacity: 0.8; }
-  100% { transform: scale(3); opacity: 0; }
 }
 
 /* Personalized Match Rationale Tag */
@@ -3516,4 +3509,3 @@ a.dt-prod:hover .dt-prod-shop span {
 .dt-results section.dt-edit {
   padding-top: 48px;
 }
-
