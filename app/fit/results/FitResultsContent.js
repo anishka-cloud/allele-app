@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { trackEvent } from "@/lib/analytics";
+import { DenimResultMap } from "@/app/fit/FitVisuals";
 import {
   FIT_STORAGE_KEY,
   answersFromSearchParams,
@@ -125,6 +126,27 @@ export default function FitResultsContent() {
         </aside>
       </section>
 
+      <section className="fit-proportion-map" aria-labelledby="fit-map-title">
+        <div className="fit-map-copy">
+          <p>Your proportion map</p>
+          <h2 id="fit-map-title">The geometry your jeans need to respond to.</h2>
+          <p>This is not a body type. It shows the fit relationships you reported so you can recognize them in a size chart and fitting room.</p>
+        </div>
+        <DenimResultMap result={result} />
+        <div className="fit-signal-list">
+          {result.signals.map((signal) => (
+            <article key={signal.id}>
+              <div className="fit-signal-heading"><span>{signal.label}</span><strong>{signal.value}</strong></div>
+              <div className="fit-signal-track" aria-label={`${signal.label}: ${signal.value}`}>
+                <i style={{ left: `${signal.position}%` }} />
+              </div>
+              <div className="fit-signal-ends"><span>{signal.low}</span><span>{signal.high}</span></div>
+              <p>{signal.detail}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
       <section className="fit-axis-grid" aria-label="Your four Fit DNA recommendations">
         {axes.map(([label, value], index) => (
           <article key={label}>
@@ -153,6 +175,25 @@ export default function FitResultsContent() {
             <span>{result.lengthGuidance}</span>
           </div>
         </aside>
+      </section>
+
+      <section className="fit-style-system-note">
+        <div>
+          <p>Optional style-system lens</p>
+          <h2>What about a Kibbe type?</h2>
+        </div>
+        <div>
+          <p>
+            Fit DNA does not assign a Kibbe Image Identity from denim answers. That would sound precise without collecting the whole-person line, upper-body, and style-identity information the system uses.
+          </p>
+          <p>
+            Your proportion map is still useful if you explore Kibbe or another style system: it shows your reported torso balance, waist-to-hip relationship, vertical preference, and need for ease. Treat those as observations—not proof of an identity.
+          </p>
+          <a href="https://www.penguinrandomhouse.com/books/723284/david-kibbes-power-of-style-by-david-kibbe/" target="_blank" rel="noopener noreferrer">
+            Explore Kibbe&rsquo;s current method <span aria-hidden="true">↗</span>
+          </a>
+          <small>Allele is not affiliated with or endorsed by David Kibbe.</small>
+        </div>
       </section>
 
       <section className="fit-shopping-summary">

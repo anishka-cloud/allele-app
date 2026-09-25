@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import {
   answersFromSearchParams,
   answersToSearchParams,
+  buildFitSignals,
   buildFitNotes,
   calculateFitDna,
   scoreLeg,
@@ -88,4 +89,19 @@ test("optional measurements appear in the private shopping note", () => {
   assert.match(note, /Full hip \/ seat: 40 in/);
   assert.match(note, /Best-fitting inseam: 29 in/);
   assert.doesNotMatch(note, /body type/i);
+});
+
+test("proportion signals describe answers without assigning an identity", () => {
+  const signals = buildFitSignals({
+    torso: "long",
+    waist_hip: "defined",
+    length: "tall",
+    fit_issue: "hip_thigh_pull",
+    goal: "hip_room",
+    silhouette: "wide",
+    fabric: "structured",
+  });
+  assert.equal(signals.find((signal) => signal.id === "torso").value, "Longer torso signal");
+  assert.equal(signals.find((signal) => signal.id === "ease").value, "Room is a strong signal");
+  assert.ok(signals.every((signal) => !/kibbe|body type/i.test(`${signal.value} ${signal.detail}`)));
 });

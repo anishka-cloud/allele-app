@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { track, trackEvent } from "@/lib/analytics";
+import { FitQuestionDiagram } from "@/app/fit/FitVisuals";
 import {
   FIT_STORAGE_KEY,
   answersToSearchParams,
@@ -136,11 +137,7 @@ export default function FitQuizContent() {
       </div>
 
       <section className={`fit-question${transitioning ? " is-transitioning" : ""}`}>
-        <div className="fit-question-rail" aria-hidden="true">
-          <span>{String(currentQuestion + 1).padStart(2, "0")}</span>
-          <i />
-          <span>{String(fitQuestions.length).padStart(2, "0")}</span>
-        </div>
+        <FitQuestionDiagram questionId={question.id} />
         <div className="fit-question-main" key={question.id}>
           <p className="fit-question-instruction">Choose the closest answer. You can go back.</p>
           <h1>{question.question}</h1>
