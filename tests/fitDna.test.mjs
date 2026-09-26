@@ -105,3 +105,14 @@ test("proportion signals describe answers without assigning an identity", () => 
   assert.equal(signals.find((signal) => signal.id === "ease").value, "Room is a strong signal");
   assert.ok(signals.every((signal) => !/kibbe|body type/i.test(`${signal.value} ${signal.detail}`)));
 });
+
+test("barrel is a supported explicit style preference, never inferred from popularity", () => {
+  const answers = { length: "standard", torso: "balanced", waist_hip: "balanced", fit_issue: "predictable", rise: "low", silhouette: "barrel", goal: "balance", shoes: "sneakers", fabric: "rigid" };
+  const result = calculateFitDna(answers);
+  assert.equal(result.leg, "barrel");
+  assert.equal(result.labels.leg, "Barrel leg");
+  assert.ok(result.reasons.some(reason => reason.includes("not its popularity")));
+  assert.ok(!result.reasons.some(reason => reason.includes("opening carries some shape below the knee")));
+  assert.deepEqual(answersFromSearchParams(answersToSearchParams(answers)), answers);
+  assert.notEqual(calculateFitDna({ ...answers, silhouette: "choose" }).leg, "barrel");
+});

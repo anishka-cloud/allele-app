@@ -1,0 +1,102 @@
+{
+  "created": "2026-09-24",
+  "mode": "built-in image_gen",
+  "purpose": "Generated style illustrations; not retailer product photos, body predictions or technical measurements.",
+  "artDirection": {
+    "palette": {
+      "paper": "#FFFBF7",
+      "denim": "#263B50",
+      "ink": "#1A1714",
+      "thread": "#C4A265",
+      "leather": "#5A3D2F"
+    },
+    "type": "Existing Lora display and Inter UI",
+    "layout": "Large garment-first answer cards; quiet text labels below. Real retailer photography remains in shopping cards.",
+    "principle": "Cloth texture and recognizable cuts replace clip art. Trend coverage informs the examples, never the fit score."
+  },
+  "sources": [
+    {
+      "url": "https://www.vogue.com/article/fall-denim-trends-experts",
+      "published": "2026-08-25",
+      "use": "Straight, cigarette, bootcut, true blue and deep indigo direction."
+    },
+    {
+      "url": "https://www.vogue.com/article/fall-runway-denim-styles",
+      "published": "2026-08-05",
+      "use": "Polished wide-leg direction."
+    },
+    {
+      "url": "https://www.madewell.com/womens/jeans/baggy-jeans/darted-barrel-leg/",
+      "checked": "2026-09-24",
+      "use": "Barrel presence and retailer best-seller labels; not independent sales data."
+    }
+  ],
+  "assets": [
+    {
+      "key": "straight",
+      "filename": "straight-v1.webp",
+      "original": "/Users/anishkanawagamuwa/.codex/generated_images/01a0bbe1-4536-7560-97aa-0b38bcff3513/exec-fb631cf0-2a6f-462d-86a4-844549dfb935.png",
+      "prompt": "Use case: product-mockup. Asset type: photorealistic cut-reference image for Allele's denim fit quiz, NOT an actual product listing. Create one pair of unbranded women's jeans, photographed as an exquisite contemporary e-commerce flat-lay. Camera exactly overhead; garment front facing camera, waistband horizontal, two full legs laid naturally straight down, small gap between legs. Absolutely no person, body, mannequin, shoes, hands, hanger, text, labels, logos, or props. Portrait 2:3 canvas. Full garment contained, waistband near 9% from top and hems near 91%; generous side margins. Seamless warm off-white background #FFFBF7, gentle soft shadow, diffuse daylight. Highly realistic cotton twill, fine gold topstitching, belt loops, realistic metal button and rivets, gentle natural folds; restrained dark-to-medium indigo wash, no holes, no heavy distressing. Refined modern denim editorial. Prioritize believable garment construction and immediately readable leg shape; not a vector, diagram, cartoon, or shiny 3D rendering. Subject: a fashionable vintage-inspired STRAIGHT-LEG jean. High rise, clean regular width from knee to hem, moderate hip and thigh ease. Authentic medium-indigo true-blue wash. Full-length not cropped. One complete garment only."
+    },
+    {
+      "key": "slim",
+      "filename": "slim-v1.webp",
+      "original": "/Users/anishkanawagamuwa/.codex/generated_images/01a0bbe1-4536-7560-97aa-0b38bcff3513/exec-28db6814-569c-4a28-829e-c7f003e9567f.png",
+      "prompt": "Use case: product-mockup. Asset type: photorealistic cut-reference image for Allele's denim fit quiz, NOT an actual product listing. Create one pair of unbranded women's jeans, photographed as an exquisite contemporary e-commerce flat-lay. Camera exactly overhead; garment front facing camera, waistband horizontal, two full legs laid naturally straight down, small gap between legs. Absolutely no person, body, mannequin, shoes, hands, hanger, text, labels, logos, or props. Portrait 2:3 canvas. Full garment contained, waistband near 9% from top and hems near 91%; generous side margins. Seamless warm off-white background #FFFBF7, gentle soft shadow, diffuse daylight. Highly realistic cotton twill, fine gold topstitching, belt loops, realistic metal button and rivets, gentle natural folds; restrained dark-to-medium indigo wash, no holes, no heavy distressing. Refined modern denim editorial. Prioritize believable garment construction and immediately readable leg shape; not a vector, diagram, cartoon, or shiny 3D rendering. Input image 1 is a style/composition reference only. Match its clean flat-lay presentation, fabric realism, lighting, background and framing. The silhouette must change: SLIM / CIGARETTE jeans. Closely skimming but not skin-tight, distinctly narrower legs than reference, nearly parallel from knee to a narrow ankle hem. Dark rinse indigo. One complete garment only."
+    },
+    {
+      "key": "wide-v2",
+      "filename": "wide-v1.webp",
+      "original": "/Users/anishkanawagamuwa/.codex/generated_images/01a0bbe1-4536-7560-97aa-0b38bcff3513/exec-5450a4e2-17be-4a68-b7d9-5b0f0f967f2d.png",
+      "prompt": "Use case: product-mockup. Asset type: photorealistic cut-reference image for Allele's denim fit quiz, NOT an actual product listing. Create one pair of unbranded women's jeans, photographed as an exquisite contemporary e-commerce flat-lay. Camera exactly overhead; garment front facing camera, waistband horizontal, two full legs laid naturally straight down, small gap between legs. Absolutely no person, body, mannequin, shoes, hands, hanger, text, labels, logos, or props. Portrait 2:3 canvas. Full garment contained, waistband near 9% from top and hems near 91%; generous side margins. Seamless warm off-white background #FFFBF7, gentle soft shadow, diffuse daylight. Highly realistic cotton twill, fine gold topstitching, belt loops, realistic metal button and rivets, gentle natural folds; restrained dark-to-medium indigo wash, no holes, no heavy distressing. Refined modern denim editorial. Prioritize believable garment construction and immediately readable leg shape; not a vector, diagram, cartoon, or shiny 3D rendering. Input image 1: style reference only. Subject: VERY WIDE LEG PALAZZO DENIM jeans, full length, high rise, fitted waistband. Dramatically roomy upper leg, with long legs widening from hip to broad flat hems. The combined width of the two hems must be almost twice the waistband width; each hem visibly wider than its corresponding thigh. Distinctly wide, NOT straight leg and NOT bootcut (no pinched knee). Keep realistic wearable fashion proportions."
+    },
+    {
+      "key": "bootcut",
+      "filename": "bootcut-v1.webp",
+      "original": "/Users/anishkanawagamuwa/.codex/generated_images/01a0bbe1-4536-7560-97aa-0b38bcff3513/exec-7081020e-0414-4c78-8d9f-e175d28dae51.png",
+      "prompt": "Use case: product-mockup. Asset type: photorealistic cut-reference image for Allele's denim fit quiz, NOT an actual product listing. Create one pair of unbranded women's jeans, photographed as an exquisite contemporary e-commerce flat-lay. Camera exactly overhead; garment front facing camera, waistband horizontal, two full legs laid naturally straight down, small gap between legs. Absolutely no person, body, mannequin, shoes, hands, hanger, text, labels, logos, or props. Portrait 2:3 canvas. Full garment contained, waistband near 9% from top and hems near 91%; generous side margins. Seamless warm off-white background #FFFBF7, gentle soft shadow, diffuse daylight. Highly realistic cotton twill, fine gold topstitching, belt loops, realistic metal button and rivets, gentle natural folds; restrained dark-to-medium indigo wash, no holes, no heavy distressing. Refined modern denim editorial. Prioritize believable garment construction and immediately readable leg shape; not a vector, diagram, cartoon, or shiny 3D rendering. Input image 1 is a style/composition reference only. Match its clean flat-lay presentation, fabric realism, lighting, background and framing. The silhouette must change: SUBTLE BOOTCUT jeans. Fitted through thigh, visibly narrower at the knee, opening gently into wider bootcut hems. A wearable small flare, not oversized bell-bottoms. Rich dark indigo. One complete garment only."
+    },
+    {
+      "key": "barrel",
+      "filename": "barrel-v1.webp",
+      "original": "/Users/anishkanawagamuwa/.codex/generated_images/01a0bbe1-4536-7560-97aa-0b38bcff3513/exec-f1aaec2d-c18a-49ff-8874-d0acd5e8ba2a.png",
+      "prompt": "Use case: product-mockup. Asset type: photorealistic cut-reference image for Allele's denim fit quiz, NOT an actual product listing. Create one pair of unbranded women's jeans, photographed as an exquisite contemporary e-commerce flat-lay. Camera exactly overhead; garment front facing camera, waistband horizontal, two full legs laid naturally straight down, small gap between legs. Absolutely no person, body, mannequin, shoes, hands, hanger, text, labels, logos, or props. Portrait 2:3 canvas. Full garment contained, waistband near 9% from top and hems near 91%; generous side margins. Seamless warm off-white background #FFFBF7, gentle soft shadow, diffuse daylight. Highly realistic cotton twill, fine gold topstitching, belt loops, realistic metal button and rivets, gentle natural folds; restrained dark-to-medium indigo wash, no holes, no heavy distressing. Refined modern denim editorial. Prioritize believable garment construction and immediately readable leg shape; not a vector, diagram, cartoon, or shiny 3D rendering. Input image 1 is a style/composition reference only. Match its clean flat-lay presentation, fabric realism, lighting, background and framing. The silhouette must change: MODERN BARREL-LEG jeans. Relaxed hip/thigh, distinctly curved bowed outer seams, maximum volume around knee, tapering to narrower ankle hems. Natural denim structure, not balloon costume. Medium true-blue indigo. One complete garment only."
+    },
+    {
+      "key": "loafers",
+      "filename": "loafers-v1.webp",
+      "original": "/Users/anishkanawagamuwa/.codex/generated_images/01a0bbe1-4536-7560-97aa-0b38bcff3513/exec-c884fb7f-ec6a-4641-88e4-0ef4e8472bbc.png",
+      "prompt": "Use case: product-mockup. Photorealistic editorial flat lay of a single pair of minimalist women's dark chocolate brown leather penny loafers, polished but softly worn, fine leather grain and stitched edges. Shoes side by side angled slightly to show top and slim sole, no foot or person. Warm off-white #FFFBF7 seamless backdrop, soft daylight, faint shadow, centered square composition with generous margins. Elegant fashion catalog, unbranded, no logos, no text, no extra objects."
+    },
+    {
+      "key": "sneakers",
+      "filename": "sneakers-v1.webp",
+      "original": "/Users/anishkanawagamuwa/.codex/generated_images/01a0bbe1-4536-7560-97aa-0b38bcff3513/exec-3c21a467-f864-4195-9290-6ed2cf3f0f16.png",
+      "prompt": "Use case: product-mockup. Photorealistic editorial flat lay of a single pair of women's minimalist low-profile ecru and taupe suede sneakers with thin gum soles, subtle textile panels, natural laces, no stripes and no recognizable brand motifs. Shoes side by side angled slightly to show top and sole, no foot or person. Warm off-white #FFFBF7 seamless backdrop, soft daylight, faint shadow, centered square composition with generous margins. Elegant fashion catalog, unbranded, no logos, no text, no extra objects."
+    },
+    {
+      "key": "heels",
+      "filename": "heels-v1.webp",
+      "original": "/Users/anishkanawagamuwa/.codex/generated_images/01a0bbe1-4536-7560-97aa-0b38bcff3513/exec-977efe9f-6e1a-4889-b78c-d614601fbb4b.png",
+      "prompt": "Use case: product-mockup. Photorealistic editorial still life of a pair of women's elegant dark chocolate brown leather ankle boots with a moderate sculptural block heel and softly pointed toe. Three-quarter side view clearly shows heel height, both boots complete in frame, no foot or person. Warm off-white #FFFBF7 seamless backdrop, soft daylight, faint shadow, centered square composition with generous margins. Elegant fashion catalog, unbranded, no logos, no text, no extra objects."
+    },
+    {
+      "key": "denim-detail",
+      "filename": "denim-detail-v1.webp",
+      "original": "/Users/anishkanawagamuwa/.codex/generated_images/01a0bbe1-4536-7560-97aa-0b38bcff3513/exec-aaeb7b7f-1a64-4166-a396-c3c65eb61152.png",
+      "prompt": "Use case: product-mockup. Photorealistic editorial macro photograph of folded medium-indigo denim cloth, delicate cotton twill visible, one fine ochre double-stitched seam curving through the frame. Gentle natural folds with both structure and soft shadows. Close, tactile textile-study image for a denim quiz. Fill entire square frame with fabric, no text, no labels, no logos, no hands or people, no objects. Diffuse daylight, subtle true-blue color. Real cloth, not a synthetic repeating pattern."
+    },
+    {
+      "key": "mid-rise",
+      "filename": "mid-rise-v1.webp",
+      "original": "/Users/anishkanawagamuwa/.codex/generated_images/01a0bbe1-4536-7560-97aa-0b38bcff3513/exec-bac70a4a-c7ad-4689-8054-13579791627c.png",
+      "prompt": "Use case: precise-object-edit. Input image 1 is the garment edit target. Change only the RISE to a MID RISE: lower the waistband from the reference, shorten the fly and front rise moderately while preserving full length legs. Mid-rise garment proportions. Same straight leg width, wash, fabric, warm background, camera, framing, no text."
+    },
+    {
+      "key": "low-rise",
+      "filename": "low-rise-v1.webp",
+      "original": "/Users/anishkanawagamuwa/.codex/generated_images/01a0bbe1-4536-7560-97aa-0b38bcff3513/exec-eac53cff-4698-4bd2-8b87-d00e3d86fe8c.png",
+      "prompt": "Use case: precise-object-edit. Input image 1 is the garment edit target. Change only the RISE to a clearly LOW RISE: a much shallower upper section and short zipper/fly, low hip-hugging waistband, visibly less fabric between crotch seam and top waistband. Same straight-leg width, wash, fabric, warm background, camera and framing, keep full-length legs. No text, no body, no mannequin."
+    }
+  ]
+}

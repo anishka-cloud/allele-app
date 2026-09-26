@@ -49,7 +49,7 @@ export default function DisclosurePage() {
           }}
         >
           <p className="mb-6">
-            <strong style={{ fontWeight: 500, color: "var(--text-primary)" }}>Last updated:</strong> April 2026
+            <strong style={{ fontWeight: 500, color: "var(--text-primary)" }}>Last updated:</strong> September 2026
           </p>
 
           <p className="mb-6">
@@ -68,7 +68,10 @@ export default function DisclosurePage() {
             How it works
           </h2>
           <p className="mb-6">
-            Our product recommendations (in Shade DNA, Vibe DNA, and related quizzes) include affiliate links through ShopMy. When you purchase a product through one of these links, we earn a small percentage of the sale. This helps us keep Allele free and ad-free.
+            Our product recommendations (in Shade DNA, Vibe DNA, Fit DNA, and related quizzes) include affiliate links through ShopMy and Amazon Associates. As an Amazon Associate, Allele earns from qualifying purchases. When you purchase through an affiliate link, we may earn a percentage of the sale at no extra cost to you.
+          </p>
+          <p className="mb-6">
+            Fit DNA uses ShopMy’s embedded product cards, which load photos and shopping links from ShopMy. Your quiz answers and personal measurements are not included in those embed URLs. The cards are third-party content; ShopMy’s privacy policy applies to its service. Direct brand product-detail links are provided separately. Amazon links labeled “search” open search results, not a verified offer for a particular wash or seller.
           </p>
 
           <h2
@@ -83,7 +86,7 @@ export default function DisclosurePage() {
             Our commitment
           </h2>
           <ul className="mb-6 space-y-3" style={{ paddingLeft: "1.5rem", listStyleType: "disc" }}>
-            <li>We only recommend products we genuinely believe in and would use ourselves.</li>
+            <li>Recommendations explain the product details and preferences behind the suggestion. A recommendation is not a claim that we have personally worn or tested every product.</li>
             <li>Affiliate relationships never influence which products appear in your results. Your quiz results are based entirely on your answers.</li>
             <li>We recommend products across all price points (budget, value, and splurge) so you can find options that work for your budget.</li>
             <li>We are not paid by any brand to feature specific products in our quizzes.</li>

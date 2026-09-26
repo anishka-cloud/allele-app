@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FitSilhouettePlayground } from "@/app/fit/FitVisuals";
 
 export const metadata = {
   title: "Fit DNA: Denim Edition — Allele",
@@ -39,9 +40,9 @@ export default function FitLanding() {
             <h1>Fit DNA</h1>
             <p>Denim Edition</p>
           </div>
-          <h2>The jeans are not the problem. The cut might be.</h2>
+          <h2>Your next great pair starts here.</h2>
           <p className="fit-hero-support">
-            Nine questions about proportion, comfort, and the fit problems you actually run into. Get a denim starting point built around you.
+            Explore the shapes, find what feels right, and meet real jeans worth trying. Nine quick choices, built around how clothes actually fit you.
           </p>
           <div className="fit-hero-actions">
             <Link href="/fit/quiz" className="fit-primary-link">Find my denim fit <span aria-hidden="true">→</span></Link>
@@ -49,23 +50,7 @@ export default function FitLanding() {
           </div>
         </div>
 
-        <div className="fit-pattern" aria-label="A denim fit pattern showing the four result axes">
-          <div className="fit-pattern-top">
-            <span>FIT SPECIFICATION</span>
-            <span>FD · 001</span>
-          </div>
-          <div className="fit-pattern-waist"><span>WAISTBAND</span></div>
-          <div className="fit-pattern-leg fit-pattern-leg-left" />
-          <div className="fit-pattern-leg fit-pattern-leg-right" />
-          <div className="fit-pattern-centerline" />
-          <dl className="fit-pattern-notes">
-            <div><dt>01</dt><dd>Rise</dd></div>
-            <div><dt>02</dt><dd>Leg</dd></div>
-            <div><dt>03</dt><dd>Length</dd></div>
-            <div><dt>04</dt><dd>Feel</dd></div>
-          </dl>
-          <p className="fit-pattern-caption">A starting pattern, adjusted by the answers only you can give.</p>
-        </div>
+        <FitSilhouettePlayground />
       </section>
 
       <section className="fit-measures" aria-labelledby="fit-measures-title">
