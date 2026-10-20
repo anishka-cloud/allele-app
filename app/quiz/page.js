@@ -13,6 +13,8 @@ import {
   SEASON_IDS,
 } from "@/lib/handoffQuiz";
 import { track } from "@/lib/analytics";
+import HelixProgress from "../components/HelixProgress";
+import "../components/allele-nav.css";
 import "./quiz.css";
 
 function Nav() {
@@ -35,7 +37,6 @@ function Nav() {
 
 function TopBar({ step, total, narrow, complete }) {
   const displayNum = complete ? total : Math.min(step + 1, total);
-  const fillPct = complete ? 100 : (step / total) * 100;
   return (
     <div className="qz-topbar">
       <div className="qz-topbar-inner">
@@ -46,15 +47,8 @@ function TopBar({ step, total, narrow, complete }) {
             {complete && <span className="qz-topbar-complete"> · complete</span>}
           </span>
         </div>
-        <div className="qz-topbar-track">
-          <div className="qz-topbar-fill" style={{ width: `${fillPct}%` }} />
-          {Array.from({ length: total }).map((_, i) => (
-            <span
-              key={i}
-              className={`qz-tick${i < step || complete ? " done" : ""}${i === step && !complete ? " active" : ""}`}
-              style={{ left: `${(i / (total - 1)) * 100}%` }}
-            />
-          ))}
+        <div className="qz-topbar-track qz-topbar-helix">
+          <HelixProgress total={total} done={complete ? total : step} active={complete ? -1 : step} />
         </div>
         <div className="qz-topbar-right">
           <span className="qz-topbar-label">Status</span>
