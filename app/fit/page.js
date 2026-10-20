@@ -1,4 +1,5 @@
 import Link from "next/link";
+import AlleleNav from "@/app/components/AlleleNav";
 import { FitSilhouettePlayground } from "@/app/fit/FitVisuals";
 
 export const metadata = {
@@ -25,28 +26,25 @@ const measures = [
 export default function FitLanding() {
   return (
     <main className="fit-landing">
-      <nav className="fit-nav" aria-label="Fit DNA navigation">
-        <Link href="/" className="fit-wordmark" aria-label="Allele home">
-          all<em>e</em>le
-        </Link>
-        <div className="fit-nav-center">Fit DNA · Denim Edition</div>
-        <Link href="/quiz" className="fit-nav-link">Shade DNA</Link>
-      </nav>
+      <AlleleNav current="fit" />
 
       <section className="fit-hero">
         <div className="fit-hero-copy">
-          <p className="fit-volume">Allele · Fit DNA</p>
+          <p className="fit-volume">Vol. II · Fit DNA · The denim edition</p>
           <div className="fit-title-lockup">
-            <h1>Fit DNA</h1>
-            <p>Denim Edition</p>
+            <h1>Your next<br /><em>great pair.</em></h1>
           </div>
-          <h2>Your next great pair starts here.</h2>
           <p className="fit-hero-support">
-            Explore the shapes, find what feels right, and meet real jeans worth trying. Nine quick choices, built around how clothes actually fit you.
+            A waistband that sits right. Room where you want it. A length that works with your shoes. Find a denim starting point built around <em>you.</em>
           </p>
           <div className="fit-hero-actions">
             <Link href="/fit/quiz" className="fit-primary-link">Find my denim fit <span aria-hidden="true">→</span></Link>
             <span>~2 min · free · no sign-up</span>
+          </div>
+          <div className="fit-hero-meta" aria-label="What to expect">
+            <div><strong>9</strong><span>Quick choices</span></div>
+            <div><strong>4</strong><span>Fit details</span></div>
+            <div><strong>You</strong><span>Set the rules</span></div>
           </div>
         </div>
 
@@ -55,7 +53,7 @@ export default function FitLanding() {
 
       <section className="fit-measures" aria-labelledby="fit-measures-title">
         <div className="fit-measures-intro">
-          <p>What this measures</p>
+          <p>§ I · Your fit, considered</p>
           <h2 id="fit-measures-title">Start with the way jeans actually behave.</h2>
           <p>
             Fit DNA does not name your body shape or tell you what you are allowed to wear. It translates repeat fit problems and real preferences into a better place to begin.
@@ -75,10 +73,15 @@ export default function FitLanding() {
       </section>
 
       <section className="fit-principle">
-        <p>Useful guidance, not a rulebook.</p>
+        <p>§ II · Useful guidance, not a rulebook.</p>
         <blockquote>“Here’s the best starting point based on how clothes actually fit you.”</blockquote>
         <Link href="/fit/quiz" className="fit-text-link">Find my starting point <span aria-hidden="true">→</span></Link>
       </section>
+      <footer className="fit-brand-footer">
+        <Link href="/" className="fit-wordmark" aria-label="Allele home">all<em>e</em>le</Link>
+        <p>buy what’s actually yours.</p>
+        <div><Link href="/quiz">Explore Shade DNA →</Link><Link href="/disclosure">How our links work</Link></div>
+      </footer>
     </main>
   );
 }

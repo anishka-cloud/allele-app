@@ -1,13 +1,13 @@
 .fit-root {
-  --fit-paper: #fffbf7;
-  --fit-paper-deep: #f3eee7;
-  --fit-ink: #1a1714;
+  --fit-paper: var(--cream, #fffbf7);
+  --fit-paper-deep: var(--cream-2, #f8f2e9);
+  --fit-ink: var(--ink, #1a1613);
   --fit-denim: #263b50;
   --fit-denim-deep: #172738;
   --fit-wash: #c8d4dc;
   --fit-wash-light: #e7edf0;
   --fit-thread: #c4a265;
-  --fit-rule: rgba(38, 59, 80, 0.19);
+  --fit-rule: var(--rule, rgba(26, 22, 19, 0.14));
   min-height: 100vh;
   background: var(--fit-paper);
   color: var(--fit-ink);
@@ -23,7 +23,7 @@
 .fit-root input { font: inherit; }
 
 .fit-root :focus-visible {
-  outline: 2px solid var(--fit-thread);
+  outline: 2px solid var(--rust, #b5500b);
   outline-offset: 4px;
 }
 
@@ -839,6 +839,145 @@
   .fit-example-reference strong { font-size: .65rem; }
   .fit-playground > .fit-retailer-photo { height: 350px; }
   .fit-private-preview { font-size: .62rem; padding-inline: 16px; }
+}
+
+/* Fit is Volume II of Allele: use the shared paper, type and controls.
+   Denim blue stays in garment imagery, rather than becoming a second brand. */
+.fit-wordmark { font-size: 26px; font-weight: 400; letter-spacing: -.02em; }
+.fit-wordmark em { color: var(--rust, #b5500b); font-weight: 400; }
+.fit-hero { width: min(1244px, calc(100% - 96px)); min-height: auto; grid-template-columns: minmax(0, 1.2fr) minmax(340px, .85fr); gap: clamp(40px, 6vw, 88px); align-items: start; padding: 64px 0 80px; }
+.fit-hero-copy { padding-top: 22px; }
+.fit-volume, .fit-measures-intro > p:first-child, .fit-principle > p, .fit-result-heading > p:first-child, .fit-map-copy > p:first-child, .fit-why > p:first-child, .fit-shopping-summary > div:first-child > p { font-family: var(--mono, monospace); font-size: 11px; font-weight: 400; color: #706253; letter-spacing: .12em; }
+.fit-volume { margin-bottom: 32px; }
+.fit-title-lockup { margin-bottom: 28px; }
+.fit-title-lockup h1 { font-size: clamp(64px, 7.6vw, 108px); font-weight: 400; line-height: 1.03; letter-spacing: -.045em; }
+.fit-title-lockup h1 em { color: var(--rust, #b5500b); font-weight: 400; }
+.fit-hero-support { max-width: 510px; font-size: 17px; line-height: 1.8; font-weight: 400; color: #635d57; }
+.fit-hero-support em { font-family: var(--font-display, Lora, serif); color: var(--fit-ink); }
+.fit-hero-actions { gap: 16px; margin-top: 30px; }
+.fit-hero-actions > span { font-size: 12px; color: #6f675f; }
+.fit-primary-link, .fit-copy-button { min-height: 54px; background: var(--fit-ink); border-color: var(--fit-ink); border-radius: 999px; font-size: 14px; font-weight: 500; letter-spacing: 0; padding-inline: 26px; }
+.fit-primary-link:hover, .fit-copy-button:hover { background: #3c3026; }
+.fit-hero-meta { display: flex; gap: 38px; border-top: 1px solid var(--fit-rule); margin-top: 36px; padding-top: 22px; max-width: 480px; }
+.fit-hero-meta strong { display: block; font-family: var(--font-display, Lora, serif); font-size: 25px; font-weight: 400; }
+.fit-hero-meta span { display: block; margin-top: 5px; font-family: var(--mono, monospace); text-transform: uppercase; font-size: 10px; letter-spacing: .06em; color: #716b63; }
+.fit-playground { background: var(--fit-paper-deep); border: 1px solid rgba(196,162,101,.4); border-radius: 2px; padding: 22px; }
+.fit-playground > p { color: var(--fit-ink); font-size: 22px; margin-top: 0; }
+.fit-playground > .fit-shape-controls { border-color: var(--fit-rule); border-radius: 999px; gap: 2px; }
+.fit-playground button { color: #635d57; border-radius: 999px; font-size: 12px; }
+.fit-playground button[aria-pressed="true"] { background: var(--fit-ink); }
+.fit-playground > span { color: #635d57; font-size: 12px; }
+.fit-playground .fit-example-reference strong { color: var(--fit-ink); font-weight: 400; }
+.fit-example-reference strong { color: var(--fit-ink); }
+.fit-example-reference a, .fit-text-link { color: var(--fit-ink) !important; font-size: 14px; }
+.fit-example-disclosure, .fit-playground > .fit-example-disclosure, .fit-source-caption { color: #686057; font-size: 12px; }
+.fit-trend-note { color: #635d57; font-size: 13px; }
+.fit-measures { padding-block: 80px; }
+.fit-measures-intro h2, .fit-principle blockquote, .fit-result-detail h2, .fit-shopping-summary h2, .fit-map-copy h2 { font-weight: 400; letter-spacing: -.03em; }
+.fit-measure-list p { font-size: 14px; color: #635d57; }
+.fit-brand-footer { border-top: 1px solid var(--fit-rule); max-width: 1244px; margin: 0 auto; padding: 36px 0 48px; display: flex; gap: 24px; align-items: baseline; }
+.fit-brand-footer p { font-family: var(--font-display, Lora, serif); font-size: 14px; font-style: italic; color: #706253; margin: 0; }
+.fit-brand-footer > div { margin-left: auto; display: flex; gap: 28px; font-size: 13px; }
+.fit-brand-footer > div a { text-decoration: none; }
+.fit-quiz-header { min-height: 82px; font-size: 12px; }
+.fit-quiz-header > span:first-of-type { color: #635d57; }
+.fit-progress { background: var(--fit-paper-deep); }
+.fit-progress span { background: var(--rust, #b5500b); }
+.fit-question-main > h1 { font-weight: 400; letter-spacing: -.03em; line-height: 1.16; }
+.fit-question-instruction { font-family: var(--mono, monospace); font-size: 11px; letter-spacing: .06em; color: #706253; }
+.fit-question-prompt { font-size: 14px; line-height: 1.6; color: #635d57; }
+.fit-option { border-radius: 3px; border-color: var(--fit-rule); background: var(--fit-paper); padding: 18px; }
+.fit-option:hover { background: var(--fit-paper-deep); border-color: var(--fit-thread); }
+.fit-option.is-selected { background: #f5ecdd; border-color: var(--fit-thread); box-shadow: inset 0 0 0 1px var(--fit-thread); }
+.fit-option i { border-color: #b5a58b; }
+.fit-option.is-selected i { background: var(--fit-ink); border-color: var(--fit-ink); }
+.fit-choice-copy strong, .fit-options-many .fit-choice-copy strong { font-size: 16px; font-weight: 500; }
+.fit-choice-copy small, .fit-options-many .fit-choice-copy small { font-size: 13px; color: #635d57; line-height: 1.55; }
+.fit-live-preview { background: var(--fit-paper-deep); border: 1px solid rgba(196,162,101,.35); border-radius: 2px; }
+.fit-preview-title, .fit-preview-note strong { color: var(--fit-ink); font-weight: 400; }
+.fit-preview-note { border-color: var(--fit-rule); }
+.fit-preview-note p { color: #635d57; font-size: 13px; }
+.fit-live-preview small, .fit-visual-caption { color: #706253; font-size: 12px; }
+.fit-question-help { background: var(--fit-paper-deep); }
+.fit-question-help summary { color: var(--fit-ink); font-size: 14px; }
+.fit-help-body > p { font-size: 14px; }
+.fit-quiz-footer .fit-continue { background: var(--fit-ink); border-radius: 999px; min-height: 50px; font-size: 14px; }
+.fit-quiz-footer > button { color: var(--fit-ink); font-size: 14px; min-height: 44px; }
+.fit-quiz-footer p { color: #706253; font-size: 12px; }
+.fit-question-silhouette .fit-answer-card { border-radius: 3px; border-color: var(--fit-rule); }
+.fit-question-silhouette .fit-answer-card.is-selected { border-color: var(--fit-thread); box-shadow: 0 0 0 1px var(--fit-thread); }
+.fit-question-silhouette .fit-choice-copy strong { font-size: 16px; }
+.fit-result-hero { align-items: start; padding: 68px 0; gap: 64px; }
+.fit-result-heading h1 { font-size: clamp(48px, 6vw, 82px); letter-spacing: -.035em; line-height: 1.06; text-transform: none; }
+.fit-result-heading > .fit-result-summary { color: #635d57; font-size: 16px; font-weight: 400; line-height: 1.75; letter-spacing: 0; text-transform: none; }
+.fit-result-ticket { background: var(--fit-paper-deep); padding: 28px; border-color: rgba(196,162,101,.45); box-shadow: none; }
+.fit-result-ticket::before, .fit-result-ticket::after { display: none; }
+.fit-ticket-head { font-family: var(--mono, monospace); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: #706253; border-bottom-style: solid; }
+.fit-result-ticket dl div { padding: 16px 0; gap: 16px; }
+.fit-result-ticket dt { font-size: 12px; color: #635d57; }
+.fit-result-ticket dd { font-size: 17px; color: var(--fit-ink); }
+.fit-result-ticket > p { font-size: 12px; color: #706253; line-height: 1.65; }
+.fit-product-edit { background: var(--fit-paper-deep); border-block: 1px solid var(--fit-rule); }
+.fit-edit-heading > div > p { font-family: var(--mono, monospace); color: #706253; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; }
+.fit-edit-heading h2 { font-weight: 400; }
+.fit-edit-heading > p { font-size: 14px; color: #635d57; }
+.fit-edit-disclosure { font-size: 12px; color: #686057; }
+.fit-product-card { border: 1px solid var(--fit-rule); }
+.fit-product-brand { font-family: var(--mono, monospace); font-size: 11px; letter-spacing: .06em; color: #706253; }
+.fit-product-body h3 { font-weight: 400; }
+.fit-product-wash { font-size: 12px; color: #686057; }
+.fit-product-match { font-size: 12px; color: #706253; border-color: var(--fit-rule); }
+.fit-product-body h4 { font-size: 14px; font-weight: 500; }
+.fit-product-reason > p, .fit-product-tradeoff > p, .fit-product-evidence { font-size: 14px; color: #635d57; }
+.fit-product-evidence summary { font-size: 13px; }
+.fit-product-primary { border-radius: 999px; background: var(--fit-ink); padding: 14px 20px; font-size: 13px; }
+.fit-product-amazon { font-size: 13px; }
+.fit-product-amazon small, .fit-edit-footnote { font-size: 12px; color: #686057; }
+.fit-link-selection { font-size: 12px; line-height: 1.6; color: #686057; }
+.fit-watchout { background: var(--fit-ink); }
+.fit-denim-map { box-shadow: none; border-color: rgba(196,162,101,.4); background: var(--fit-paper); }
+.fit-signal-list article > p { font-size: 13px; line-height: 1.6; color: #635d57; }
+.fit-signal-heading span, .fit-signal-ends { font-size: 11px; color: #706253; }
+.fit-retake-button { border-radius: 999px; }
+@media (max-width: 1050px) {
+  .fit-hero { gap: 36px; grid-template-columns: minmax(0, 1fr) minmax(320px, .85fr); }
+  .fit-title-lockup h1 { font-size: 70px; }
+  .fit-brand-footer { margin-inline: 32px; }
+}
+@media (max-width: 820px) {
+  .fit-hero { grid-template-columns: minmax(0, 1fr); width: min(620px, calc(100% - 48px)); gap: 40px; padding: 44px 0 60px; }
+  .fit-hero-copy { padding: 0; }
+  .fit-title-lockup h1 { font-size: clamp(56px, 10vw, 80px); }
+  .fit-playground { max-width: 520px; }
+  .fit-result-hero { gap: 32px; }
+  .fit-brand-footer { flex-wrap: wrap; margin-inline: 24px; }
+  .fit-brand-footer > div { width: 100%; margin: 0; }
+}
+@media (max-width: 560px) {
+  .fit-volume { font-size: 10px; letter-spacing: .08em; margin-bottom: 26px; }
+  .fit-title-lockup { margin-bottom: 22px; }
+  .fit-hero-support { font-size: 16px; line-height: 1.75; }
+  .fit-hero-actions { margin-top: 26px; }
+  .fit-primary-link { justify-content: space-between; }
+  .fit-hero-meta { margin-top: 28px; gap: 30px; }
+  .fit-hero-meta span { font-size: 9px; }
+  .fit-playground { padding: 20px 16px; }
+  .fit-playground button { font-size: 11px; }
+  .fit-measures { padding-block: 56px; }
+  .fit-quiz-header { width: calc(100% - 40px); min-height: 72px; font-size: 10px; gap: 12px; }
+  .fit-question { width: calc(100% - 40px); }
+  .fit-question-main > h1 { font-size: 32px; }
+  .fit-question-prompt { font-size: 14px; }
+  .fit-option { padding: 12px; }
+  .fit-choice-copy strong, .fit-options-many .fit-choice-copy strong { font-size: 14px; }
+  .fit-choice-copy small, .fit-options-many .fit-choice-copy small { font-size: 12px; }
+  .fit-option-open { padding-right: 35px; }
+  .fit-example-reference strong { font-size: 13px; }
+  .fit-quiz-footer p { display: none; }
+  .fit-result-hero { padding: 44px 0; }
+  .fit-result-heading h1 { font-size: 48px; }
+  .fit-result-ticket { padding: 24px; }
+  .fit-edit-disclosure { font-size: 12px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

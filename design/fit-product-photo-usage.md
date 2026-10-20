@@ -2,11 +2,11 @@
 
 Checked September 25, 2026.
 
-## Current release candidate — supersedes history below
+## Published release — supersedes history below
 
 All nine real product records now have intact, provider-issued ShopMy carousel embeds. Exact collection/pin/SKU mapping: `lib/fitProductEmbeds.mjs`. Only provider-supplied Site Options matching the named wash were selected; no Google Images or another creator's uploads. All new collections are hidden from the shop index, without changing existing collections.
 
-The five quiz photo cards render in the HTTPS preview, including mobile. Four result-only cards were also checked in ShopMy's own preview. The local HTTP blank-frame problem does not reproduce in HTTPS; its exact local-only cause is not established. The temporary one-hour preview link was explicitly approved. See `FIT-DNA-PREVIEW-NOTES.md` for deployment status.
+The five quiz photo cards render in the HTTPS preview, including mobile. Four result-only cards also loaded on the public allele.app release. Published source commit: `472672a`. The local HTTP blank-frame problem does not reproduce in HTTPS; its exact local-only cause is not established. The temporary one-hour preview link was explicitly approved. See `FIT-DNA-PREVIEW-NOTES.md` for deployment details.
 
 Use the complete ShopMy frame, shopping controls and affiliate disclosure. This does not confer standalone photo reuse permission: do not copy/rehost its images or crop away provider controls. Raw retailer photos are no longer rendered by the shared component. Keep the direct brand fallback and origin-only referrer. Do not rewrite provider attribution or mix ShopMy with Amazon Associates.
 

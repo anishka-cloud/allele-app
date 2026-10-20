@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import AlleleNav from "@/app/components/AlleleNav";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { trackEvent } from "@/lib/analytics";
@@ -98,32 +99,25 @@ export default function FitResultsContent() {
 
   return (
     <main className="fit-results">
-      <nav className="fit-nav" aria-label="Fit DNA results navigation">
-        <Link href="/" className="fit-wordmark" aria-label="Allele home">all<em>e</em>le</Link>
-        <div className="fit-nav-center">Your Fit DNA</div>
-        <Link href="/fit">About Fit DNA</Link>
-      </nav>
+      <AlleleNav current="fit" />
 
       <section className="fit-result-hero">
         <div className="fit-result-heading">
-          <p>Your denim starting point</p>
+          <p>Fit DNA · Your denim starting point</p>
           <h1>{result.headline}</h1>
           <p className="fit-result-summary">{result.summary}</p>
           <a href="#jeans" className="fit-primary-link fit-jeans-jump">See jeans to try <span aria-hidden="true">↓</span></a>
         </div>
-        <aside className="fit-result-ticket" aria-label="Fit DNA shopping ticket">
+        <aside className="fit-result-ticket" aria-label="Your Fit DNA reference card">
           <div className="fit-ticket-head">
-            <span>ALLELE FIT TICKET</span>
-            <span>DENIM · V1</span>
+            <span>Your fit, at a glance</span>
+            <span>Vol. II</span>
           </div>
           <dl>
             {axes.map(([label, value]) => (
               <div key={label}><dt>{label}</dt><dd>{value}</dd></div>
             ))}
           </dl>
-          <div className="fit-ticket-code" aria-hidden="true">
-            {Array.from({ length: 28 }, (_, index) => <i key={index} style={{ height: `${12 + (index % 5) * 3}px` }} />)}
-          </div>
           <p>Bring this logic—not a body-type rule—into the fitting room.</p>
         </aside>
       </section>

@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import AlleleNav from "./components/AlleleNav";
+import DnaPortfolio from "./components/DnaPortfolio";
 import { useEffect, useState } from "react";
 import { track } from "@/lib/analytics";
 import "./landing.css";
@@ -97,35 +99,21 @@ export default function Home() {
   return (
     <main className="landing">
       {/* ============ Nav ============ */}
-      <nav className="l-nav">
-        <div className="l-nav-inner">
-          <div className="l-nav-wordmark">all<em>e</em>le</div>
-          <div className="l-nav-links">
-            <a href="#twelve">The Twelve</a>
-            <a href="#method">Method</a>
-            <a href="#axes">The Axes</a>
-            <a href="#showcase">Results</a>
-            <a href="#science">Philosophy</a>
-            <Link href="/my-allele">My Allele</Link>
-          </div>
-          <Link className="l-nav-cta" href="/quiz?source=homepage_nav" onClick={() => markQuizStarted("homepage_nav")}>Begin the analysis →</Link>
-        </div>
-      </nav>
+      <AlleleNav onShadeStart={() => markQuizStarted("allele_nav")} />
 
       <Link
         className="l-sticky-cta"
-        href="/quiz?source=homepage_sticky"
-        onClick={() => markQuizStarted("homepage_sticky")}
+        href="#portfolio"
       >
-        <span className="l-sticky-cta-kicker">Shade DNA</span>
-        <span className="l-sticky-cta-copy">Begin the analysis</span>
+        <span className="l-sticky-cta-kicker">Allele</span>
+        <span className="l-sticky-cta-copy">Find your DNA</span>
         <span className="l-sticky-cta-arrow">→</span>
       </Link>
 
       {/* ============ Hero ============ */}
       <section className="l-hero">
         <div className="l-hero-eyebrow">
-          <span>Allele · Vol. I · Shade DNA</span>
+          <span>Color. Fit. A little more you.</span>
           <span className="hairline"></span>
           <span>Est. 2026</span>
           <div className="l-swatch-row">
@@ -138,35 +126,32 @@ export default function Home() {
 
         <div className="l-hero-grid">
           <div>
-            <h1 className="l-hero-headline">
-              Find the<br />
-              <em>one</em> season<br />
-              you were<br />
-              drawn in.
+            <h1 className="l-hero-headline l-umbrella-headline">
+              Buy what’s<br />
+              <em>actually</em><br />
+              yours.
             </h1>
             <p className="l-hero-sub">
-              Twelve questions. One archetype. A palette matched to your skin, your eyes, and the <em>light you live in</em>. Free to take. Free to retake. Yours forever.
+              Makeup colors. Better-fitting jeans. Two free quizzes to help you understand what works for you—and <em>why.</em>
             </p>
             <div className="l-hero-cta-row">
               <Link className="l-cta-primary" href="/quiz?source=homepage_hero" onClick={() => markQuizStarted("homepage_hero")}>
-                <span>Begin the analysis</span>
+                <span>Find my colors</span>
                 <span className="arrow">→</span>
               </Link>
-              <Link className="l-cta-secondary" href="/my-allele">
-                Start with something you own
+              <Link className="l-cta-outline" href="/fit">
+                Find my denim fit <span aria-hidden="true">→</span>
               </Link>
-              <span className="l-cta-meta">~2 min · free · no sign-up</span>
+              <span className="l-cta-meta">About 2 minutes each · free · no sign-up</span>
             </div>
             <div className="l-hero-meta">
-              <div className="l-hero-meta-item"><strong>12</strong><span>Archetypes</span></div>
-              <div className="l-hero-meta-item"><strong>96</strong><span>Curated Shades</span></div>
-              <div className="l-hero-meta-item"><strong>3</strong><span>Price Tiers</span></div>
-              <div className="l-hero-meta-item"><strong>0</strong><span>Guesswork</span></div>
+              <div className="l-hero-meta-item"><strong>2</strong><span>Ways to explore</span></div>
+              <div className="l-hero-meta-item"><strong>You</strong><span>Make the call</span></div>
             </div>
           </div>
 
           <div className="l-hero-card">
-            <div className="l-hero-card-tag">Specimen · {hero.name}</div>
+            <div className="l-hero-card-tag">From Shade DNA · An example palette</div>
             <div className="l-hero-card-name">{hero.name}</div>
             <div className="l-hero-card-attrs">
               {hero.attrs.map((a) => <span key={a}>{a}</span>)}
@@ -198,272 +183,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ============ Portfolio (umbrella signal) ============ */}
-      <section
-        id="portfolio"
-        style={{
-          padding: "72px 24px",
-          background: "var(--cream-2, #F8F2E9)",
-          borderTop: "1px solid rgba(196,162,101,0.18)",
-          borderBottom: "1px solid rgba(196,162,101,0.18)",
-        }}
-      >
-        <div style={{ maxWidth: "1120px", margin: "0 auto" }}>
-          <div className="l-section-head" style={{ marginBottom: "48px" }}>
-            <div className="l-section-head-num">§ I</div>
-            <h2 className="l-section-head-title">The DNA <em>Portfolio</em>.</h2>
-            <div className="l-section-head-meta">Three volumes &middot; One identity</div>
-          </div>
-
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-              gap: "0",
-              border: "1px solid rgba(196,162,101,0.28)",
-              background: "var(--cream, #FFFBF7)",
-            }}
-          >
-            {/* Shade DNA — active */}
-            <Link
-              href="/quiz?source=portfolio_strip"
-              onClick={() => markQuizStarted("portfolio_strip")}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                padding: "36px 28px",
-                borderRight: "1px solid rgba(196,162,101,0.28)",
-                textDecoration: "none",
-                color: "inherit",
-                background: "var(--cream, #FFFBF7)",
-                transition: "background 0.2s",
-              }}
-            >
-              <div
-                style={{
-                  fontFamily: "var(--font-mono, 'JetBrains Mono'), monospace",
-                  fontSize: "0.7rem",
-                  letterSpacing: "0.2em",
-                  textTransform: "uppercase",
-                  color: "#C4A265",
-                  marginBottom: "20px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "10px",
-                }}
-              >
-                <span>N&deg; 01 / 03</span>
-                <span style={{ flex: 1, height: "1px", background: "rgba(196,162,101,0.4)" }} />
-                <span style={{ color: "#3A6B3A" }}>&middot; Live</span>
-              </div>
-              <div
-                style={{
-                  fontFamily: "var(--font-display, 'Lora'), Georgia, serif",
-                  fontSize: "1.5rem",
-                  fontWeight: 500,
-                  marginBottom: "6px",
-                  color: "var(--ink, #1A1613)",
-                }}
-              >
-                Shade <em>DNA</em>
-              </div>
-              <div
-                style={{
-                  fontFamily: "var(--font-mono, 'JetBrains Mono'), monospace",
-                  fontSize: "0.72rem",
-                  letterSpacing: "0.14em",
-                  textTransform: "uppercase",
-                  color: "rgba(26,22,19,0.55)",
-                  marginBottom: "20px",
-                }}
-              >
-                Vol. I &middot; MMXXVI
-              </div>
-              <p
-                style={{
-                  fontFamily: "var(--font-inter, system-ui, sans-serif)",
-                  fontSize: "0.92rem",
-                  lineHeight: 1.65,
-                  color: "rgba(26,22,19,0.78)",
-                  margin: "0 0 24px",
-                  flex: 1,
-                }}
-              >
-                Your color season, mapped from twelve questions. Twelve archetypes, ninety-six curated shades, three price tiers. Free.
-              </p>
-              <div
-                style={{
-                  fontFamily: "var(--font-inter, system-ui, sans-serif)",
-                  fontSize: "0.85rem",
-                  fontWeight: 500,
-                  color: "var(--ink, #1A1613)",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "8px",
-                }}
-              >
-                Begin the analysis <span>&rarr;</span>
-              </div>
-            </Link>
-
-            {/* Vibe DNA — forthcoming */}
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                padding: "36px 28px",
-                borderRight: "1px solid rgba(196,162,101,0.28)",
-                background: "rgba(255,251,247,0.6)",
-              }}
-            >
-              <div
-                style={{
-                  fontFamily: "var(--font-mono, 'JetBrains Mono'), monospace",
-                  fontSize: "0.7rem",
-                  letterSpacing: "0.2em",
-                  textTransform: "uppercase",
-                  color: "#C4A265",
-                  marginBottom: "20px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "10px",
-                }}
-              >
-                <span>N&deg; 02 / 03</span>
-                <span style={{ flex: 1, height: "1px", background: "rgba(196,162,101,0.4)" }} />
-                <span style={{ color: "rgba(26,22,19,0.55)" }}>&middot; Forthcoming</span>
-              </div>
-              <div
-                style={{
-                  fontFamily: "var(--font-display, 'Lora'), Georgia, serif",
-                  fontSize: "1.5rem",
-                  fontWeight: 500,
-                  marginBottom: "6px",
-                  color: "var(--ink, #1A1613)",
-                }}
-              >
-                Vibe <em>DNA</em>
-              </div>
-              <div
-                style={{
-                  fontFamily: "var(--font-mono, 'JetBrains Mono'), monospace",
-                  fontSize: "0.72rem",
-                  letterSpacing: "0.14em",
-                  textTransform: "uppercase",
-                  color: "rgba(26,22,19,0.55)",
-                  marginBottom: "20px",
-                }}
-              >
-                Vol. II &middot; Forthcoming
-              </div>
-              <p
-                style={{
-                  fontFamily: "var(--font-inter, system-ui, sans-serif)",
-                  fontSize: "0.92rem",
-                  lineHeight: 1.65,
-                  color: "rgba(26,22,19,0.78)",
-                  margin: "0 0 24px",
-                  flex: 1,
-                }}
-              >
-                Your wardrobe archetype, mapped from the silhouettes and textures you keep coming back to. Same method, new lens.
-              </p>
-              <div
-                style={{
-                  fontFamily: "var(--font-inter, system-ui, sans-serif)",
-                  fontSize: "0.85rem",
-                  fontWeight: 500,
-                  color: "rgba(26,22,19,0.5)",
-                  fontStyle: "italic",
-                }}
-              >
-                In final review
-              </div>
-            </div>
-
-            {/* Signature DNA — in development */}
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                padding: "36px 28px",
-                background: "rgba(26,22,19,0.04)",
-              }}
-            >
-              <div
-                style={{
-                  fontFamily: "var(--font-mono, 'JetBrains Mono'), monospace",
-                  fontSize: "0.7rem",
-                  letterSpacing: "0.2em",
-                  textTransform: "uppercase",
-                  color: "#C4A265",
-                  marginBottom: "20px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "10px",
-                }}
-              >
-                <span>N&deg; 03 / 03</span>
-                <span style={{ flex: 1, height: "1px", background: "rgba(196,162,101,0.4)" }} />
-                <span style={{ color: "rgba(26,22,19,0.55)" }}>&middot; In Development</span>
-              </div>
-              <div
-                style={{
-                  fontFamily: "var(--font-display, 'Lora'), Georgia, serif",
-                  fontSize: "1.5rem",
-                  fontWeight: 500,
-                  marginBottom: "6px",
-                  color: "var(--ink, #1A1613)",
-                }}
-              >
-                Signature <em>DNA</em>
-              </div>
-              <div
-                style={{
-                  fontFamily: "var(--font-mono, 'JetBrains Mono'), monospace",
-                  fontSize: "0.72rem",
-                  letterSpacing: "0.14em",
-                  textTransform: "uppercase",
-                  color: "rgba(26,22,19,0.55)",
-                  marginBottom: "20px",
-                }}
-              >
-                Vol. III &middot; In Development
-              </div>
-              <p
-                style={{
-                  fontFamily: "var(--font-inter, system-ui, sans-serif)",
-                  fontSize: "0.92rem",
-                  lineHeight: 1.65,
-                  color: "rgba(26,22,19,0.78)",
-                  margin: "0 0 24px",
-                  flex: 1,
-                }}
-              >
-                The identity layer. When you&rsquo;ve completed two DNAs, the third becomes yours &mdash; your color, your archetype, your map across all of it.
-              </p>
-              <div
-                style={{
-                  fontFamily: "var(--font-inter, system-ui, sans-serif)",
-                  fontSize: "0.85rem",
-                  fontWeight: 500,
-                  color: "rgba(26,22,19,0.5)",
-                  fontStyle: "italic",
-                }}
-              >
-                Unlocks with 2+ volumes
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <DnaPortfolio onShadeStart={() => markQuizStarted("portfolio_strip")} />
 
       {/* ============ Twelve ============ */}
       <section className="l-twelve" id="twelve">
         <div className="l-section-head">
           <div className="l-section-head-num">§ 01</div>
-          <h2 className="l-section-head-title">The twelve.</h2>
-          <div className="l-section-head-meta">Four families · Three variants each</div>
+          <h2 className="l-section-head-title">Inside <em>Shade DNA.</em></h2>
+          <div className="l-section-head-meta">Twelve palettes · Four color families</div>
         </div>
         {SEASONS.map((fam) => (
           <div key={fam.family} className="l-family-row">
@@ -497,7 +224,7 @@ export default function Home() {
           <div className="l-section-head" style={{ borderColor: "var(--ink)" }}>
             <div className="l-section-head-num">§ 02</div>
             <h2 className="l-section-head-title">The method.</h2>
-            <div className="l-section-head-meta">Answer · Analyze · Arrive</div>
+            <div className="l-section-head-meta">Shade DNA · Answer · Explore · Try</div>
           </div>
           <div className="l-method-grid">
             <div className="l-method-step">
@@ -695,7 +422,7 @@ export default function Home() {
                 <div>
                   <h2>A field guide to <em>yourself</em>.</h2>
                   <div className="l-science-body">
-                    <p>You are reading Shade DNA, Volume I in an open series. This volume maps the physics of your coloring into one of twelve seasons. The next volumes (Vibe, Signature, Carry-On, and the ones still in the lab) use different lenses on the same person.</p>
+                    <p>Start with Shade DNA to explore color, or Fit DNA to understand your denim preferences. Two different lenses on the same person. Both offer a starting point—not a verdict on what you can wear.</p>
                     <p>Shade DNA began with a question: <em>why do some colors make you, and others un-make you?</em> The answer is not taste or trend. It is coloring: the interference pattern of your skin, eyes, and hair against light. Physics. Yours. This is where we start.</p>
                     <p>Twelve families. Three variants each. <em>One of them is yours.</em></p>
                   </div>
@@ -777,7 +504,7 @@ export default function Home() {
           <div>
             <h2>A field guide to <em>yourself</em>.</h2>
             <div className="l-science-body">
-              <p>You are reading Shade DNA, Volume I in an open series. This volume maps the physics of your coloring into one of twelve seasons. The next volumes (Vibe, Signature, Carry-On, and the ones still in the lab) use different lenses on the same person.</p>
+              <p>Start with Shade DNA to explore color, or Fit DNA to understand your denim preferences. Two different lenses on the same person. Both offer a starting point—not a verdict on what you can wear.</p>
               <p>Shade DNA began with a question: <em>why do some colors make you, and others un-make you?</em> The answer is not taste or trend. It is coloring: the interference pattern of your skin, eyes, and hair against light. Physics. Yours. This is where we start.</p>
               <p>Twelve families. Three variants each. <em>One of them is yours.</em></p>
             </div>
@@ -860,10 +587,10 @@ export default function Home() {
       {/* ============ Final ============ */}
       <section className="l-final">
         <div className="l-final-eyebrow">§ Begin</div>
-        <h2>Your <em>shade,</em><br />your <em>science.</em></h2>
-        <p>Sixty seconds. One season. <em>Yours forever.</em></p>
-        <Link className="l-cta-primary" href="/quiz?source=homepage_bottom" onClick={() => markQuizStarted("homepage_bottom")}>
-          <span>Begin the analysis</span>
+        <h2>Your <em>color.</em><br />Your <em>fit.</em></h2>
+        <p>A little more understanding. <em>A better place to start.</em></p>
+        <Link className="l-cta-primary" href="#portfolio">
+          <span>Find your DNA</span>
           <span className="arrow">→</span>
         </Link>
         <div className="l-final-meta">Free · No sign-up required · Works on mobile</div>
@@ -874,14 +601,15 @@ export default function Home() {
         <div className="l-footer-inner">
           <div>
             <div className="l-footer-wordmark">allele</div>
-            <p className="l-footer-tagline">A chromatic cartography for the ninety-six shades you were meant to wear.</p>
+            <p className="l-footer-tagline">buy what’s actually yours.</p>
           </div>
           <div className="l-footer-col">
             <div className="l-footer-col-title">Product</div>
-            <Link href="/quiz">The quiz</Link>
+            <Link href="/quiz">Shade DNA</Link>
+            <Link href="/fit">Fit DNA</Link>
             <a href="#twelve">The twelve</a>
             <a href="#showcase">Sample result</a>
-            <Link href="/vibe">Vibe DNA (soon)</Link>
+            <Link href="/my-allele">My Allele</Link>
           </div>
           <div className="l-footer-col">
             <div className="l-footer-col-title">Company</div>

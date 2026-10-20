@@ -2662,6 +2662,9 @@ function Edit({ s, seasonId, shadeIndex, setShadeIndex, priority }) {
                 </div>
 
                 <p className="dt-prod-match-reason">{getMatchRationale(catId, s.name, p)}</p>
+                <p className="dt-prod-variant-note" style={{ fontSize: "12px", lineHeight: 1.6, color: "#70513a", borderLeft: "2px solid #C4A265", paddingLeft: "10px", margin: "12px 0" }}>
+                  {p.variantSelectionNote || `Check that ${p.shade} is selected at the retailer. Links can open a different shade or a search page.`}
+                </p>
 
                 <div className="dt-prod-stock">
                   <span className="dt-stock-pulse" /> Check price + availability
@@ -2679,7 +2682,7 @@ function Edit({ s, seasonId, shadeIndex, setShadeIndex, priority }) {
                     const retailer = getRetailerName(targetUrl);
                     return (
                       <div className="dt-prod-shop">
-                        Shop at {retailer} <span aria-hidden="true">→</span>
+                        {p.shopUrl?.includes("amazon.com/s?") ? "Search" : "View"} at {retailer} <span aria-hidden="true">→</span>
                       </div>
                     );
                   })()}
