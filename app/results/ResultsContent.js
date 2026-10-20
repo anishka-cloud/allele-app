@@ -2161,6 +2161,47 @@ function PredictsThisYear({ seasonId }) {
   );
 }
 
+function Everyday({ s, seasonId }) {
+  const n = neutralsFor(seasonId);
+  return (
+    <section className="dt-basics dt-everyday" id="everyday" style={{ "--accent": s.accent }}>
+      <div className="dt-section-head">
+        <span className="dt-section-num">·</span>
+        <h2 className="dt-section-title">Your <em>everyday</em></h2>
+        <span className="dt-section-meta">{n.palette.length} neutrals · {n.basics.length} basics</span>
+      </div>
+      <p className="dt-basics-intro">
+        The colors you&rsquo;ll actually wear most. Build the base of your wardrobe from these, then add your
+        statement colors near your face.
+      </p>
+      <div className="dt-drape-rail neutrals dt-everyday-rail">
+        {n.palette.map((c, i) => (
+          <div key={i} className={`dt-drape-chip neutral${isDarkHex(c.hex) ? " dark-cell" : ""}`} style={{ background: c.hex }}>
+            <span className="dt-drape-label">{c.name}</span>
+            <span className="dt-drape-wear">{c.wear}</span>
+          </div>
+        ))}
+      </div>
+      <h3 className="dt-everyday-sub">Your version of the basics</h3>
+      <div className="dt-basics-grid">
+        {n.basics.map((b, i) => (
+          <div key={b.piece} className={`dt-basic${/metal/i.test(b.piece) ? " dt-basic-metal" : ""}`}>
+            <div className="dt-basic-swatch" style={{ background: b.hex }}>
+              {/metal/i.test(b.piece) && <span className="dt-basic-metal-sheen" />}
+              <span className="dt-basic-num">{String(i + 1).padStart(2, "0")}</span>
+            </div>
+            <div className="dt-basic-body">
+              <span className="dt-basic-k">{b.piece}</span>
+              <span className="dt-basic-v">{b.answer}</span>
+              <p className="dt-basic-note">{b.note}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function Drape({ s, seasonId }) {
   const [band, setBand] = useState("both");
   const n = neutralsFor(seasonId);
@@ -2206,7 +2247,7 @@ function Drape({ s, seasonId }) {
           <div className="dt-band-head">
             <span className="dt-band-tag">I · Statement</span>
             <span className="dt-band-desc">
-              Expressive. Wear near the face. For impact, event dressing, and moments.
+              Colors to try. Start with one near your face: a lipstick, a scarf, or a top under a neutral jacket.
             </span>
             <span className="dt-band-meta">{statementCount} shades</span>
           </div>
@@ -3506,13 +3547,26 @@ function ResultsInner({ seasonParam, depthParam, oliveFlag, priority }) {
 
   if (!s) return null;
 
+  const makeupFirst = priority === "foundation" || priority === "lips";
+
   return (
     <main className="dt-results">
       <Nav seasonId={seasonId} onChange={onSeasonChange} />
       <Hero s={s} seasonId={seasonId} />
       
-      {/* A small, priority-aware edit comes first so the result stays useful. */}
-      <Edit s={s} seasonId={seasonId} shadeIndex={shadeIndex} setShadeIndex={setShadeIndex} priority={priority} />
+      {/* Lead with what the person said they came to solve: makeup-first answers see the
+          product edit first; wardrobe, full-palette and unknown priorities see everyday colors first. */}
+      {makeupFirst ? (
+        <>
+          <Edit s={s} seasonId={seasonId} shadeIndex={shadeIndex} setShadeIndex={setShadeIndex} priority={priority} />
+          <Everyday s={s} seasonId={seasonId} />
+        </>
+      ) : (
+        <>
+          <Everyday s={s} seasonId={seasonId} />
+          <Edit s={s} seasonId={seasonId} shadeIndex={shadeIndex} setShadeIndex={setShadeIndex} priority={priority} />
+        </>
+      )}
 
       {/* Sticky shopping bar for quick checkout accessibility */}
       <StickyShopBar s={s} shadeIndex={shadeIndex} />
