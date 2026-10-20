@@ -16,6 +16,7 @@ import {
 } from "@/lib/handoffSeasons";
 import { track, trackEvent } from "@/lib/analytics";
 import { getShopUrl, withUTM } from "@/lib/shopLinks";
+import { bridalWhiteFor } from "@/lib/bridalWhites";
 import "./results.css";
 
 const SEASON_IDS = Object.keys(SEASONS);
@@ -2161,6 +2162,76 @@ function PredictsThisYear({ seasonId }) {
   );
 }
 
+function BridalWhite({ s }) {
+  const w = bridalWhiteFor(s.family);
+  if (!w) return null;
+  return (
+    <section className="dt-basics dt-bridal" id="bridal" style={{ "--accent": s.accent }}>
+      <div className="dt-section-head">
+        <span className="dt-section-num">·</span>
+        <h2 className="dt-section-title">Your <em>bridal white</em></h2>
+        <span className="dt-section-meta">{s.family} family</span>
+      </div>
+      <div className="dt-bridal-grid">
+        <div className="dt-bridal-chips" aria-hidden="true">
+          {w.chips.map(c => <span key={c} style={{ background: c }} />)}
+        </div>
+        <div className="dt-bridal-body">
+          <p className="dt-bridal-name">{w.name}</p>
+          <p className="dt-bridal-line"><span className="dt-basic-k">Ask for</span> {w.ask}</p>
+          <p className="dt-bridal-line"><span className="dt-basic-k">Pair with</span> {w.metal}</p>
+          <p className="dt-bridal-note">{w.note}</p>
+          <p className="dt-bridal-fine">
+            A starting point from your {s.name} result, not a fitting. Hold fabric swatches at your jaw in daylight before you decide.
+            Your full season is below, for the bridal party, the rest of the day and everything after.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Everyday({ s, seasonId }) {
+  const n = neutralsFor(seasonId);
+  return (
+    <section className="dt-basics dt-everyday" id="everyday" style={{ "--accent": s.accent }}>
+      <div className="dt-section-head">
+        <span className="dt-section-num">·</span>
+        <h2 className="dt-section-title">Your <em>everyday</em></h2>
+        <span className="dt-section-meta">{n.palette.length} neutrals · {n.basics.length} basics</span>
+      </div>
+      <p className="dt-basics-intro">
+        The colors you&rsquo;ll actually wear most. Build the base of your wardrobe from these, then add your
+        statement colors near your face.
+      </p>
+      <div className="dt-drape-rail neutrals dt-everyday-rail">
+        {n.palette.map((c, i) => (
+          <div key={i} className={`dt-drape-chip neutral${isDarkHex(c.hex) ? " dark-cell" : ""}`} style={{ background: c.hex }}>
+            <span className="dt-drape-label">{c.name}</span>
+            <span className="dt-drape-wear">{c.wear}</span>
+          </div>
+        ))}
+      </div>
+      <h3 className="dt-everyday-sub">Your version of the basics</h3>
+      <div className="dt-basics-grid">
+        {n.basics.map((b, i) => (
+          <div key={b.piece} className={`dt-basic${/metal/i.test(b.piece) ? " dt-basic-metal" : ""}`}>
+            <div className="dt-basic-swatch" style={{ background: b.hex }}>
+              {/metal/i.test(b.piece) && <span className="dt-basic-metal-sheen" />}
+              <span className="dt-basic-num">{String(i + 1).padStart(2, "0")}</span>
+            </div>
+            <div className="dt-basic-body">
+              <span className="dt-basic-k">{b.piece}</span>
+              <span className="dt-basic-v">{b.answer}</span>
+              <p className="dt-basic-note">{b.note}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function Drape({ s, seasonId }) {
   const [band, setBand] = useState("both");
   const n = neutralsFor(seasonId);
@@ -2206,7 +2277,7 @@ function Drape({ s, seasonId }) {
           <div className="dt-band-head">
             <span className="dt-band-tag">I · Statement</span>
             <span className="dt-band-desc">
-              Expressive. Wear near the face. For impact, event dressing, and moments.
+              Colors to try. Start with one near your face: a lipstick, a scarf, or a top under a neutral jacket.
             </span>
             <span className="dt-band-meta">{statementCount} shades</span>
           </div>
@@ -2662,6 +2733,9 @@ function Edit({ s, seasonId, shadeIndex, setShadeIndex, priority }) {
                 </div>
 
                 <p className="dt-prod-match-reason">{getMatchRationale(catId, s.name, p)}</p>
+                <p className="dt-prod-variant-note" style={{ fontSize: "12px", lineHeight: 1.6, color: "#70513a", borderLeft: "2px solid #C4A265", paddingLeft: "10px", margin: "12px 0" }}>
+                  {p.variantSelectionNote || `Check that ${p.shade} is selected at the retailer. Links can open a different shade or a search page.`}
+                </p>
 
                 <div className="dt-prod-stock">
                   <span className="dt-stock-pulse" /> Check price + availability
@@ -2679,7 +2753,7 @@ function Edit({ s, seasonId, shadeIndex, setShadeIndex, priority }) {
                     const retailer = getRetailerName(targetUrl);
                     return (
                       <div className="dt-prod-shop">
-                        Shop at {retailer} <span aria-hidden="true">→</span>
+                        {p.shopUrl?.includes("amazon.com/s?") ? "Search" : "View"} at {retailer} <span aria-hidden="true">→</span>
                       </div>
                     );
                   })()}
@@ -3430,6 +3504,7 @@ function ParamReader() {
       depthParam={sp.get("depth")}
       oliveFlag={sp.get("olive") === "1"}
       priority={sp.get("priority")}
+      intent={sp.get("intent")}
     />
   );
 }
@@ -3450,7 +3525,7 @@ export default function ResultsContent() {
   );
 }
 
-function ResultsInner({ seasonParam, depthParam, oliveFlag, priority }) {
+function ResultsInner({ seasonParam, depthParam, oliveFlag, priority, intent }) {
   const router = useRouter();
 
   const initialId = useMemo(() => {
@@ -3498,18 +3573,33 @@ function ResultsInner({ seasonParam, depthParam, oliveFlag, priority }) {
     if (depthParam) params.set("depth", depthParam);
     if (oliveFlag) params.set("olive", "1");
     if (priority) params.set("priority", priority);
+    if (intent === "bridal") params.set("intent", "bridal");
     router.replace(`/results?${params.toString()}`, { scroll: false });
   };
 
   if (!s) return null;
 
+  const makeupFirst = priority === "foundation" || priority === "lips";
+
   return (
     <main className="dt-results">
       <Nav seasonId={seasonId} onChange={onSeasonChange} />
       <Hero s={s} seasonId={seasonId} />
+      {intent === "bridal" && <BridalWhite s={s} />}
       
-      {/* A small, priority-aware edit comes first so the result stays useful. */}
-      <Edit s={s} seasonId={seasonId} shadeIndex={shadeIndex} setShadeIndex={setShadeIndex} priority={priority} />
+      {/* Lead with what the person said they came to solve: makeup-first answers see the
+          product edit first; wardrobe, full-palette and unknown priorities see everyday colors first. */}
+      {makeupFirst ? (
+        <>
+          <Edit s={s} seasonId={seasonId} shadeIndex={shadeIndex} setShadeIndex={setShadeIndex} priority={priority} />
+          <Everyday s={s} seasonId={seasonId} />
+        </>
+      ) : (
+        <>
+          <Everyday s={s} seasonId={seasonId} />
+          <Edit s={s} seasonId={seasonId} shadeIndex={shadeIndex} setShadeIndex={setShadeIndex} priority={priority} />
+        </>
+      )}
 
       {/* Sticky shopping bar for quick checkout accessibility */}
       <StickyShopBar s={s} shadeIndex={shadeIndex} />

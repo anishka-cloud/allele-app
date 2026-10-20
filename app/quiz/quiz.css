@@ -1071,3 +1071,6 @@ body:has(.qz-shell) { background: var(--cream); }
     width: 100%;
   }
 }
+
+/* Fine-line helix replaces the pill track (shared HelixProgress component) */
+.qz-topbar-track.qz-topbar-helix { height: 24px; background: none; border-radius: 0; }

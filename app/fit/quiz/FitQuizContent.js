@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { track, trackEvent } from "@/lib/analytics";
+import HelixProgress from "@/app/components/HelixProgress";
+import "@/app/components/allele-nav.css";
 import { FitChoiceVisual, FitLivePreview, FitTrendNote, choiceHints } from "@/app/fit/FitVisuals";
 import { FitProductEmbed, FitProductReference, FitAffiliateDisclosure } from "@/app/fit/FitProductReference";
 import { getFitStyleExample } from "@/lib/fitStyleExamples.mjs";
@@ -37,7 +39,6 @@ export default function FitQuizContent() {
   const headingRef = useRef(null);
 
   const question = fitQuestions[currentQuestion];
-  const progress = ((currentQuestion + 1) / fitQuestions.length) * 100;
 
   useEffect(() => {
     let saved = null;
@@ -158,7 +159,7 @@ export default function FitQuizContent() {
       </header>
 
       <div className="fit-progress" aria-label={`Question ${currentQuestion + 1} of ${fitQuestions.length}`}>
-        <span style={{ width: `${progress}%` }} />
+        <HelixProgress total={fitQuestions.length} done={currentQuestion} active={currentQuestion} accent="#263b50" />
       </div>
 
       <section className={`fit-question fit-question-${question.id}${transitioning ? " is-transitioning" : ""}`}>

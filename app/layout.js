@@ -20,15 +20,15 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: "Shade DNA by Allele · Find Your Perfect Makeup Colors",
+  title: "Allele · Shade DNA & Fit DNA",
   description:
-    "Find the makeup shades that actually make you glow. Discover your color season in two minutes. Based on color science, not guesswork.",
+    "Explore makeup colors with Shade DNA and better-fitting jeans with Fit DNA. Two free quizzes to help you understand what works for you—and why.",
   keywords: "shade dna, color analysis, color season, makeup shades, seasonal color analysis, beauty quiz",
   metadataBase: new URL("https://www.allele.app"),
   openGraph: {
-    title: "Your makeup isn't working. It's the wrong season.",
+    title: "Allele · Buy what’s actually yours.",
     description:
-      "Find the shades that actually make you glow. Based on color science. Two minutes. No signup.",
+      "Your color. Your fit. Explore Shade DNA and Fit DNA—two free quizzes, no sign-up required.",
     type: "website",
     url: "https://www.allele.app",
     siteName: "Allele",
@@ -43,8 +43,8 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Your makeup isn't working. It's the wrong season.",
-    description: "Find the shades that actually make you glow. Free, two minutes.",
+    title: "Allele · Shade DNA & Fit DNA",
+    description: "Your color. Your fit. Two free quizzes to help you find your starting point.",
     images: ["/og/shade-dna-hero.png"],
   },
   alternates: {

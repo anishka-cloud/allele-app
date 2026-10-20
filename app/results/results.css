@@ -3509,3 +3509,62 @@ a.dt-prod:hover .dt-prod-shop span {
 .dt-results section.dt-edit {
   padding-top: 48px;
 }
+
+/* ============================================================
+   Everyday colors — neutrals + your version of the basics
+   (shown near the top of the result)
+   ============================================================ */
+.dt-everyday-rail { margin-bottom: 56px; aspect-ratio: 8 / 1.7; }
+.dt-everyday-sub {
+  max-width: var(--content-max);
+  margin: 0 auto 20px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-60);
+}
+.dt-everyday .dt-drape-chip { cursor: default; }
+.dt-everyday-rail > .dt-drape-chip { min-width: 0; overflow: hidden; }
+.dt-everyday-rail .dt-drape-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dt-everyday .dt-drape-chip:hover { transform: none; }
+@media (max-width: 640px) {
+  .dt-everyday-rail { grid-template-columns: repeat(4, 1fr); aspect-ratio: 4 / 2.4; margin-bottom: 40px; }
+  .dt-everyday .dt-drape-chip { padding: 10px; }
+  .dt-everyday .dt-drape-wear { display: none; }
+  .dt-everyday .dt-basics-grid { gap: 10px; }
+  .dt-everyday .dt-basic { flex-direction: row; padding: 0; }
+  .dt-everyday .dt-basic-swatch { aspect-ratio: auto; width: 76px; flex: none; padding: 10px; }
+  .dt-everyday .dt-basic-body { padding: 14px 14px 16px; }
+  .dt-everyday .dt-basic-v { font-size: 19px; }
+}
+
+/* The --edge declared on .dt-results above shadows the :root breakpoint values,
+   which left 64px side margins on phones. Re-apply the intended gutters here. */
+@media (max-width: 1100px) { .dt-results { --edge: 40px; } }
+@media (max-width: 640px)  { .dt-results { --edge: 16px; } }
+
+/* ============================================================
+   Bridal white — shown first when arriving from /bridal
+   ============================================================ */
+.dt-bridal { background: var(--cream-2); }
+.dt-bridal-grid {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  gap: 56px;
+  align-items: center;
+}
+.dt-bridal-chips { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; aspect-ratio: 3 / 2; border-radius: 8px; overflow: hidden; border: 1px solid var(--rule); }
+.dt-bridal-chips span { display: block; }
+.dt-bridal-name { font-family: var(--display); font-weight: 300; font-size: 64px; line-height: 1; letter-spacing: -0.02em; color: var(--ink); margin: 0 0 22px; }
+.dt-bridal-line { font-family: var(--serif); font-size: 19px; color: var(--ink); margin: 0 0 10px; display: flex; gap: 14px; align-items: baseline; flex-wrap: wrap; }
+.dt-bridal-line .dt-basic-k { min-width: 82px; }
+.dt-bridal-note { font-family: var(--serif); font-style: italic; font-size: 17px; line-height: 1.55; color: var(--ink-80); margin: 22px 0 0; max-width: 560px; text-wrap: pretty; }
+.dt-bridal-fine { font-family: var(--sans); font-size: 13px; line-height: 1.55; color: var(--ink-60); margin: 18px 0 0; max-width: 560px; }
+@media (max-width: 900px) {
+  .dt-bridal-grid { grid-template-columns: 1fr; gap: 28px; }
+  .dt-bridal-name { font-size: 44px; }
+}

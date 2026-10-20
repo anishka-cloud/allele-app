@@ -97,6 +97,24 @@ test("one Amazon product ID never represents two different products", () => {
   assert.deepEqual(conflicts, []);
 });
 
+test("one ShopMy pin never represents two different products", () => {
+  const names = new Map();
+  for (const product of inventory().filter(p => p.shopUrl.includes("go.shopmy.us"))) {
+    const name = `${product.brand} ${product.product}`;
+    if (names.has(product.shopUrl)) assert.equal(names.get(product.shopUrl), name);
+    names.set(product.shopUrl, name);
+  }
+});
+
+test("known variant mismatches have explicit selection notes, not incorrect photos", () => {
+  for (const pin of ["p-51043829", "p-51044298"]) {
+    const product = inventory().find(p => p.shopUrl.endsWith(pin));
+    assert.ok(product.variantSelectionNote.includes(product.shade));
+    assert.ok(!product.productImageUrl);
+  }
+  assert.ok(!inventory().some(p => p.shopUrl.includes("p-51044537")), "the wrong Moondust product link must not return");
+});
+
 test("foundation and concealer affiliate routes keep their network attribution", async () => {
   const source = await readFile(new URL("../app/results/ResultsContent.js", import.meta.url), "utf8");
   const urls = [...source.matchAll(/shopUrl:\s*"(https:[^"]+)"/g)].map((match) => match[1]);

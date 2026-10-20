@@ -14,6 +14,39 @@
 :where(.landing) button { font-family: inherit; border: none; background: none; cursor: pointer; color: inherit; }
 .landing * { box-sizing: border-box; }
 
+/* The umbrella keeps Allele's original paper, type and specimen language. */
+.landing .l-umbrella-headline { font-size: clamp(64px, 8vw, 112px); line-height: .98; letter-spacing: -.035em; word-spacing: 0; }
+.landing .l-umbrella-headline em { display: inline; }
+.l-cta-outline { display: inline-flex; align-items: center; justify-content: space-between; gap: 20px; padding: 17px 24px; border: 1px solid var(--ink); border-radius: 999px; font-size: 15px; font-weight: 500; }
+.l-cta-outline:hover { background: var(--cream-2); }
+.l-hero-cta-row .l-cta-meta { flex-basis: 100%; }
+.l-portfolio { scroll-margin-top: 24px; padding: 72px max(48px, calc((100vw - 1244px) / 2)); background: var(--cream-2); border-block: 1px solid var(--rule); }
+.l-portfolio-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); background: var(--cream); border: 1px solid var(--rule); }
+.l-dna-entry { display: flex; flex-direction: column; padding: 36px; }
+.l-dna-entry + .l-dna-entry { border-left: 1px solid var(--rule); }
+.l-dna-entry:hover { background: #faf4eb; }
+.l-dna-entry:focus-visible { outline: 2px solid var(--rust); outline-offset: -4px; }
+.l-dna-volume, .l-dna-facts { font-family: var(--mono); font-size: 11px; letter-spacing: .06em; color: #706253; }
+.l-dna-volume { text-transform: uppercase; }
+.l-dna-specimens { display: grid; grid-template-columns: repeat(6, 1fr); height: 70px; margin: 28px 0; }
+.l-dna-specimens span { display: block; }
+.l-dna-denim span { position: relative; }
+.l-dna-denim span::after { content: ""; position: absolute; inset: 8px; border-inline: 1px dashed rgba(255,251,247,.4); }
+.l-dna-entry h3 { font-family: var(--font-display, Lora, serif); font-size: 40px; letter-spacing: -.03em; font-weight: 400; margin: 0 0 14px; }
+.l-dna-entry p { font-size: 15px; line-height: 1.75; color: #635d57; max-width: 480px; margin: 0 0 24px; }
+.l-dna-facts { margin-top: auto; line-height: 1.6; }
+.l-dna-action { display: flex; justify-content: space-between; font-size: 15px; border-top: 1px solid var(--rule); padding-top: 22px; margin-top: 24px; }
+.l-portfolio-note { font-size: 13px; line-height: 1.65; color: #706253; margin: 22px 0 0; }
+@media (max-width: 740px) {
+  .l-portfolio { padding: 48px 24px; }
+  .l-portfolio-grid { grid-template-columns: 1fr; }
+  .l-dna-entry { padding: 28px 24px; }
+  .l-dna-entry + .l-dna-entry { border-left: 0; border-top: 1px solid var(--rule); }
+  .l-dna-entry h3 { font-size: 34px; }
+  .l-dna-specimens { height: 56px; }
+  .landing .l-umbrella-headline { font-size: clamp(64px, 15vw, 86px); }
+}
+
 /* Override the body background that legacy globals.css sets */
 body:has(.landing) { background: var(--cream); }
 

@@ -1,6 +1,6 @@
 # Fit DNA release notes — September 25, 2026
 
-## Current release candidate (supersedes all history below)
+## Published release (supersedes all history below)
 
 - Nish authorized a one-hour preview-access link. It was created without disabling protection permanently; no access token is stored in source.
 - HTTPS testing resolves the photo blocker: all five quiz examples load, including mobile. Local HTTP frames remain blank for an unconfirmed local-only reason.
@@ -8,7 +8,9 @@
 - Complete nine-question journey reaches the expected low-rise wide-leg result with clear fabric/hip-room tradeoffs. Saved answers resume; a 30-inch inseam converts to 76.2 cm and survives result refresh. No measurements enter result URLs or analytics.
 - 39 automated tests and targeted ESLint pass. Desktop and 390px mobile results/quiz checked without horizontal overflow; full provider image and shopping controls render.
 - Exact product destinations and creator ID 267437 checked in ShopMy. Ribcage uses the observed new `wide-leg` category URL, same A60810009 SKU. Amazon attribution remains separate and unchanged.
-- Final build/publication verification pending. Do not call the release live until confirmed. Earlier public publishing requests remain the release authorization.
+- Published commit `472672a6284ea68c2766ae4d807d0b782fa879e2` by fast-forward push to main. Both existing Vercel integrations completed successfully. Production build and public page verified September 25, 2026, around 19:48 PDT.
+- **Domain mapping verified:** `allele.app` and `www.allele.app` belong to the existing **shade-dna** Vercel project, not the locally linked allele-app project. Live deployment: `dpl_9GiGU1W9vLDE3rsoAZCNFcXniDnL` (`shade-82ubcqm9v-anishka-clouds-projects.vercel.app`). The same Git push also deployed allele-app as `dpl_5aMoR7QPpAidAD9xeNU7ZvDwTKK1`. Do not manually alias one over the other.
+- Live `/fit` and result variants render the new provider cards. Four result-only photos (314, 315, Ribcage, Curve Love) loaded on allele.app. Live Amazon URLs and rel attributes verified. A bounded error-log check returned no entries; this is not full analytics/email/checkout verification.
 - No new paid service, user-data deletion, or email integration. Live stock, checkout, email delivery and production analytics ingestion are not claimed by these tests.
 
 ## Historical notes — superseded; not current release instructions
