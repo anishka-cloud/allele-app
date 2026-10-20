@@ -1,0 +1,25 @@
+.br-page { background: var(--cream); color: var(--ink); min-height: 100vh; font-family: var(--sans); padding-bottom: 80px; }
+.br-hero { max-width: 880px; margin: 0 auto; padding: 96px 24px 64px; text-align: center; }
+.br-kicker { font-family: var(--mono); font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--ink-60); margin: 0 0 28px; }
+.br-title { font-family: var(--display); font-weight: 300; font-size: clamp(48px, 9vw, 104px); line-height: 0.98; letter-spacing: -0.03em; margin: 0 0 28px; }
+.br-title em { font-style: italic; color: var(--rust); }
+.br-lede { font-family: var(--serif); font-size: 20px; line-height: 1.55; color: var(--ink-80); max-width: 620px; margin: 0 auto 36px; text-wrap: pretty; }
+.br-cta { display: inline-flex; align-items: center; gap: 12px; background: var(--ink); color: var(--cream); padding: 18px 34px; border-radius: 999px; font-size: 16px; text-decoration: none; transition: transform 0.2s; }
+.br-cta:hover { transform: translateY(-2px); }
+.br-meta { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-40); margin: 18px 0 0; }
+.br-whites { max-width: 1040px; margin: 0 auto; padding: 0 24px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.br-white { text-align: center; }
+.br-chip { aspect-ratio: 3 / 4; border-radius: 6px; border: 1px solid var(--rule); margin-bottom: 14px; }
+.br-white-name { font-family: var(--serif); font-size: 20px; margin: 0 0 4px; }
+.br-white-family { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-40); margin: 0; }
+.br-how { max-width: 1040px; margin: 80px auto 0; padding: 40px 24px 0; border-top: 1px solid var(--rule); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; }
+.br-how p { font-family: var(--serif); font-size: 17px; line-height: 1.55; color: var(--ink-80); margin: 10px 0 0; }
+.br-num { font-family: var(--mono); font-size: 12px; letter-spacing: 0.24em; color: var(--rust); }
+.br-fine { max-width: 1040px; margin: 56px auto 0; padding: 0 24px; font-size: 13px; color: var(--ink-60); text-align: center; }
+@media (max-width: 720px) {
+  .br-hero { padding: 56px 16px 48px; }
+  .br-lede { font-size: 17px; }
+  .br-whites { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 0 16px; }
+  .br-how { grid-template-columns: 1fr; gap: 24px; margin-top: 56px; padding: 32px 16px 0; }
+  .br-fine { padding: 0 16px; }
+}

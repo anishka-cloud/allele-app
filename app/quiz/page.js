@@ -361,6 +361,10 @@ export default function QuizPage() {
     if (depthAnswer) params.set("depth", depthAnswer);
     if (score.oliveFlag) params.set("olive", "1");
     if (score.priority) params.set("priority", score.priority);
+    // Visitors from /bridal see their bridal white first on the result.
+    if (typeof window !== "undefined" && new URLSearchParams(window.location.search).get("intent") === "bridal") {
+      params.set("intent", "bridal");
+    }
 
     router.push(`/results?${params.toString()}`);
   }, [lead, router, answers, score.oliveFlag, score.priority]);

@@ -16,6 +16,7 @@ import {
 } from "@/lib/handoffSeasons";
 import { track, trackEvent } from "@/lib/analytics";
 import { getShopUrl, withUTM } from "@/lib/shopLinks";
+import { bridalWhiteFor } from "@/lib/bridalWhites";
 import "./results.css";
 
 const SEASON_IDS = Object.keys(SEASONS);
@@ -2161,6 +2162,35 @@ function PredictsThisYear({ seasonId }) {
   );
 }
 
+function BridalWhite({ s }) {
+  const w = bridalWhiteFor(s.family);
+  if (!w) return null;
+  return (
+    <section className="dt-basics dt-bridal" id="bridal" style={{ "--accent": s.accent }}>
+      <div className="dt-section-head">
+        <span className="dt-section-num">·</span>
+        <h2 className="dt-section-title">Your <em>bridal white</em></h2>
+        <span className="dt-section-meta">{s.family} family</span>
+      </div>
+      <div className="dt-bridal-grid">
+        <div className="dt-bridal-chips" aria-hidden="true">
+          {w.chips.map(c => <span key={c} style={{ background: c }} />)}
+        </div>
+        <div className="dt-bridal-body">
+          <p className="dt-bridal-name">{w.name}</p>
+          <p className="dt-bridal-line"><span className="dt-basic-k">Ask for</span> {w.ask}</p>
+          <p className="dt-bridal-line"><span className="dt-basic-k">Pair with</span> {w.metal}</p>
+          <p className="dt-bridal-note">{w.note}</p>
+          <p className="dt-bridal-fine">
+            A starting point from your {s.name} result, not a fitting. Hold fabric swatches at your jaw in daylight before you decide.
+            Your full season is below, for the bridal party, the rest of the day and everything after.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Everyday({ s, seasonId }) {
   const n = neutralsFor(seasonId);
   return (
@@ -3474,6 +3504,7 @@ function ParamReader() {
       depthParam={sp.get("depth")}
       oliveFlag={sp.get("olive") === "1"}
       priority={sp.get("priority")}
+      intent={sp.get("intent")}
     />
   );
 }
@@ -3494,7 +3525,7 @@ export default function ResultsContent() {
   );
 }
 
-function ResultsInner({ seasonParam, depthParam, oliveFlag, priority }) {
+function ResultsInner({ seasonParam, depthParam, oliveFlag, priority, intent }) {
   const router = useRouter();
 
   const initialId = useMemo(() => {
@@ -3542,6 +3573,7 @@ function ResultsInner({ seasonParam, depthParam, oliveFlag, priority }) {
     if (depthParam) params.set("depth", depthParam);
     if (oliveFlag) params.set("olive", "1");
     if (priority) params.set("priority", priority);
+    if (intent === "bridal") params.set("intent", "bridal");
     router.replace(`/results?${params.toString()}`, { scroll: false });
   };
 
@@ -3553,6 +3585,7 @@ function ResultsInner({ seasonParam, depthParam, oliveFlag, priority }) {
     <main className="dt-results">
       <Nav seasonId={seasonId} onChange={onSeasonChange} />
       <Hero s={s} seasonId={seasonId} />
+      {intent === "bridal" && <BridalWhite s={s} />}
       
       {/* Lead with what the person said they came to solve: makeup-first answers see the
           product edit first; wardrobe, full-palette and unknown priorities see everyday colors first. */}
