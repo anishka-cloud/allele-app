@@ -3044,7 +3044,7 @@ function SeasonEdit({ seasonId, seasonName }) {
   return (
     <section
       style={{
-        padding: "64px 24px",
+        padding: "36px 24px",
         background: "var(--cream-2, #F8F2E9)",
         borderTop: "1px solid rgba(196,162,101,0.18)",
       }}
@@ -3091,7 +3091,7 @@ function SeasonEdit({ seasonId, seasonName }) {
             fontSize: "1.02rem",
             lineHeight: 1.75,
             color: "rgba(26,22,19,0.82)",
-            margin: "0 0 28px",
+            margin: "0 0 20px",
           }}
         >
           {hasOwn
@@ -3631,15 +3631,15 @@ function ResultsInner({ seasonParam, depthParam, oliveFlag, priority }) {
     <main className="dt-results">
       <Nav seasonId={seasonId} onChange={onSeasonChange} />
       <Hero s={s} seasonId={seasonId} />
+
+      {/* ShopMy season edit (clothing): high on the page so Pinterest/TikTok visitors see it without scrolling */}
+      <SeasonEdit seasonId={seasonId} seasonName={s.name} />
       
       {/* A small, priority-aware edit comes first so the result stays useful. */}
       <Edit s={s} seasonId={seasonId} shadeIndex={shadeIndex} setShadeIndex={setShadeIndex} priority={priority} />
 
       {/* Sticky shopping bar for quick checkout accessibility */}
       <StickyShopBar s={s} shadeIndex={shadeIndex} />
-
-      {/* ShopMy season edit (clothing) — every season; links to its own edit or the full list */}
-      <SeasonEdit seasonId={seasonId} seasonName={s.name} />
 
       {/* Olive ambiguity cross-link — only renders for the 6 olive-prone seasons */}
       <OliveAmbiguity seasonId={seasonId} seasonName={s.name} oliveFlag={oliveFlag} />
