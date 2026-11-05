@@ -3019,6 +3019,129 @@ function OliveAmbiguity({ seasonId, seasonName, oliveFlag = false }) {
   );
 }
 
+// ShopMy season edits (clothing + accessories in each season's palette).
+// Seasons without their own edit yet link to the full list of edits.
+const SHOPMY_ALL_EDITS_URL = "https://shopmy.us/shop/nish?Section_id=1301336";
+const SEASON_EDIT_URLS = {
+  "soft-autumn": "https://shopmy.us/collections/8793236",
+  "true-autumn": "https://shopmy.us/collections/8793271",
+  "soft-summer": "https://shopmy.us/collections/8793283",
+  "dark-winter": "https://shopmy.us/collections/8793294",
+};
+
+function SeasonEdit({ seasonId, seasonName }) {
+  const url = SEASON_EDIT_URLS[seasonId] || SHOPMY_ALL_EDITS_URL;
+  const hasOwn = Boolean(SEASON_EDIT_URLS[seasonId]);
+  const handleClick = () => {
+    trackEvent("shop_click", {
+      source: "results_season_edit",
+      destination: "shopmy_collection",
+      season: seasonName,
+      has_own_edit: hasOwn,
+    });
+  };
+
+  return (
+    <section
+      style={{
+        padding: "64px 24px",
+        background: "var(--cream-2, #F8F2E9)",
+        borderTop: "1px solid rgba(196,162,101,0.18)",
+      }}
+    >
+      <div style={{ maxWidth: "760px", margin: "0 auto" }}>
+        <div
+          style={{
+            fontFamily: "var(--font-mono, 'JetBrains Mono'), monospace",
+            fontSize: "0.7rem",
+            letterSpacing: "0.2em",
+            textTransform: "uppercase",
+            color: "#C4A265",
+            marginBottom: "20px",
+            display: "flex",
+            alignItems: "center",
+            gap: "16px",
+          }}
+        >
+          <span>&sect; The season edit</span>
+          <span style={{ flex: 1, height: "1px", background: "rgba(196,162,101,0.4)" }} />
+          <span>Clothes &amp; accessories</span>
+        </div>
+
+        <h2
+          style={{
+            fontFamily: "var(--font-display, 'Lora'), Georgia, serif",
+            fontSize: "clamp(1.6rem, 3.2vw, 2.2rem)",
+            fontWeight: 500,
+            lineHeight: 1.2,
+            margin: "0 0 16px",
+            color: "var(--ink, #1A1613)",
+          }}
+        >
+          {hasOwn ? (
+            <>Now wear it. The <em>{seasonName}</em> edit.</>
+          ) : (
+            <>Now wear it. <em>Shop the season edits.</em></>
+          )}
+        </h2>
+
+        <p
+          style={{
+            fontFamily: "var(--font-inter, system-ui, sans-serif)",
+            fontSize: "1.02rem",
+            lineHeight: 1.75,
+            color: "rgba(26,22,19,0.82)",
+            margin: "0 0 28px",
+          }}
+        >
+          {hasOwn
+            ? `Coats, knits, dresses and accessories picked in the ${seasonName} palette.`
+            : `Coats, knits, dresses and accessories picked by color season. Your ${seasonName} edit is coming soon.`}
+        </p>
+
+        <div style={{ display: "flex", alignItems: "center", gap: "20px", flexWrap: "wrap" }}>
+          <a
+            href={url}
+            target="_blank"
+            rel="sponsored noopener noreferrer"
+            onClick={handleClick}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "12px",
+              padding: "14px 26px",
+              background: "var(--ink, #1A1613)",
+              color: "var(--cream, #FFFBF7)",
+              fontFamily: "var(--font-inter, system-ui, sans-serif)",
+              fontSize: "0.9rem",
+              fontWeight: 500,
+              letterSpacing: "0.04em",
+              textDecoration: "none",
+              border: "1px solid #C4A265",
+              borderRadius: "2px",
+            }}
+          >
+            <span>{hasOwn ? `Shop the ${seasonName} edit` : "Shop the season edits"}</span>
+            <span>&rarr;</span>
+          </a>
+        </div>
+
+        <p
+          style={{
+            fontFamily: "var(--font-inter, system-ui, sans-serif)",
+            fontSize: "0.78rem",
+            lineHeight: 1.6,
+            color: "rgba(26,22,19,0.6)",
+            margin: "18px 0 0",
+          }}
+        >
+          Affiliate links: Allele may earn a commission if you buy through them. Color inspiration, not a foundation shade match.
+        </p>
+      </div>
+    </section>
+  );
+}
+
 function TravelCapsule({ seasonId, seasonName }) {
   const handleClick = (source) => {
     trackEvent("kit_clicked", {
@@ -3402,6 +3525,7 @@ function Footer() {
           <div className="dt-footer-k">Product</div>
           <Link href="/quiz">Shade DNA</Link>
           <Link href="/vibe">Vibe DNA</Link>
+          <a href={SHOPMY_ALL_EDITS_URL} target="_blank" rel="sponsored noopener noreferrer">Season edits (shop)</a>
         </div>
         <div>
           <div className="dt-footer-k">Company</div>
@@ -3513,6 +3637,9 @@ function ResultsInner({ seasonParam, depthParam, oliveFlag, priority }) {
 
       {/* Sticky shopping bar for quick checkout accessibility */}
       <StickyShopBar s={s} shadeIndex={shadeIndex} />
+
+      {/* ShopMy season edit (clothing) — every season; links to its own edit or the full list */}
+      <SeasonEdit seasonId={seasonId} seasonName={s.name} />
 
       {/* Olive ambiguity cross-link — only renders for the 6 olive-prone seasons */}
       <OliveAmbiguity seasonId={seasonId} seasonName={s.name} oliveFlag={oliveFlag} />

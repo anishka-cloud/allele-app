@@ -882,6 +882,7 @@ export default function Home() {
             <a href="#twelve">The twelve</a>
             <a href="#showcase">Sample result</a>
             <Link href="/vibe">Vibe DNA (soon)</Link>
+            <a href="https://shopmy.us/shop/nish?Section_id=1301336" target="_blank" rel="sponsored noopener noreferrer">Season edits (shop)</a>
           </div>
           <div className="l-footer-col">
             <div className="l-footer-col-title">Company</div>
