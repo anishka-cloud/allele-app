@@ -1884,9 +1884,26 @@ function Hero({ s, seasonId }) {
                   </a>
                 );
               })()}
+              <a
+                href={SEASON_EDIT_URLS[seasonId] || SHOPMY_ALL_EDITS_URL}
+                target="_blank"
+                rel="sponsored noopener noreferrer"
+                className="dt-btn dt-btn-ghost"
+                onClick={() =>
+                  trackEvent("shop_click", {
+                    source: "results_hero_season_edit",
+                    destination: "shopmy_collection",
+                    season: s.name,
+                    has_own_edit: Boolean(SEASON_EDIT_URLS[seasonId]),
+                  })
+                }
+              >
+                {SEASON_EDIT_URLS[seasonId] ? `Shop the ${s.name} edit` : "Shop the season edits"} <span aria-hidden="true">→</span>
+              </a>
             </div>
             <div style={{ fontSize: "11px", fontFamily: "var(--font-mono, monospace)", letterSpacing: "0.1em", paddingLeft: "4px" }}>
               <a href="#share" style={{ color: "var(--text-muted, var(--ink-40))", textDecoration: "underline" }}>· save palette card · share with a friend</a>
+              <span style={{ color: "var(--text-muted, var(--ink-40))" }}> · shop links are affiliate links</span>
             </div>
           </div>
 
