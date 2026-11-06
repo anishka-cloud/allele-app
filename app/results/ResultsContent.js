@@ -3044,6 +3044,8 @@ const SEASON_EDIT_URLS = {
   "true-autumn": "https://shopmy.us/collections/8793271",
   "soft-summer": "https://shopmy.us/collections/8793283",
   "dark-winter": "https://shopmy.us/collections/8793294",
+  "dark-autumn": "https://shopmy.us/collections/8817771",
+  "light-summer": "https://shopmy.us/collections/8817917",
 };
 
 function SeasonEdit({ seasonId, seasonName }) {
