@@ -22,6 +22,8 @@ export function CookieConsent() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ accepted: true, date: new Date().toISOString() }));
     } catch {}
     setShow(false);
+    // Lets consent-gated tags (PinterestTag) load without a page refresh.
+    if (typeof window !== "undefined") window.dispatchEvent(new Event("allele-consent"));
   };
 
   const decline = () => {
