@@ -14,6 +14,7 @@ export async function POST(request) {
       depth,
       olive,
       olive_flag: oliveFlag,
+      source,
     } = body;
 
     // Accept the canonical Beehiiv field names as well as the older quiz aliases.
@@ -52,7 +53,8 @@ export async function POST(request) {
           email,
           reactivate_existing: false,
           send_welcome_email: true,
-          utm_source: "shade-dna-quiz",
+          // Season guides send source "season-guide"; everything else is the quiz.
+          utm_source: source === "season-guide" ? "season-guide" : "shade-dna-quiz",
           utm_medium: "organic",
           custom_fields: [
             { name: "season", value: season || "" },
