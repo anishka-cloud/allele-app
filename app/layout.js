@@ -1,4 +1,5 @@
 import { Lora, Inter } from "next/font/google";
+import PinterestTag from "./PinterestTag";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 import { AnalyticsProvider } from "./AnalyticsProvider";
@@ -64,6 +65,7 @@ export default function RootLayout({ children }) {
       </head>
       <body className="min-h-screen antialiased">
         <AnalyticsProvider />
+        <PinterestTag />
         <div
           role="note"
           aria-label="Affiliate disclosure"

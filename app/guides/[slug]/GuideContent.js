@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { trackEvent } from "@/lib/analytics";
 import { withUTM } from "@/lib/shopLinks";
+import { pinTrack } from "../../PinterestTag";
 import "../../landing.css";
 
 const INK = "var(--ink, #1A1613)";
@@ -47,14 +48,15 @@ function ShopButton({ guide, placement, dark }) {
       href={href}
       target="_blank"
       rel="sponsored noopener noreferrer"
-      onClick={() =>
+      onClick={() => {
         trackEvent("shop_click", {
           source: `guide_${placement}`,
           destination: "shopmy_collection",
           season: guide.seasonName,
           guide: guide.slug,
-        })
-      }
+        });
+        pinTrack("custom", { event_id: `shop_${guide.slug}_${placement}` });
+      }}
       style={{
         display: "inline-flex",
         alignItems: "center",
@@ -111,6 +113,7 @@ function EmailCapture({ guide }) {
       if (!res.ok) throw new Error("subscribe failed");
       setState("done");
       trackEvent("email_signup", { source: "season_guide", season: guide.seasonName, guide: guide.slug });
+      pinTrack("lead", { lead_type: "season_guide" });
     } catch {
       setState("error");
     }
